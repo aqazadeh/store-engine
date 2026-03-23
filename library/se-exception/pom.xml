@@ -3,19 +3,14 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-
     <parent>
         <groupId>az.kon.academy</groupId>
         <artifactId>store-engine-parent</artifactId>
         <version>${revision}</version>
-        <relativePath>./shared/store-engine-parent/pom.xml</relativePath>
+        <relativePath>../../shared/store-engine-parent/pom.xml</relativePath>
     </parent>
 
-    <artifactId>store-engine</artifactId>
-    <packaging>pom</packaging>
-    <modules>
-        <module>shared/store-engine-parent</module>
-        <module>library/se-exception</module>
-    </modules>
+    <groupId>az.kon.academy.exception</groupId>
+    <artifactId>se-exception</artifactId>
 
 </project>
