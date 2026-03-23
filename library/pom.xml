@@ -9,12 +9,21 @@
         <version>${revision}</version>
         <relativePath>../shared/store-engine-parent/pom.xml</relativePath>
     </parent>
+
     <artifactId>store-engine-lib-parent</artifactId>
     <packaging>pom</packaging>
-    <version>1.0.0</version>
+    <version>${library-revision}</version>
 
     <name>store-engine-lib-parent</name>
     <description>Store Engine Library Parent module</description>
+
+    <properties>
+        <library-revision>1.0.0</library-revision>
+    </properties>
+
+    <modules>
+        <module>se-exception</module>
+    </modules>
 
     <developers>
         <developer>
