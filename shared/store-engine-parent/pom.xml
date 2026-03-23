@@ -69,6 +69,13 @@
         </dependencies>
     </dependencyManagement>
 
+    <dependencies>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+        </dependency>
+    </dependencies>
+
     <build>
         <pluginManagement>
             <plugins>
@@ -77,20 +84,20 @@
                     <artifactId>flatten-maven-plugin</artifactId>
                     <version>${maven-flatten-plugin.version}</version>
                     <configuration>
-                        <flattenMode>clean</flattenMode>
+                        <flattenMode>resolveCiFriendliesOnly</flattenMode>
                         <pomElements>
-                            <parent>keep</parent>
-                            <groupId>keep</groupId>
-                            <artifactId>keep</artifactId>
-                            <version>keep</version>
-                            <packaging>keep</packaging>
-                            <build>keep</build>
-                            <dependencies>keep</dependencies>
-                            <repositories>keep</repositories>
-                            <dependencyManagement>keep</dependencyManagement>
-                            <distributionManagement>keep</distributionManagement>
-                            <pluginManagement>keep</pluginManagement>
-                            <pluginRepositories>keep</pluginRepositories>
+<!--                            <parent>keep</parent>-->
+<!--                            <groupId>keep</groupId>-->
+<!--                            <artifactId>keep</artifactId>-->
+<!--                            <version>keep</version>-->
+<!--                            <packaging>keep</packaging>-->
+<!--                            <build>keep</build>-->
+<!--                            <dependencies>keep</dependencies>-->
+<!--                            <repositories>keep</repositories>-->
+<!--                            <dependencyManagement>keep</dependencyManagement>-->
+<!--                            <distributionManagement>keep</distributionManagement>-->
+<!--                            <pluginManagement>keep</pluginManagement>-->
+<!--                            <pluginRepositories>keep</pluginRepositories>-->
                         </pomElements>
                         <updatePomFile>true</updatePomFile>
                     </configuration>

@@ -23,6 +23,7 @@
 
     <modules>
         <module>se-exception</module>
+        <module>se-aggregate</module>
     </modules>
 
     <developers>
@@ -33,4 +34,12 @@
         </developer>
     </developers>
 
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>flatten-maven-plugin</artifactId>
+            </plugin>
+        </plugins>
+    </build>
 </project>
