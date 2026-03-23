@@ -3,19 +3,25 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-
     <parent>
         <groupId>az.kon.academy</groupId>
         <artifactId>store-engine-parent</artifactId>
         <version>${revision}</version>
-        <relativePath>./shared/store-engine-parent/pom.xml</relativePath>
+        <relativePath>../shared/store-engine-parent/pom.xml</relativePath>
     </parent>
-
-    <artifactId>store-engine</artifactId>
+    <artifactId>store-engine-lib-parent</artifactId>
     <packaging>pom</packaging>
-    <modules>
-        <module>shared/store-engine-parent</module>
-        <module>library</module>
-    </modules>
+    <version>1.0.0</version>
+
+    <name>store-engine-lib-parent</name>
+    <description>Store Engine Library Parent module</description>
+
+    <developers>
+        <developer>
+            <id>aqazadeh</id>
+            <name>Rovshan Aghayev</name>
+            <email>rovsenaqazadeh@gmail.com</email>
+        </developer>
+    </developers>
 
 </project>
