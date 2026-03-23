@@ -5,9 +5,9 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>az.kon.academy</groupId>
-        <artifactId>store-engine-parent</artifactId>
-        <version>${revision}</version>
-        <relativePath>../../shared/store-engine-parent/pom.xml</relativePath>
+        <artifactId>store-engine-lib-parent</artifactId>
+        <version>${library-revision}</version>
+        <relativePath>../pom.xml</relativePath>
     </parent>
 
     <groupId>az.kon.academy.exception</groupId>
