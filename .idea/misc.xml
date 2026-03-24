@@ -8,6 +8,11 @@
         <option value="$PROJECT_DIR$/library/pom.xml" />
       </list>
     </option>
+    <option name="ignoredFiles">
+      <set>
+        <option value="$PROJECT_DIR$/catalog-management/catalog-command-service/catalog-command-shared/catalog-command-domain-vo/pom.xml" />
+      </set>
+    </option>
   </component>
   <component name="ProjectRootManager" version="2" languageLevel="JDK_25" default="true" project-jdk-name="corretto-25 (3)" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/out" />
