@@ -11,8 +11,8 @@
     </parent>
 
     <artifactId>store-engine-lib-parent</artifactId>
-    <packaging>pom</packaging>
     <version>${library-revision}</version>
+    <packaging>pom</packaging>
 
     <name>store-engine-lib-parent</name>
     <description>Store Engine Library Parent module</description>
