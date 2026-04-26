@@ -18,6 +18,11 @@
             <artifactId>junit-jupiter</artifactId>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>az.kon.academy.event</groupId>
+            <artifactId>se-event-core</artifactId>
+            <version>${library-revision}</version>
+        </dependency>
     </dependencies>
 
 </project>

@@ -1,16 +1,23 @@
 package az.kon.academy.aggragate;
 
-import az.kon.academy.aggragate.valueobject.SeDateTime;
 import az.kon.academy.aggragate.valueobject.ProcessStatus;
 import az.kon.academy.aggragate.valueobject.RowStatus;
+import az.kon.academy.aggragate.valueobject.SeDateTime;
+import az.kon.academy.event.AbstractEvent;
+import az.kon.academy.event.behavioral.DomainEvent;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.ToString;
 import lombok.experimental.SuperBuilder;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 @ToString(callSuper = true)
 @SuperBuilder(toBuilder = true)
 public class AggregateRoot<T extends BaseRoot<T, ID>, ID extends AggregateId<?>> extends BasicAggregateRoot<T, ID> {
+    private final List<DomainEvent> events = new ArrayList<>();
 
     @Getter
     @Builder.Default
@@ -82,6 +89,14 @@ public class AggregateRoot<T extends BaseRoot<T, ID>, ID extends AggregateId<?>>
                 .modificationTs(SeDateTime.now())
                 .build()
                 .self();
+    }
+
+    public final List<AbstractEvent> getUncommittedEvents() {
+        return Collections.unmodifiableList(this.events);
+    }
+
+    public final void addEvent(AbstractEvent event) {
+        this.events.add(event);
     }
 
 }
