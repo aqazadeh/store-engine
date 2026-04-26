@@ -1,8 +1,8 @@
 package az.kon.academy.catalog.command.service.domain.core.command.category;
 
-import az.kon.academy.catalog.command.service.domain.core.vo.category.ProductCategoryDescription;
-import az.kon.academy.catalog.command.service.domain.core.vo.category.ProductCategoryName;
-import az.kon.academy.catalog.command.service.domain.core.vo.category.ProductCategoryPath;
+import az.kon.academy.catalog.command.service.domain.core.vo.management.category.ProductCategoryDescription;
+import az.kon.academy.catalog.command.service.domain.core.vo.management.category.ProductCategoryName;
+import az.kon.academy.catalog.command.service.domain.core.vo.management.category.ProductCategoryPath;
 import lombok.Builder;
 import lombok.Getter;
 

@@ -4,6 +4,7 @@ import az.kon.academy.aggragate.AggregateRoot;
 import az.kon.academy.aggragate.valueobject.SeDateTime;
 import az.kon.academy.catalog.command.service.domain.core.command.brand.BrandChangeImageCommand;
 import az.kon.academy.catalog.command.service.domain.core.command.brand.BrandChangeInformationCommand;
+import az.kon.academy.catalog.command.service.domain.core.command.brand.BrandChangeOwnerCommand;
 import az.kon.academy.catalog.command.service.domain.core.command.brand.BrandCreateCommand;
 import az.kon.academy.catalog.command.service.domain.core.exception.brand.BrandDomainErrorCodes;
 import az.kon.academy.catalog.command.service.domain.core.exception.brand.BrandDomainException;
@@ -16,27 +17,35 @@ import java.util.List;
 
 @SuperBuilder(toBuilder = true)
 public class BrandRoot extends AggregateRoot<BrandRoot, BrandId> {
-    @Getter
-    private final MerchantId merchantId;
-    @Getter
-    private BrandName name;
-    @Getter
-    private BrandDescription description;
-    @Getter
-    private BrandPath path;
-    @Getter
-    private String image; //Fixme when file storage is implemented, change it to Image value object
-    @Getter
-    private BrandStatus status;
+    @Getter private final MerchantId owner;
+    @Getter private BrandName name;
+    @Getter private BrandDescription description;
+    @Getter private BrandPath path;
+    @Getter private String image; //Fixme when file storage is implemented, change it to Image value object
+    @Getter private Boolean isGlobal;
+    @Getter private BrandStatus status;
 
-    public static BrandRoot initialize(BrandCreateCommand command) {
+    public static BrandRoot initializeForMerchant(BrandCreateCommand command) {
         return BrandRoot.builder()
                 .id(BrandId.random())
-                .merchantId(command.getMerchantId())
+                .owner(command.getOwner())
                 .name(command.getName())
                 .description(command.getDescription())
                 .path(command.getPath())
+                .isGlobal(Boolean.FALSE)
                 .status(BrandStatus.DRAFT)
+                .build();
+    }
+
+    public static BrandRoot initializeGlobal(BrandCreateCommand command) {
+        return BrandRoot.builder()
+                .id(BrandId.random())
+                .owner(command.getOwner())
+                .name(command.getName())
+                .description(command.getDescription())
+                .path(command.getPath())
+                .isGlobal(Boolean.TRUE)
+                .status(BrandStatus.APPROVED)
                 .build();
     }
 
@@ -119,6 +128,13 @@ public class BrandRoot extends AggregateRoot<BrandRoot, BrandId> {
                 .build();
 
         //Fixme when implement event system, add event for brand image change
+    }
+
+    public BrandRoot changeOwner(BrandChangeOwnerCommand command) {
+        return this.toBuilder()
+                .owner(command.getOwner())
+                .modificationTs(SeDateTime.now())
+                .build();
     }
 
 }
