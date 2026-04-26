@@ -24,6 +24,7 @@
     <modules>
         <module>se-exception</module>
         <module>se-aggregate</module>
+        <module>se-event</module>
     </modules>
 
     <developers>
