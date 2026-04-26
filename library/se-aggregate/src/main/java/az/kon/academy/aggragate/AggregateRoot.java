@@ -95,7 +95,7 @@ public class AggregateRoot<T extends BaseRoot<T, ID>, ID extends AggregateId<?>>
         return Collections.unmodifiableList(this.events);
     }
 
-    public final void addEvent(AbstractEvent event) {
+    public final void addEvent(DomainEvent event) {
         this.events.add(event);
     }
 
