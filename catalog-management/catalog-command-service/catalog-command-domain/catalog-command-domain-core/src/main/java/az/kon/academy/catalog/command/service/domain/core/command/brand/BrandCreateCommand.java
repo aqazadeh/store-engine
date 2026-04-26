@@ -9,7 +9,7 @@ import lombok.Getter;
 
 @Builder
 public final class BrandCreateCommand {
-    @Getter private final MerchantId merchantId;
+    @Getter private final MerchantId owner;
     @Getter private final BrandName name;
     @Getter private final BrandDescription description;
     @Getter private final BrandPath path;
