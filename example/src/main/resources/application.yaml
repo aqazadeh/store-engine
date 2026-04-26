@@ -1,0 +1,5 @@
+store-engine:
+  event:
+    dispatcher:
+      strategies:
+        "az.kon.academy.event.behavioral.DomainEvent": "az.kon.academy.event.dispatcher.strategy.InternalEventDispatchStrategy"

@@ -17,6 +17,7 @@
         <module>shared/store-engine-parent</module>
         <module>library</module>
         <module>catalog-management</module>
+        <module>example</module>
     </modules>
 
 </project>

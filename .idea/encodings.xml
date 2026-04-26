@@ -18,8 +18,24 @@
     <file url="file://$PROJECT_DIR$/catalog-management/catalog-command-service/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/catalog-management/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/catalog-management/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/example/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/example/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/library/se-aggregate/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/library/se-aggregate/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/library/se-event/se-event-core/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/library/se-event/se-event-core/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/library/se-event/se-event-dispatcher-internal/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/library/se-event/se-event-dispatcher-internal/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/library/se-event/se-event-dispatcher-kafka/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/library/se-event/se-event-dispatcher-kafka/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/library/se-event/se-event-dispatcher-spring-boot-starter/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/library/se-event/se-event-dispatcher-spring-boot-starter/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/library/se-event/se-event-dispatcher/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/library/se-event/se-event-dispatcher/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/library/se-event/se-event-handler/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/library/se-event/se-event-handler/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/library/se-event/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/library/se-event/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/library/se-exception/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/library/se-exception/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/library/src/main/java" charset="UTF-8" />
