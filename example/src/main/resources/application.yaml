@@ -3,3 +3,21 @@ store-engine:
     dispatcher:
       strategies:
         "az.kon.academy.event.behavioral.DomainEvent": "az.kon.academy.event.dispatcher.strategy.InternalEventDispatchStrategy"
+      strategies-entries:
+        - name: domain-event
+          event: az.kon.academy.event.behavioral.DomainEvent
+          strategy: az.kon.academy.event.dispatcher.strategy.InternalEventDispatchStrategy
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+
+  metrics:
+    enable:
+      all: true
+
+logging:
+  level:
+    az.kon.academy: ERROR

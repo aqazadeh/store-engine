@@ -5,7 +5,7 @@ import az.kon.academy.event.dispatcher.EventDispatchMonitor;
 import az.kon.academy.event.dispatcher.EventDispatchStrategyRegistry;
 import az.kon.academy.event.dispatcher.EventDispatcher;
 import io.micrometer.core.instrument.MeterRegistry;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -14,13 +14,13 @@ import org.springframework.context.annotation.Configuration;
 public class EventDispatcherAutoConfiguration {
 
     @Bean
-    @ConditionalOnBean(MeterRegistry.class)
+    @ConditionalOnClass(MeterRegistry.class)
     public EventDispatchMonitor eventDispatchMonitor(MeterRegistry meterRegistry) {
         return new DefaultEventDispatchMonitor(meterRegistry);
     }
 
     @Bean
-    @ConditionalOnMissingBean({EventDispatchMonitor.class, MeterRegistry.class})
+    @ConditionalOnMissingBean(EventDispatchMonitor.class)
     public EventDispatchMonitor noopEventDispatchMonitor() {
         return EventDispatchMonitor.NOOP;
     }

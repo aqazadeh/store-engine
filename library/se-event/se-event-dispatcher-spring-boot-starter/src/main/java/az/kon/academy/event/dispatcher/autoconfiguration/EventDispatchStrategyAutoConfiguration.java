@@ -25,16 +25,18 @@ public class EventDispatchStrategyAutoConfiguration {
     @SuppressWarnings("unchecked")
     public void init() {
         Map<String, EventDispatchStrategy> strategies = this.applicationContext.getBeansOfType(EventDispatchStrategy.class);
-        this.eventDispatchStrategyProperties.getStrategies().forEach((eventClass, strategyName) -> {
-
-            if (!strategies.containsKey(strategyName)) {
-                throw new RuntimeException("No EventDispatchStrategy bean found with name: " + strategyName + ". Allowed strategies: " + strategies.keySet());
-            }
-            if (!AbstractEvent.class.isAssignableFrom(eventClass)) {
-                throw new RuntimeException("Event type must extend AbstractEvent: " + eventClass.getName());
-            }
-            EventDispatchStrategy strategy = strategies.get(strategyName);
-            registry.register((Class<? extends AbstractEvent>) eventClass, strategy);
-        });
+        this.eventDispatchStrategyProperties
+                .getStrategiesEntries()
+                .forEach(entry -> {
+                    if (!strategies.containsKey(entry.getStrategy().getName())) {
+                        throw new RuntimeException("No EventDispatchStrategy bean found with name: "
+                                + entry.getStrategy().getSimpleName() + ". Allowed strategies: " + strategies.keySet());
+                    }
+                    if (!AbstractEvent.class.isAssignableFrom(entry.getEvent())) {
+                        throw new RuntimeException("Event type must extend AbstractEvent: " + entry.getEvent().getSimpleName());
+                    }
+                    EventDispatchStrategy strategy = strategies.get(entry.getStrategy().getName());
+                    registry.register((Class<? extends AbstractEvent>) entry.getEvent(), strategy);
+                });
     }
 }
