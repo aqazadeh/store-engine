@@ -3,6 +3,7 @@ package az.kon.academy.event.dispatcher.autoconfiguration;
 import az.kon.academy.event.AbstractEvent;
 import az.kon.academy.event.dispatcher.EventDispatchStrategy;
 import az.kon.academy.event.dispatcher.EventDispatchStrategyRegistry;
+import az.kon.academy.event.dispatcher.autoconfiguration.data.EventDispatchStrategyProperties;
 import jakarta.annotation.PostConstruct;
 import org.springframework.context.ApplicationContext;
 
@@ -22,11 +23,10 @@ public class EventDispatchStrategyAutoConfiguration {
     }
 
     @PostConstruct
-    @SuppressWarnings("unchecked")
     public void init() {
         Map<String, EventDispatchStrategy> strategies = this.applicationContext.getBeansOfType(EventDispatchStrategy.class);
         this.eventDispatchStrategyProperties
-                .getStrategiesEntries()
+                .getStrategies()
                 .forEach(entry -> {
                     if (!strategies.containsKey(entry.getStrategy().getName())) {
                         throw new RuntimeException("No EventDispatchStrategy bean found with name: "
@@ -36,7 +36,7 @@ public class EventDispatchStrategyAutoConfiguration {
                         throw new RuntimeException("Event type must extend AbstractEvent: " + entry.getEvent().getSimpleName());
                     }
                     EventDispatchStrategy strategy = strategies.get(entry.getStrategy().getName());
-                    registry.register((Class<? extends AbstractEvent>) entry.getEvent(), strategy);
+                    registry.register(entry.getEvent(), strategy);
                 });
     }
 }

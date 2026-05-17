@@ -1,11 +1,15 @@
 package az.kon.academy.event.handler.autoconfiguration.interceptor;
 
 import az.kon.academy.event.AbstractEvent;
+import az.kon.academy.event.handler.autoconfiguration.annotation.EvenHandlerInterceptor;
 import az.kon.academy.event.handler.interceptor.EventHandlerInterceptor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBooleanProperty;
 
 
+@EvenHandlerInterceptor
+@ConditionalOnBooleanProperty(prefix = "store-engine.event.handler.logging", name = "enabled", matchIfMissing = true)
 public class EventHandlerLoggingInterceptor implements EventHandlerInterceptor {
 
     private static final Logger logger = LoggerFactory.getLogger(EventHandlerLoggingInterceptor.class);
@@ -13,16 +17,6 @@ public class EventHandlerLoggingInterceptor implements EventHandlerInterceptor {
     @Override
     public <T extends AbstractEvent> void onReceive(T event) {
         logger.info("Received event: {}", event.getClass().getSimpleName());
-    }
-
-    @Override
-    public <T extends AbstractEvent> void preExecution(T event) {
-        logger.debug("Pre-execution of event: {}", event.getClass().getSimpleName());
-    }
-
-    @Override
-    public <T extends AbstractEvent> void postExecution(T event) {
-        logger.debug("Post-execution of event: {}", event.getClass().getSimpleName());
     }
 
     @Override

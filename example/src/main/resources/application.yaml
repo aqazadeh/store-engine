@@ -1,9 +1,12 @@
 store-engine:
   event:
+    handler:
+      metrics:
+        enabled: false
+      logging:
+        enabled: false
     dispatcher:
       strategies:
-        "az.kon.academy.event.behavioral.DomainEvent": "az.kon.academy.event.dispatcher.strategy.InternalEventDispatchStrategy"
-      strategies-entries:
         - name: domain-event
           event: az.kon.academy.event.behavioral.DomainEvent
           strategy: az.kon.academy.event.dispatcher.strategy.InternalEventDispatchStrategy
@@ -20,4 +23,4 @@ management:
 
 logging:
   level:
-    az.kon.academy: ERROR
+    az.kon.academy: DEBUG
