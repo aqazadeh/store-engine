@@ -15,31 +15,25 @@ public final class ProductVariantAddedEvent extends DomainEvent implements Produ
     private final UUID variantId;
     private final List<UUID> variantKeyIds;
     private final List<UUID> variantValueIds;
-    private final Boolean inStock;
 
     public ProductVariantAddedEvent(UUID eventId, String aggregateId, OffsetDateTime timestamp, Integer version,
-                                    UUID variantId, List<UUID> variantKeyIds, List<UUID> variantValueIds,
-                                    Boolean inStock) {
+                                    UUID variantId, List<UUID> variantKeyIds, List<UUID> variantValueIds) {
         super(eventId, aggregateId, timestamp, version);
         this.variantId = variantId;
         this.variantKeyIds = variantKeyIds;
         this.variantValueIds = variantValueIds;
-        this.inStock = inStock;
     }
 
     private ProductVariantAddedEvent(String aggregateId, OffsetDateTime timestamp,
-                                     UUID variantId, List<UUID> variantKeyIds, List<UUID> variantValueIds,
-                                     Boolean inStock) {
+                                     UUID variantId, List<UUID> variantKeyIds, List<UUID> variantValueIds) {
         super(aggregateId, timestamp);
         this.variantId = variantId;
         this.variantKeyIds = variantKeyIds;
         this.variantValueIds = variantValueIds;
-        this.inStock = inStock;
     }
 
     public static ProductVariantAddedEvent of(String aggregateId, OffsetDateTime timestamp,
-                                              UUID variantId, List<UUID> variantKeyIds, List<UUID> variantValueIds,
-                                              Boolean inStock) {
-        return new ProductVariantAddedEvent(aggregateId, timestamp, variantId, variantKeyIds, variantValueIds, inStock);
+                                              UUID variantId, List<UUID> variantKeyIds, List<UUID> variantValueIds) {
+        return new ProductVariantAddedEvent(aggregateId, timestamp, variantId, variantKeyIds, variantValueIds);
     }
 }

@@ -1381,7 +1381,6 @@ class ProductRootTest {
             addVariantCommand = ProductAddVariantCommand.builder()
                     .productId(ProductId.random())
                     .assignments(List.of(ProductVariantAssignment.of(keyId, valueId)))
-                    .inStock(Boolean.TRUE)
                     .build();
         }
 
@@ -1418,20 +1417,11 @@ class ProductRootTest {
             }
 
             @Test
-            @DisplayName("Added variant has correct inStock")
-            void addedVariantHasCorrectInStock() {
-                var result = freshProduct().addVariant(addVariantCommand);
-
-                assertThat(result.getVariants().getFirst().getInStock()).isTrue();
-            }
-
-            @Test
             @DisplayName("Adding two variants results in two entries")
             void addingTwoVariantsResultsInTwoEntries() {
                 var secondCmd = ProductAddVariantCommand.builder()
                         .productId(ProductId.random())
                         .assignments(List.of(ProductVariantAssignment.of(VariantKeyId.random(), VariantValueId.random())))
-                        .inStock(Boolean.FALSE)
                         .build();
 
                 var result = freshProduct()
@@ -1492,14 +1482,6 @@ class ProductRootTest {
                 assertThat(event.getVariantValueIds()).containsExactly(valueId.value());
             }
 
-            @Test
-            @DisplayName("Event carries inStock")
-            void eventCarriesInStock() {
-                var result = freshProduct().addVariant(addVariantCommand);
-                var event = (ProductVariantAddedEvent) result.getUncommittedEvents().getFirst();
-
-                assertThat(event.getInStock()).isTrue();
-            }
         }
     }
 
@@ -1518,7 +1500,6 @@ class ProductRootTest {
             addVariantCommand = ProductAddVariantCommand.builder()
                     .productId(ProductId.random())
                     .assignments(List.of(ProductVariantAssignment.of(VariantKeyId.random(), VariantValueId.random())))
-                    .inStock(Boolean.TRUE)
                     .build();
         }
 
@@ -1548,7 +1529,6 @@ class ProductRootTest {
                 var secondCmd = ProductAddVariantCommand.builder()
                         .productId(ProductId.random())
                         .assignments(List.of(ProductVariantAssignment.of(VariantKeyId.random(), VariantValueId.random())))
-                        .inStock(Boolean.FALSE)
                         .build();
 
                 var withTwo = freshProduct().addVariant(addVariantCommand).addVariant(secondCmd);
@@ -1670,7 +1650,6 @@ class ProductRootTest {
             var cmd = ProductAddVariantCommand.builder()
                     .productId(ProductId.random())
                     .assignments(List.of(ProductVariantAssignment.of(VariantKeyId.random(), VariantValueId.random())))
-                    .inStock(Boolean.TRUE)
                     .build();
 
             assertThat(freshProduct().addVariant(cmd).getVariants()).isUnmodifiable();

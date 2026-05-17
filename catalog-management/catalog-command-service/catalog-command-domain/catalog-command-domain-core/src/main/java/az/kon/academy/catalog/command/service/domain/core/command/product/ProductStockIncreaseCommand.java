@@ -1,0 +1,11 @@
+package az.kon.academy.catalog.command.service.domain.core.command.product;
+
+import az.kon.academy.catalog.command.service.domain.core.vo.product.ProductStockId;
+import lombok.Builder;
+import lombok.Getter;
+
+@Builder
+public final class ProductStockIncreaseCommand {
+    @Getter private final ProductStockId stockId;
+    @Getter private final Integer quantity;
+}

@@ -262,8 +262,7 @@ public class ProductRoot extends AggregateRoot<ProductRoot, ProductId> {
                 product.getModificationTs().toOffsetDateTime(),
                 variant.getRootID().value(),
                 keyIds,
-                valueIds,
-                command.getInStock()
+                valueIds
         ));
         return product;
     }
