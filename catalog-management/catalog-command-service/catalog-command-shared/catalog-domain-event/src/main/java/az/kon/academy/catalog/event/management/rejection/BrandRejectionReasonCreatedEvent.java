@@ -1,10 +1,12 @@
 package az.kon.academy.catalog.event.management.rejection;
 
+import az.kon.academy.event.annotation.Event;
 import az.kon.academy.event.behavioral.DomainEvent;
 
 import java.time.OffsetDateTime;
 import java.util.UUID;
 
+@Event(version = 1)
 public final class BrandRejectionReasonCreatedEvent extends DomainEvent implements BrandRejectionReasonEvent {
 
     private final UUID brandId;
