@@ -1,4 +1,4 @@
-package az.kon.academy.catalog.command.service.domain.core.aggregate.management;
+package az.kon.academy.catalog.command.service.domain.core.aggregate.management.rejection;
 
 import az.kon.academy.aggragate.AggregateRoot;
 import az.kon.academy.catalog.command.service.domain.core.command.product.ProductCreateRejectionReasonCommand;

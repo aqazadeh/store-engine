@@ -1,5 +1,6 @@
 package az.kon.academy.catalog.command.service.domain.core.aggregate.management;
 
+import az.kon.academy.catalog.command.service.domain.core.aggregate.management.rejection.ProductRejectionReasonRoot;
 import az.kon.academy.catalog.command.service.domain.core.command.product.ProductCreateRejectionReasonCommand;
 import az.kon.academy.catalog.command.service.domain.core.vo.moderation.ModeratorId;
 import az.kon.academy.catalog.command.service.domain.core.vo.product.ProductId;

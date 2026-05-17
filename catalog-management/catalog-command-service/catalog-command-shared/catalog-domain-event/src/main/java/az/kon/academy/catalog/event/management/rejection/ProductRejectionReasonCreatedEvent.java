@@ -2,10 +2,12 @@ package az.kon.academy.catalog.event.management.rejection;
 
 import az.kon.academy.event.annotation.Event;
 import az.kon.academy.event.behavioral.DomainEvent;
+import lombok.Getter;
 
 import java.time.OffsetDateTime;
 import java.util.UUID;
 
+@Getter
 @Event(version = 1)
 public final class ProductRejectionReasonCreatedEvent extends DomainEvent implements ProductRejectionReasonEvent {
 
@@ -33,8 +35,4 @@ public final class ProductRejectionReasonCreatedEvent extends DomainEvent implem
                                                         UUID productId, String reason, UUID moderatedBy) {
         return new ProductRejectionReasonCreatedEvent(aggregateId, timestamp, productId, reason, moderatedBy);
     }
-
-    public UUID getProductId() { return productId; }
-    public String getReason() { return reason; }
-    public UUID getModeratedBy() { return moderatedBy; }
 }
