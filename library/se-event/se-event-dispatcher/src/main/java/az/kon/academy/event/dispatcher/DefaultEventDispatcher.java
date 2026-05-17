@@ -2,7 +2,6 @@ package az.kon.academy.event.dispatcher;
 
 import az.kon.academy.event.AbstractEvent;
 import az.kon.academy.event.EventMessage;
-import az.kon.academy.event.dispatcher.exception.EventDispatcherException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

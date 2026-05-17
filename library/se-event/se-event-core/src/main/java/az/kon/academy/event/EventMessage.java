@@ -1,11 +1,13 @@
 package az.kon.academy.event;
 
 import lombok.Getter;
+import lombok.ToString;
 
 import java.time.OffsetDateTime;
 import java.util.UUID;
 
 @Getter
+@ToString
 public class EventMessage<T extends AbstractEvent> {
     private final UUID id;
     private final String aggregateId;
@@ -17,7 +19,7 @@ public class EventMessage<T extends AbstractEvent> {
         this.id = event.getEventId();
         this.aggregateId = event.getAggregateId();
         this.timestamp = event.getTimestamp();
-        this.header = EventMessageHeader.of(event.getClass().getName(), correlationId, causationId, triggerBy);
+        this.header = EventMessageHeader.of(event.getClass().getName(), correlationId, causationId, triggerBy, event.getVersion());
         this.payload = event;
     }
 

@@ -6,7 +6,7 @@
     <parent>
         <groupId>az.kon.academy.event</groupId>
         <artifactId>se-event</artifactId>
-        <version>1.0.0</version>
+        <version>${library-revision}</version>
     </parent>
 
     <artifactId>se-event-handler</artifactId>

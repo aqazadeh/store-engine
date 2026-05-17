@@ -20,6 +20,7 @@
         <module>se-event-dispatcher-spring-boot-starter</module>
         <module>se-event-dispatcher-internal</module>
         <module>se-event-dispatcher-kafka</module>
+        <module>se-event-handler-spring-boot-starter</module>
     </modules>
 
 </project>
