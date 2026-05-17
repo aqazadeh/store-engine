@@ -2,12 +2,14 @@ package az.kon.academy.event.handler.autoconfiguration.interceptor;
 
 
 import az.kon.academy.event.AbstractEvent;
-import az.kon.academy.event.handler.autoconfiguration.annotation.EventInterceptor;
+import az.kon.academy.event.handler.autoconfiguration.annotation.EvenHandlerInterceptor;
 import az.kon.academy.event.handler.exception.EventHandlerNotFoundException;
 import az.kon.academy.event.handler.interceptor.EventHandlerInterceptor;
 import az.kon.academy.event.handler.metric.EventHandlerMonitor;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBooleanProperty;
 
-@EventInterceptor
+@EvenHandlerInterceptor
+@ConditionalOnBooleanProperty(prefix = "store-engine.event.handler.metrics", name = "enabled", matchIfMissing = true)
 public class EventHandlerMetricInterceptor implements EventHandlerInterceptor {
 
     private final EventHandlerMonitor eventHandlerMonitor;

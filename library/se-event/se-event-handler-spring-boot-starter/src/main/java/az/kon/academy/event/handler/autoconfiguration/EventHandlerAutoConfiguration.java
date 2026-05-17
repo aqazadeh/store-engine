@@ -6,7 +6,7 @@ import az.kon.academy.event.handler.DefaultDomainEventRegistry;
 import az.kon.academy.event.handler.DomainEventPublisherPipeline;
 import az.kon.academy.event.handler.EventHandlerRegistry;
 import az.kon.academy.event.handler.autoconfiguration.annotation.EventHandler;
-import az.kon.academy.event.handler.autoconfiguration.annotation.EventInterceptor;
+import az.kon.academy.event.handler.autoconfiguration.annotation.EvenHandlerInterceptor;
 import az.kon.academy.event.handler.autoconfiguration.interceptor.EventHandlerLoggingInterceptor;
 import az.kon.academy.event.handler.autoconfiguration.interceptor.EventHandlerMetricInterceptor;
 import az.kon.academy.event.handler.autoconfiguration.metrics.DefaultEventHandlerMonitor;
@@ -16,7 +16,7 @@ import az.kon.academy.event.handler.metric.EventHandlerMonitor;
 import io.micrometer.core.instrument.MeterRegistry;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBooleanProperty;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
@@ -33,7 +33,7 @@ public class EventHandlerAutoConfiguration {
     }
 
     @Bean
-    @ConditionalOnClass(MeterRegistry.class)
+    @ConditionalOnBooleanProperty(prefix = "store-engine.event.handler.metrics", name = "enabled")
     public EventHandlerMonitor eventHandlerMonitor(MeterRegistry meterRegistry) {
         return new DefaultEventHandlerMonitor(meterRegistry);
     }
@@ -51,29 +51,21 @@ public class EventHandlerAutoConfiguration {
     }
 
     @Bean
-    public DomainEventPublisherPipeline eventBus() {
-        DomainEventPublisherPipeline eventHandlerPipeline = new DomainEventPublisherPipeline(this.eventHandlerRegistry());
-        this.registerEventHandlerInterceptors(eventHandlerPipeline);
-        return eventHandlerPipeline;
+    public DomainEventPublisherPipeline eventBus(EventHandlerMonitor monitor) {
+        EventHandlerRegistry registry = this.eventHandlerRegistry();
+        DomainEventPublisherPipeline pipeline = new DomainEventPublisherPipeline(registry, monitor);
+        this.registerEventHandlers(registry);
+        this.registerEventHandlerInterceptors(pipeline);
+        return pipeline;
     }
 
-    @Bean
-    public EventHandlerInterceptor eventHandlerLoggingInterceptor() {
-        return new EventHandlerLoggingInterceptor();
-    }
-
-    @Bean
-    public EventHandlerInterceptor eventHandlerMetricInterceptor(EventHandlerMonitor monitor) {
-        return new EventHandlerMetricInterceptor(monitor);
-    }
-
-    private void registerEventHandlerInterceptors(EventHandlerInterceptorRegistry eventHandlerInterceptorRegistry) {
-        var interceptors = applicationContext.getBeansWithAnnotation(EventInterceptor.class);
+    private void registerEventHandlerInterceptors(EventHandlerInterceptorRegistry registry) {
+        var interceptors = applicationContext.getBeansWithAnnotation(EvenHandlerInterceptor.class);
 
         interceptors.forEach((beanName, interceptor) -> {
-            if (interceptor instanceof EventHandlerInterceptor) {
+            if (interceptor instanceof EventHandlerInterceptor ei) {
                 logger.debug("Registering event handler interceptor: {}", interceptor.getClass().getSimpleName());
-                eventHandlerInterceptorRegistry.registerInterceptor((EventHandlerInterceptor) interceptor);
+                registry.registerInterceptor(ei);
             } else {
                 throw new RuntimeException("Interceptor is not a EventHandlerInterceptor: " + interceptor.getClass().getName());
             }
@@ -84,7 +76,7 @@ public class EventHandlerAutoConfiguration {
     }
 
     @SuppressWarnings({"rawtypes", "unchecked"})
-    private void registerEventHanders(EventHandlerRegistry eventHandlerRegistry) {
+    private void registerEventHandlers(EventHandlerRegistry registry) {
         var handlers = applicationContext.getBeansWithAnnotation(EventHandler.class);
 
         handlers.forEach((beanName, handler) -> {
@@ -100,7 +92,7 @@ public class EventHandlerAutoConfiguration {
                             eventType.getSimpleName(),
                             handler.getClass().getSimpleName());
 
-                    eventHandlerRegistry.registerHandler((BaseEventHandler) handler, eventType);
+                    registry.registerHandler((BaseEventHandler) handler, eventType);
                 } else {
                     throw new RuntimeException("Could not resolve event type for handler: " + handler.getClass().getName());
                 }
@@ -108,6 +100,7 @@ public class EventHandlerAutoConfiguration {
                 throw new RuntimeException("Bean " + beanName + " is annotated with @EventHandler but does not implement BaseEventHandler");
             }
         });
+
         logger.info("Registered {} event handlers {}", handlers.size(),
                 handlers.values().stream().map(o -> o.getClass().getSimpleName()).toList());
     }

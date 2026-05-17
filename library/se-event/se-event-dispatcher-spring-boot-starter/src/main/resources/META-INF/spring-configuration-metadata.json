@@ -1,0 +1,36 @@
+{
+  "groups": [
+    {
+      "name": "store-engine.event.dispatcher",
+      "type": "az.kon.academy.event.dispatcher.autoconfiguration.data.EventDispatchStrategyProperties",
+      "sourceType": "az.kon.academy.event.dispatcher.autoconfiguration.data.EventDispatchStrategyProperties",
+      "description": "Store Engine event dispatcher strategy configuration."
+    }
+  ],
+  "properties": [
+    {
+      "name": "store-engine.event.dispatcher.strategies",
+      "type": "java.util.List<az.kon.academy.event.dispatcher.autoconfiguration.data.EventDispatchEntry>",
+      "sourceType": "az.kon.academy.event.dispatcher.autoconfiguration.data.EventDispatchStrategyProperties",
+      "description": "List of event-to-strategy mappings. Each entry binds one event type to one dispatch strategy."
+    },
+    {
+      "name": "store-engine.event.dispatcher.strategies[].name",
+      "type": "java.lang.String",
+      "sourceType": "az.kon.academy.event.dispatcher.autoconfiguration.data.EventDispatchEntry",
+      "description": "Human-readable name for this dispatch entry (used for logging)."
+    },
+    {
+      "name": "store-engine.event.dispatcher.strategies[].event",
+      "type": "java.lang.Class<az.kon.academy.event.AbstractEvent>",
+      "sourceType": "az.kon.academy.event.dispatcher.autoconfiguration.data.EventDispatchEntry",
+      "description": "Fully-qualified class name of the event type (must extend AbstractEvent)."
+    },
+    {
+      "name": "store-engine.event.dispatcher.strategies[].strategy",
+      "type": "java.lang.Class<az.kon.academy.event.dispatcher>",
+      "sourceType": "az.kon.academy.event.dispatcher.autoconfiguration.data.EventDispatchEntry",
+      "description": "Fully-qualified class name of the EventDispatchStrategy bean to use for this event type."
+    }
+  ]
+}

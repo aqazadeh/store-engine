@@ -1,3 +1,3 @@
 az.kon.academy.event.dispatcher.autoconfiguration.EventDispatcherAutoConfiguration
 az.kon.academy.event.dispatcher.autoconfiguration.EventDispatchStrategyAutoConfiguration
-az.kon.academy.event.dispatcher.autoconfiguration.EventDispatchStrategyProperties
+az.kon.academy.event.dispatcher.autoconfiguration.data.EventDispatchStrategyProperties
