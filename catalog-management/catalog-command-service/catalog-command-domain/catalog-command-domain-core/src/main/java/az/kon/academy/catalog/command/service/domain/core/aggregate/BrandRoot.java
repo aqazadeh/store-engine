@@ -106,7 +106,7 @@ public class BrandRoot extends AggregateRoot<BrandRoot, BrandId> {
 
     public BrandRoot sentToApproval() {
 
-        if (!this.status.isDraft() || !this.status.isRejected()) {
+        if (!this.status.isDraft() && !this.status.isRejected()) {
             throw new BrandDomainException(BrandDomainErrorCodes.STATUS_INVALID_FOR_APPROVAL, List.of(this.getRootID().toString()));
         }
 
@@ -138,7 +138,7 @@ public class BrandRoot extends AggregateRoot<BrandRoot, BrandId> {
                 .modificationTs(SeDateTime.now())
                 .build();
 
-        var event = BrandSentToApprovalEvent.of(
+        var event = BrandMovedToDraftEvent.of(
                 brand.getRootID().value().toString(),
                 brand.getModificationTs().toOffsetDateTime(),
                 brand.getStatus().name()
