@@ -22,7 +22,6 @@ public class DefaultEventDispatcher implements EventDispatcher {
 
     @Override
     public <T extends AbstractEvent> void dispatch(List<T> events, UUID correlationId, UUID causationId) {
-
         logger.info("Start batch | correlationId={} causationId={} size={}",
                 correlationId, causationId, events == null ? 0 : events.size());
 
@@ -30,6 +29,17 @@ public class DefaultEventDispatcher implements EventDispatcher {
             logger.debug("Empty event list received | correlationId={}", correlationId);
             return;
         }
+
+        Map<EventDispatchStrategy, List<EventMessage<T>>> strategyGroups =
+                groupByStrategy(events, correlationId, causationId);
+
+        logger.info("Strategy grouping done | groups={}", strategyGroups.size());
+        executeStrategies(strategyGroups);
+        logger.info("Batch completed | correlationId={}", correlationId);
+    }
+
+    private <T extends AbstractEvent> Map<EventDispatchStrategy, List<EventMessage<T>>> groupByStrategy(
+            List<T> events, UUID correlationId, UUID causationId) {
 
         Map<EventDispatchStrategy, List<EventMessage<T>>> strategyGroups = new HashMap<>();
 
@@ -54,11 +64,15 @@ public class DefaultEventDispatcher implements EventDispatcher {
             var eventMessage = EventMessage.of(event, correlationId, causationId, triggerBy);
             logger.debug("EventMessage created | type={} messageId={} strategy={}",
                     eventType, eventMessage.getId(), strategy.getClass().getSimpleName());
-            strategyGroups.computeIfAbsent(strategy, k -> new ArrayList<>())
-                    .add(eventMessage);
+            strategyGroups.computeIfAbsent(strategy, k -> new ArrayList<>()).add(eventMessage);
         }
 
-        logger.info("Strategy grouping done | groups={}", strategyGroups.size());
+        return strategyGroups;
+    }
+
+    private <T extends AbstractEvent> void executeStrategies(
+            Map<EventDispatchStrategy, List<EventMessage<T>>> strategyGroups) {
+
         for (Map.Entry<EventDispatchStrategy, List<EventMessage<T>>> entry : strategyGroups.entrySet()) {
             EventDispatchStrategy strategy = entry.getKey();
             List<EventMessage<T>> messages = entry.getValue();
@@ -68,18 +82,19 @@ public class DefaultEventDispatcher implements EventDispatcher {
 
             logger.info("Execute strategy | strategy={} eventType={} batchSize={}",
                     strategyName, eventType, messages.size());
-            
+
             try {
                 eventDispatchMonitor.record(eventType, strategyName, () -> {
                     strategy.proceed(messages);
                     return null;
                 });
+                eventDispatchMonitor.reportSuccess(eventType, strategyName);
                 logger.info("Strategy completed | strategy={} eventType={}", strategyName, eventType);
             } catch (Exception ex) {
+                eventDispatchMonitor.reportFailure(eventType, strategyName, ex);
                 logger.error("Strategy failed | strategy={} eventType={}", strategyName, eventType, ex);
                 throw ex;
             }
         }
-        logger.info("Batch completed | correlationId={}", correlationId);
     }
 }

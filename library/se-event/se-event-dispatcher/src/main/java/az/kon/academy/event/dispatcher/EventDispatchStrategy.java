@@ -11,13 +11,15 @@ public interface EventDispatchStrategy {
 
     <T extends AbstractEvent> void proceed(List<EventMessage<T>> eventMessages);
 
-    EventDispatchStrategy NOOP = new EventDispatchStrategy() {
-        private static final Logger logger = LoggerFactory.getLogger(EventDispatchStrategy.class);
+    EventDispatchStrategy NOOP = new NoopEventDispatchStrategy();
+
+    class NoopEventDispatchStrategy implements EventDispatchStrategy {
+        private static final Logger logger = LoggerFactory.getLogger(NoopEventDispatchStrategy.class);
 
         @Override
         public <T extends AbstractEvent> void proceed(List<EventMessage<T>> eventMessages) {
-            logger.warn("NoopEventDispatchStrategy: Received event of type {}, but no action is taken.",
-                    eventMessages.stream().map(item -> item.getPayload().getClass().getSimpleName()).toList());
+            logger.warn("No strategy registered for event types: {}",
+                    eventMessages.stream().map(m -> m.getPayload().getClass().getSimpleName()).toList());
         }
-    };
+    }
 }
