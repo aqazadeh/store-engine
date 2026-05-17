@@ -10,6 +10,7 @@ import az.kon.academy.catalog.command.service.domain.core.exception.brand.BrandD
 import az.kon.academy.catalog.command.service.domain.core.exception.brand.BrandDomainException;
 import az.kon.academy.catalog.command.service.domain.core.vo.brand.*;
 import az.kon.academy.catalog.command.service.domain.core.vo.merchent.MerchantId;
+import az.kon.academy.catalog.event.brand.*;
 import lombok.Getter;
 import lombok.experimental.SuperBuilder;
 
@@ -17,6 +18,7 @@ import java.util.List;
 
 @SuperBuilder(toBuilder = true)
 public class BrandRoot extends AggregateRoot<BrandRoot, BrandId> {
+
     @Getter private final MerchantId owner;
     @Getter private BrandName name;
     @Getter private BrandDescription description;
@@ -26,7 +28,7 @@ public class BrandRoot extends AggregateRoot<BrandRoot, BrandId> {
     @Getter private BrandStatus status;
 
     public static BrandRoot initializeForMerchant(BrandCreateCommand command) {
-        return BrandRoot.builder()
+        var brand = BrandRoot.builder()
                 .id(BrandId.random())
                 .owner(command.getOwner())
                 .name(command.getName())
@@ -35,10 +37,22 @@ public class BrandRoot extends AggregateRoot<BrandRoot, BrandId> {
                 .isGlobal(Boolean.FALSE)
                 .status(BrandStatus.DRAFT)
                 .build();
+        var event = BrandCreatedEvent.of(
+                brand.getRootID().value().toString(),
+                brand.getModificationTs().toOffsetDateTime(),
+                brand.getOwner().value(),
+                brand.getName().value(),
+                brand.getDescription().value(),
+                brand.getPath().value(),
+                brand.getIsGlobal(),
+                brand.getStatus().name()
+        );
+        brand.addEvent(event);
+        return brand;
     }
 
     public static BrandRoot initializeGlobal(BrandCreateCommand command) {
-        return BrandRoot.builder()
+        var brand = BrandRoot.builder()
                 .id(BrandId.random())
                 .owner(command.getOwner())
                 .name(command.getName())
@@ -47,22 +61,47 @@ public class BrandRoot extends AggregateRoot<BrandRoot, BrandId> {
                 .isGlobal(Boolean.TRUE)
                 .status(BrandStatus.APPROVED)
                 .build();
+        var event = BrandCreatedGlobalEvent.of(
+                brand.getRootID().value().toString(),
+                brand.getModificationTs().toOffsetDateTime(),
+                brand.getOwner().value(),
+                brand.getName().value(),
+                brand.getDescription().value(),
+                brand.getPath().value(),
+                brand.getIsGlobal(),
+                brand.getStatus().name()
+        );
+        brand.addEvent(event);
+        return brand;
     }
 
     public BrandRoot approve() {
-        return this.toBuilder()
+        var brand = this.toBuilder()
                 .status(BrandStatus.APPROVED)
                 .modificationTs(SeDateTime.now())
                 .build();
-        //Fixme when implement event system, add event for brand approval
+
+        var event = BrandApprovedEvent.of(
+                brand.getRootID().value().toString(),
+                brand.getModificationTs().toOffsetDateTime(),
+                brand.getStatus().name()
+        );
+        brand.addEvent(event);
+        return brand;
     }
 
     public BrandRoot reject() {
-        return this.toBuilder()
+        var brand = this.toBuilder()
                 .status(BrandStatus.REJECTED)
                 .modificationTs(SeDateTime.now())
                 .build();
-        //Fixme when implement event system, add event for brand rejection
+        var event = BrandRejectedEvent.of(
+                brand.getRootID().value().toString(),
+                brand.getModificationTs().toOffsetDateTime(),
+                brand.getStatus().name()
+        );
+        brand.addEvent(event);
+        return brand;
     }
 
     public BrandRoot sentToApproval() {
@@ -71,11 +110,18 @@ public class BrandRoot extends AggregateRoot<BrandRoot, BrandId> {
             throw new BrandDomainException(BrandDomainErrorCodes.STATUS_INVALID_FOR_APPROVAL, List.of(this.getRootID().toString()));
         }
 
-        return this.toBuilder()
+        var brand = this.toBuilder()
                 .status(BrandStatus.SENT_TO_APPROVAL)
                 .modificationTs(SeDateTime.now())
                 .build();
-        //Fixme when implement event system, add event for brand sent to approval
+
+        var event = BrandSentToApprovalEvent.of(
+                brand.getRootID().value().toString(),
+                brand.getModificationTs().toOffsetDateTime(),
+                brand.getStatus().name()
+        );
+        brand.addEvent(event);
+        return brand;
     }
 
     public BrandRoot moveToDraft() {
@@ -87,11 +133,18 @@ public class BrandRoot extends AggregateRoot<BrandRoot, BrandId> {
             );
         }
 
-        return this.toBuilder()
+        var brand = this.toBuilder()
                 .status(BrandStatus.DRAFT)
                 .modificationTs(SeDateTime.now())
                 .build();
-        //Fixme when implement event system, add event for brand move to draft
+
+        var event = BrandSentToApprovalEvent.of(
+                brand.getRootID().value().toString(),
+                brand.getModificationTs().toOffsetDateTime(),
+                brand.getStatus().name()
+        );
+        brand.addEvent(event);
+        return brand;
     }
 
     public BrandRoot changeInformation(BrandChangeInformationCommand command) {
@@ -102,15 +155,23 @@ public class BrandRoot extends AggregateRoot<BrandRoot, BrandId> {
                     List.of(this.getRootID().toString())
             );
         }
-
-        return this.toBuilder()
+        var brand = this.toBuilder()
                 .name(command.getName())
                 .description(command.getDescription())
                 .path(command.getPath())
                 .modificationTs(SeDateTime.now())
                 .build();
 
-        //Fixme when implement event system, add event for brand information change
+        var event = BrandInformationChangedEvent.of(
+                brand.getRootID().value().toString(),
+                brand.getModificationTs().toOffsetDateTime(),
+                brand.getName().value(),
+                brand.getDescription().value(),
+                brand.getPath().value()
+        );
+        brand.addEvent(event);
+
+        return brand;
     }
 
     public BrandRoot changeImage(BrandChangeImageCommand command) {
@@ -121,20 +182,34 @@ public class BrandRoot extends AggregateRoot<BrandRoot, BrandId> {
                     List.of(this.getRootID().toString())
             );
         }
-
-        return this.toBuilder()
+        var brand = this.toBuilder()
                 .image(command.getImage())
                 .modificationTs(SeDateTime.now())
                 .build();
 
-        //Fixme when implement event system, add event for brand image change
+        var event = BrandImageChangedEvent.of(
+                brand.getRootID().value().toString(),
+                brand.getModificationTs().toOffsetDateTime(),
+                brand.getImage()
+        );
+
+        brand.addEvent(event);
+        return brand;
     }
 
     public BrandRoot changeOwner(BrandChangeOwnerCommand command) {
-        return this.toBuilder()
+        var brand = this.toBuilder()
                 .owner(command.getOwner())
                 .modificationTs(SeDateTime.now())
                 .build();
+
+        var event = BrandOwnerChangedEvent.of(
+                brand.getRootID().value().toString(),
+                brand.getModificationTs().toOffsetDateTime(),
+                brand.getOwner().value()
+        );
+        brand.addEvent(event);
+        return brand;
     }
 
 }

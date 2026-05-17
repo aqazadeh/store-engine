@@ -7,11 +7,15 @@ import java.util.UUID;
 
 public abstract class DomainEvent  extends AbstractEvent {
 
+    public DomainEvent(UUID eventId, String aggregateId, OffsetDateTime timestamp, Integer version) {
+        super(eventId, aggregateId, timestamp, version);
+    }
+
     protected DomainEvent(String aggregateId, OffsetDateTime timestamp) {
         super(aggregateId, timestamp);
     }
 
-    public DomainEvent(UUID eventId, String aggregateId, OffsetDateTime timestamp) {
+    protected DomainEvent(UUID eventId, String aggregateId, OffsetDateTime timestamp) {
         super(eventId, aggregateId, timestamp);
     }
 }

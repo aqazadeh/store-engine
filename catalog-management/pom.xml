@@ -17,6 +17,7 @@
 
     <modules>
         <module>catalog-command-service</module>
+        <module>catalog-command-service/catalog-command-shared/catalog-domain-event</module>
     </modules>
 
     <properties>
