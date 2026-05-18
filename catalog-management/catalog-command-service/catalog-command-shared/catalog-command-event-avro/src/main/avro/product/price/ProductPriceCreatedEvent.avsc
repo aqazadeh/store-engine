@@ -1,0 +1,44 @@
+{
+  "type": "record",
+  "name": "ProductPriceCreatedAvroModel",
+  "namespace": "az.kon.academy.catalog.avro.model.product.price",
+  "fields": [
+    {
+      "name": "maxPrice",
+      "type": "string"
+    },
+    {
+      "name": "minPrice",
+      "type": "string"
+    },
+    {
+      "name": "variantId",
+      "type": {
+        "type": "string",
+        "logicalType": "uuid"
+      }
+    },
+    {
+      "name": "aggregateId",
+      "type": "string"
+    },
+    {
+      "name": "eventId",
+      "type": {
+        "type": "string",
+        "logicalType": "uuid"
+      }
+    },
+    {
+      "name": "timestamp",
+      "type": {
+        "type": "long",
+        "logicalType": "timestamp-millis"
+      }
+    },
+    {
+      "name": "version",
+      "type": "int"
+    }
+  ]
+}

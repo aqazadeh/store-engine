@@ -18,6 +18,7 @@
     <modules>
         <module>catalog-command-service</module>
         <module>catalog-command-service/catalog-command-shared/catalog-domain-event</module>
+        <module>catalog-command-service/catalog-command-shared/catalog-command-event-avro</module>
     </modules>
 
     <properties>
