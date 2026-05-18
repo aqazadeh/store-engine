@@ -1,41 +1,33 @@
 {
-  "type": "record",
-  "name": "BrandInformationChangedAvroModel",
-  "namespace": "az.kon.academy.catalog.avro.model.brand",
-  "fields": [
-    {
-      "name": "description",
-      "type": "string"
-    },
-    {
-      "name": "name",
-      "type": "string"
-    },
-    {
-      "name": "path",
-      "type": "string"
-    },
-    {
-      "name": "aggregateId",
-      "type": "string"
-    },
-    {
-      "name": "eventId",
-      "type": {
-        "type": "string",
-        "logicalType": "uuid"
-      }
-    },
-    {
-      "name": "timestamp",
-      "type": {
-        "type": "long",
-        "logicalType": "timestamp-millis"
-      }
-    },
-    {
-      "name": "version",
-      "type": "int"
+  "type" : "record",
+  "name" : "BrandInformationChangedAvroModel",
+  "namespace" : "az.kon.academy.catalog.avro.model.brand",
+  "fields" : [ {
+    "name" : "description",
+    "type" : "string"
+  }, {
+    "name" : "name",
+    "type" : "string"
+  }, {
+    "name" : "path",
+    "type" : "string"
+  }, {
+    "name" : "aggregateId",
+    "type" : "string"
+  }, {
+    "name" : "eventId",
+    "type" : {
+      "type" : "string",
+      "logicalType" : "uuid"
     }
-  ]
+  }, {
+    "name" : "timestamp",
+    "type" : {
+      "type" : "long",
+      "logicalType" : "timestamp-millis"
+    }
+  }, {
+    "name" : "version",
+    "type" : "int"
+  } ]
 }

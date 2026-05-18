@@ -1,0 +1,6 @@
+{
+  "type" : "record",
+  "name" : "BrandAvroModel",
+  "namespace" : "az.kon.academy.catalog.avro.model.brand",
+  "fields" : [ ]
+}

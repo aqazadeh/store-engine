@@ -34,6 +34,34 @@
     <build>
         <plugins>
             <plugin>
+                <groupId>az.kon.academy.avro</groupId>
+                <artifactId>avro-event-maven-plugin</artifactId>
+                <version>1.0.0</version>
+                <executions>
+                    <execution>
+                        <id>generate-avsc</id>
+                        <goals>
+                            <goal>generate-avsc</goal>
+                        </goals>
+                        <configuration>
+                            <eventBasePackage>az.kon.academy.catalog.event</eventBasePackage>
+                            <outputDirectory>${project.basedir}/src/main/avro</outputDirectory>
+                        </configuration>
+                    </execution>
+<!--                    <execution>-->
+<!--                        <id>generate-mappers</id>-->
+<!--                        <goals>-->
+<!--                            <goal>generate-mappers</goal>-->
+<!--                        </goals>-->
+<!--                        <configuration>-->
+<!--                            <avroDirectory>${project.basedir}/src/main/avro</avroDirectory>-->
+<!--                            <outputDirectory>${project.basedir}/src/main/java</outputDirectory>-->
+<!--                            <mapStructConfigClass>az.kon.academy.catalog.avro.mapper.common.AvroMapStructConfig</mapStructConfigClass>-->
+<!--                        </configuration>-->
+<!--                    </execution>-->
+                </executions>
+            </plugin>
+            <plugin>
                 <groupId>org.apache.avro</groupId>
                 <artifactId>avro-maven-plugin</artifactId>
                 <executions>

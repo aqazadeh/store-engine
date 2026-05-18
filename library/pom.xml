@@ -25,6 +25,7 @@
         <module>se-exception</module>
         <module>se-aggregate</module>
         <module>se-event</module>
+        <module>avro-event-maven-plugin</module>
     </modules>
 
     <developers>

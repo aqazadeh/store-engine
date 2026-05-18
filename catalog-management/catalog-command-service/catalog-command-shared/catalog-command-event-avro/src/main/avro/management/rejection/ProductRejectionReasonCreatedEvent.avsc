@@ -1,47 +1,39 @@
 {
-  "type": "record",
-  "name": "ProductRejectionReasonCreatedAvroModel",
-  "namespace": "az.kon.academy.catalog.avro.model.management.rejection",
-  "fields": [
-    {
-      "name": "moderatedBy",
-      "type": {
-        "type": "string",
-        "logicalType": "uuid"
-      }
-    },
-    {
-      "name": "productId",
-      "type": {
-        "type": "string",
-        "logicalType": "uuid"
-      }
-    },
-    {
-      "name": "reason",
-      "type": "string"
-    },
-    {
-      "name": "aggregateId",
-      "type": "string"
-    },
-    {
-      "name": "eventId",
-      "type": {
-        "type": "string",
-        "logicalType": "uuid"
-      }
-    },
-    {
-      "name": "timestamp",
-      "type": {
-        "type": "long",
-        "logicalType": "timestamp-millis"
-      }
-    },
-    {
-      "name": "version",
-      "type": "int"
+  "type" : "record",
+  "name" : "ProductRejectionReasonCreatedAvroModel",
+  "namespace" : "az.kon.academy.catalog.avro.model.management.rejection",
+  "fields" : [ {
+    "name" : "moderatedBy",
+    "type" : {
+      "type" : "string",
+      "logicalType" : "uuid"
     }
-  ]
+  }, {
+    "name" : "productId",
+    "type" : {
+      "type" : "string",
+      "logicalType" : "uuid"
+    }
+  }, {
+    "name" : "reason",
+    "type" : "string"
+  }, {
+    "name" : "aggregateId",
+    "type" : "string"
+  }, {
+    "name" : "eventId",
+    "type" : {
+      "type" : "string",
+      "logicalType" : "uuid"
+    }
+  }, {
+    "name" : "timestamp",
+    "type" : {
+      "type" : "long",
+      "logicalType" : "timestamp-millis"
+    }
+  }, {
+    "name" : "version",
+    "type" : "int"
+  } ]
 }

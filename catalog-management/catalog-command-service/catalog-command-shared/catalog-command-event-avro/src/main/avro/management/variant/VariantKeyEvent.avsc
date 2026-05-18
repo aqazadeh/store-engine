@@ -1,0 +1,6 @@
+{
+  "type" : "record",
+  "name" : "VariantKeyAvroModel",
+  "namespace" : "az.kon.academy.catalog.avro.model.management.variant",
+  "fields" : [ ]
+}

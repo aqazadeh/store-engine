@@ -1,66 +1,54 @@
 {
-  "type": "record",
-  "name": "ProductCreatedAvroModel",
-  "namespace": "az.kon.academy.catalog.avro.model.product",
-  "fields": [
-    {
-      "name": "barcode",
-      "type": "string"
-    },
-    {
-      "name": "brandId",
-      "type": {
-        "type": "string",
-        "logicalType": "uuid"
-      }
-    },
-    {
-      "name": "categoryId",
-      "type": {
-        "type": "string",
-        "logicalType": "uuid"
-      }
-    },
-    {
-      "name": "description",
-      "type": "string"
-    },
-    {
-      "name": "merchantId",
-      "type": {
-        "type": "string",
-        "logicalType": "uuid"
-      }
-    },
-    {
-      "name": "name",
-      "type": "string"
-    },
-    {
-      "name": "status",
-      "type": "string"
-    },
-    {
-      "name": "aggregateId",
-      "type": "string"
-    },
-    {
-      "name": "eventId",
-      "type": {
-        "type": "string",
-        "logicalType": "uuid"
-      }
-    },
-    {
-      "name": "timestamp",
-      "type": {
-        "type": "long",
-        "logicalType": "timestamp-millis"
-      }
-    },
-    {
-      "name": "version",
-      "type": "int"
+  "type" : "record",
+  "name" : "ProductCreatedAvroModel",
+  "namespace" : "az.kon.academy.catalog.avro.model.product",
+  "fields" : [ {
+    "name" : "barcode",
+    "type" : "string"
+  }, {
+    "name" : "brandId",
+    "type" : {
+      "type" : "string",
+      "logicalType" : "uuid"
     }
-  ]
+  }, {
+    "name" : "categoryId",
+    "type" : {
+      "type" : "string",
+      "logicalType" : "uuid"
+    }
+  }, {
+    "name" : "description",
+    "type" : "string"
+  }, {
+    "name" : "merchantId",
+    "type" : {
+      "type" : "string",
+      "logicalType" : "uuid"
+    }
+  }, {
+    "name" : "name",
+    "type" : "string"
+  }, {
+    "name" : "status",
+    "type" : "string"
+  }, {
+    "name" : "aggregateId",
+    "type" : "string"
+  }, {
+    "name" : "eventId",
+    "type" : {
+      "type" : "string",
+      "logicalType" : "uuid"
+    }
+  }, {
+    "name" : "timestamp",
+    "type" : {
+      "type" : "long",
+      "logicalType" : "timestamp-millis"
+    }
+  }, {
+    "name" : "version",
+    "type" : "int"
+  } ]
 }
