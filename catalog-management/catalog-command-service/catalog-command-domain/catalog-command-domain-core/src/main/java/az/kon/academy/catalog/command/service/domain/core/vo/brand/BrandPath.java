@@ -1,5 +1,6 @@
 package az.kon.academy.catalog.command.service.domain.core.vo.brand;
 
+import az.kon.academy.application.core.helper.Slugify;
 import az.kon.academy.catalog.command.service.domain.core.exception.brand.BrandDomainErrorCodes;
 import az.kon.academy.catalog.command.service.domain.core.exception.category.ProductCategoryDomainException;
 
@@ -11,6 +12,14 @@ public final class BrandPath {
     public static final int MAX_LENGTH = 20;
 
     private final String value;
+
+    public static BrandPath create(String name) {
+        return new BrandPath(Slugify.of(name));
+    }
+
+    public static BrandPath of(String value){
+        return new BrandPath(value);
+    }
 
     public BrandPath(String value) {
         if (Objects.isNull(value) || value.isBlank()) {

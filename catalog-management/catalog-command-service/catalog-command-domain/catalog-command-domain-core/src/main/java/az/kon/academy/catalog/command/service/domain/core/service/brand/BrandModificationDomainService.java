@@ -1,22 +1,19 @@
 package az.kon.academy.catalog.command.service.domain.core.service.brand;
 
-import az.kon.academy.catalog.command.service.domain.core.DomainContext;
 import az.kon.academy.catalog.command.service.domain.core.aggregate.BrandRoot;
-import az.kon.academy.catalog.command.service.domain.core.command.brand.BrandChangeImageCommand;
-import az.kon.academy.catalog.command.service.domain.core.command.brand.BrandChangeInformationCommand;
-import az.kon.academy.catalog.command.service.domain.core.command.brand.BrandCreateCommand;
-import az.kon.academy.catalog.command.service.domain.core.command.brand.BrandSentToApprovalCommand;
+import az.kon.academy.catalog.command.service.domain.core.command.brand.merchant.*;
+import az.kon.academy.domain.core.SeDomainContext;
 
 public interface BrandModificationDomainService {
-    BrandRoot createBrand(DomainContext context, BrandCreateCommand command);
+    BrandRoot createForMerchant(SeDomainContext context, BrandCreateForMerchantCommand command);
 
-    BrandRoot changeInformation(DomainContext context, BrandChangeInformationCommand command);
+    BrandRoot changeInformation(SeDomainContext context, BrandChangeInformationCommand command);
 
-    BrandRoot changeImage(DomainContext context, BrandChangeImageCommand command);
+    BrandRoot changeImage(SeDomainContext context, BrandChangeImageCommand command);
 
-    BrandRoot sentToApproval(DomainContext context, BrandSentToApprovalCommand command);
+    BrandRoot sentToApproval(SeDomainContext context, BrandSentToApprovalCommand command);
 
-    BrandRoot moveToDraft(DomainContext context, BrandSentToApprovalCommand command);
+    BrandRoot moveToDraft(SeDomainContext context, BrandMoveToDraftCommand command);
 
 
 }

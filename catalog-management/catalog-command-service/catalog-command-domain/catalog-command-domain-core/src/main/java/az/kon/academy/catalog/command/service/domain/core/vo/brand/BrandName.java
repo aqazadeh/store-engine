@@ -12,6 +12,10 @@ public final class BrandName {
 
     private final String value;
 
+    public static BrandName of(String value){
+        return new BrandName(value);
+    }
+
     public BrandName(String value) {
         if (Objects.isNull(value) || value.isBlank()) {
             throw new BrandDomainException(BrandDomainErrorCodes.NAME_REQUIRED);

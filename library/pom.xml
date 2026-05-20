@@ -26,6 +26,8 @@
         <module>se-aggregate</module>
         <module>se-event</module>
         <module>se-avro-avsc-maven-plugin</module>
+        <module>se-application-core</module>
+        <module>se-domain-core</module>
     </modules>
 
     <developers>

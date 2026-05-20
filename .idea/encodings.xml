@@ -28,8 +28,12 @@
     <file url="file://$PROJECT_DIR$/example/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/library/se-aggregate/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/library/se-aggregate/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/library/se-application-core/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/library/se-application-core/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/library/se-avro-avsc-maven-plugin/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/library/se-avro-avsc-maven-plugin/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/library/se-domain-core/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/library/se-domain-core/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/library/se-event/se-event-core/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/library/se-event/se-event-core/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/library/se-event/se-event-dispatcher-internal/src/main/java" charset="UTF-8" />

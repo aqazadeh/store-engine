@@ -18,9 +18,21 @@
             <artifactId>catalog-command-domain-core</artifactId>
             <version>1.0.0-SNAPSHOT</version>
         </dependency>
+
         <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-context</artifactId>
+            <groupId>az.kon.academy.event</groupId>
+            <artifactId>se-event-dispatcher-spring-boot-starter</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+        <dependency>
+            <groupId>az.kon.academy</groupId>
+            <artifactId>se-application-core</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+        <dependency>
+            <groupId>az.kon.academy.event</groupId>
+            <artifactId>se-event-handler</artifactId>
+            <version>1.0.0</version>
         </dependency>
     </dependencies>
 </project>

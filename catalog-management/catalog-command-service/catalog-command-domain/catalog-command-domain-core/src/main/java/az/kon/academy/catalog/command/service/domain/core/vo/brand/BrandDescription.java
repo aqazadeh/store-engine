@@ -12,6 +12,10 @@ public final class BrandDescription {
 
     private final String value;
 
+    public static BrandDescription of(String value) {
+        return new BrandDescription(value);
+    }
+
     public BrandDescription(String value) {
         if (Objects.isNull(value) || value.isBlank()) {
             throw new ProductCategoryDomainException(BrandDomainErrorCodes.DESCRIPTION_REQUIRED);

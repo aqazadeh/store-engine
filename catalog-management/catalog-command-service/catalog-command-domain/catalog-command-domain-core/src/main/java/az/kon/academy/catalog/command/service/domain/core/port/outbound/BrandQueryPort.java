@@ -14,11 +14,15 @@ public interface BrandQueryPort {
     Optional<BrandRoot> fetchById(BrandId id);
 
     default BrandRoot fetchByIdAndStatusSentToApproval(BrandId id){
-        return this.fetchById(id).orElseThrow(() -> new BrandDomainException(
-                BrandDomainErrorCodes.ENTITY_NOT_FOUND,
-                List.of(id.toString()))
-        );
+        return this.fetchById(id).orElseThrow(() ->
+                new BrandDomainException(BrandDomainErrorCodes.ENTITY_NOT_FOUND, List.of(id.toString())));
     }
+
+    default BrandRoot fetchByIdAndMerchantIdAndRowStatusActive(BrandId brandId, MerchantId merchantId) {
+        return this.findByIdAndMerchantIdAndRowStatusActive(brandId, merchantId).orElseThrow(() ->
+                new BrandDomainException(BrandDomainErrorCodes.ENTITY_NOT_FOUND, List.of(brandId.toString())));
+    }
+    Optional<BrandRoot> findByIdAndMerchantIdAndRowStatusActive(BrandId brandId, MerchantId merchantId);
 
     BrandRoot fetchByIdAndRowStatusActive(BrandId id);
 
