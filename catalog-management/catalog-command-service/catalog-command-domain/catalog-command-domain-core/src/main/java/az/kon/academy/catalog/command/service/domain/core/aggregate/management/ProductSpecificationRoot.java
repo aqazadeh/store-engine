@@ -8,6 +8,7 @@ import az.kon.academy.catalog.command.service.domain.core.vo.management.specific
 import az.kon.academy.catalog.command.service.domain.core.vo.management.specification.SpecificationCategoryAssignment;
 import az.kon.academy.catalog.command.service.domain.core.vo.management.specification.SpecificationDescription;
 import az.kon.academy.catalog.command.service.domain.core.vo.management.specification.SpecificationName;
+import az.kon.academy.catalog.event.management.specification.*;
 import lombok.Getter;
 import lombok.experimental.SuperBuilder;
 
@@ -17,12 +18,12 @@ import java.util.Set;
 
 @SuperBuilder(toBuilder = true)
 public class ProductSpecificationRoot extends AggregateRoot<ProductSpecificationRoot, ProductSpecificationId> {
-    @Getter private SpecificationName name;
-    @Getter private SpecificationDescription description;
-    @Getter private Set<SpecificationCategoryAssignment> categories;
+    @Getter private final SpecificationName name;
+    @Getter private final SpecificationDescription description;
+    @Getter private final Set<SpecificationCategoryAssignment> categories;
 
     public static ProductSpecificationRoot initialize(SpecificationCreateCommand command) {
-        return ProductSpecificationRoot.builder()
+        var specification = ProductSpecificationRoot.builder()
                 .id(ProductSpecificationId.random())
                 .name(command.getName())
                 .description(command.getDescription())
@@ -30,36 +31,73 @@ public class ProductSpecificationRoot extends AggregateRoot<ProductSpecification
                 .creationTs(SeDateTime.now())
                 .modificationTs(SeDateTime.now())
                 .build();
-        //Fixme when implement event system, add event for changing specification information
+
+        var event = ProductSpecificationCreatedEvent.of(
+                specification.getRootID().value().toString(),
+                specification.getModificationTs().toOffsetDateTime(),
+                specification.getName().value(),
+                specification.getDescription().value()
+        );
+
+        specification.addEvent(event);
+        return specification;
     }
 
-    public ProductSpecificationRoot assignCategory(SpecificationCategoryAssignment assignments) {
+    public ProductSpecificationRoot assignCategory(SpecificationCategoryAssignment assignment) {
         Set<SpecificationCategoryAssignment> changed = new HashSet<>(this.categories);
-        changed.removeIf(a -> assignments.getCategoryId().equals(a.getCategoryId()));
-        changed.add(assignments);
-        return this.toBuilder()
+        changed.removeIf(a -> assignment.getCategoryId().equals(a.getCategoryId()));
+        changed.add(assignment);
+
+        var specification = this.toBuilder()
                 .categories(Collections.unmodifiableSet(changed))
                 .modificationTs(SeDateTime.now())
                 .build();
-        //Fixme when implement event system, add event for changing specification information
+
+        var event = ProductSpecificationCategoryAssignedEvent.of(
+                specification.getRootID().value().toString(),
+                specification.getModificationTs().toOffsetDateTime(),
+                assignment.getCategoryId().value(),
+                assignment.isRequired()
+        );
+
+        specification.addEvent(event);
+        return specification;
     }
 
-    public ProductSpecificationRoot removeCategoryAssignment(SpecificationCategoryAssignment assignments) {
+    public ProductSpecificationRoot removeCategoryAssignment(SpecificationCategoryAssignment assignment) {
         Set<SpecificationCategoryAssignment> changed = new HashSet<>(this.categories);
-        changed.removeIf(a -> assignments.getCategoryId().equals(a.getCategoryId()));
-        return this.toBuilder()
+        changed.removeIf(a -> assignment.getCategoryId().equals(a.getCategoryId()));
+
+        var specification = this.toBuilder()
                 .categories(Collections.unmodifiableSet(changed))
                 .modificationTs(SeDateTime.now())
                 .build();
-        //Fixme when implement event system, add event for changing specification information
+
+        var event = ProductSpecificationCategoryRemovedEvent.of(
+                specification.getRootID().value().toString(),
+                specification.getModificationTs().toOffsetDateTime(),
+                assignment.getCategoryId().value()
+        );
+
+        specification.addEvent(event);
+        return specification;
     }
 
     public ProductSpecificationRoot changeInformation(SpecificationChangeInformationCommand command) {
-        return this.toBuilder()
+        var specification = this.toBuilder()
                 .name(command.getName())
                 .description(command.getDescription())
                 .modificationTs(SeDateTime.now())
                 .build();
-        //Fixme when implement event system, add event for changing specification information
+
+        var event = ProductSpecificationInformationChangedEvent.of(
+                specification.getRootID().value().toString(),
+                specification.getModificationTs().toOffsetDateTime(),
+                specification.getName().value(),
+                specification.getDescription().value()
+        );
+
+        specification.addEvent(event);
+        return specification;
     }
 }

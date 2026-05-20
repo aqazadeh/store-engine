@@ -6,7 +6,7 @@
 
     <groupId>az.kon.academy</groupId>
     <artifactId>store-engine-parent</artifactId>
-    <version>${revision}</version>
+    <version>1.0.0-ALPHA</version>
     <packaging>pom</packaging>
 
     <name>store-engine-parent</name>
@@ -37,6 +37,11 @@
         <!-- Spring Boot -->
         <spring-boot.version>4.0.6</spring-boot.version>
         <spring-cloud.version>2025.1.1</spring-cloud.version>
+
+
+        <kafka-serializer.version>8.2.1</kafka-serializer.version>
+        <grpc-version>1.81.0</grpc-version>
+        <mapstruct.version>1.6.3</mapstruct.version>
 
     </properties>
 
@@ -69,6 +74,30 @@
                 <version>${spring-cloud.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
+            </dependency>
+
+            <!-- Kafka s -->
+            <dependency>
+                <groupId>io.confluent</groupId>
+                <artifactId>kafka-schema-registry-parent</artifactId>
+                <version>${kafka-serializer.version}</version>
+                <scope>import</scope>
+                <type>pom</type>
+            </dependency>
+
+            <!-- GRPC Bom -->
+            <dependency>
+                <groupId>io.grpc</groupId>
+                <artifactId>grpc-bom</artifactId>
+                <version>${grpc-version}</version>
+                <scope>import</scope>
+                <type>pom</type>
+            </dependency>
+
+            <dependency>
+                <groupId>org.mapstruct</groupId>
+                <artifactId>mapstruct</artifactId>
+                <version>${mapstruct.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
@@ -162,6 +191,26 @@
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-surefire-report-plugin</artifactId>
                     <version>3.5.5</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.avro</groupId>
+                    <artifactId>avro-maven-plugin</artifactId>
+                    <executions>
+                        <execution>
+                            <phase>generate-sources</phase>
+                            <goals>
+                                <goal>schema</goal>
+                            </goals>
+                            <configuration>
+                                <createOptionalGetters>true</createOptionalGetters>
+                                <enableDecimalLogicalType>false</enableDecimalLogicalType>
+                                <fieldVisibility>PRIVATE</fieldVisibility>
+                                <optionalGettersForNullableFieldsOnly>true</optionalGettersForNullableFieldsOnly>
+                                <outputDirectory>${project.build.directory}/generated-sources/avro</outputDirectory>
+                                <sourceDirectory>${project.basedir}/src/main/avro</sourceDirectory>
+                            </configuration>
+                        </execution>
+                    </executions>
                 </plugin>
             </plugins>
         </pluginManagement>

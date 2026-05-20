@@ -6,7 +6,7 @@
     <parent>
         <groupId>az.kon.academy.event</groupId>
         <artifactId>se-event</artifactId>
-        <version>${library-revision}</version>
+        <version>1.0.0</version>
     </parent>
 
     <artifactId>se-event-dispatcher-kafka</artifactId>
@@ -15,7 +15,7 @@
         <dependency>
             <groupId>az.kon.academy.event</groupId>
             <artifactId>se-event-dispatcher</artifactId>
-            <version>${library-revision}</version>
+            <version>1.0.0</version>
         </dependency>
         <dependency>
             <groupId>org.slf4j</groupId>

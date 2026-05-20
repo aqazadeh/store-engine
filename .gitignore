@@ -42,3 +42,6 @@ build/
 */logs/*.log
 .idea/*
 **/.flattened-pom.xml
+docs
+avro-generator/*
+!.gitkeep

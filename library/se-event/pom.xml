@@ -6,7 +6,7 @@
     <parent>
         <groupId>az.kon.academy</groupId>
         <artifactId>store-engine-lib-parent</artifactId>
-        <version>${library-revision}</version>
+        <version>1.0.0</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 

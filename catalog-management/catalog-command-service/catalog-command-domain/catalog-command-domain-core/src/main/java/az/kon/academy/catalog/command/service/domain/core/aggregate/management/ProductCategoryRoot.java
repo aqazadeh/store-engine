@@ -10,6 +10,7 @@ import az.kon.academy.catalog.command.service.domain.core.vo.management.category
 import az.kon.academy.catalog.command.service.domain.core.vo.management.category.ProductCategoryId;
 import az.kon.academy.catalog.command.service.domain.core.vo.management.category.ProductCategoryName;
 import az.kon.academy.catalog.command.service.domain.core.vo.management.category.ProductCategoryPath;
+import az.kon.academy.catalog.event.management.category.*;
 import lombok.Getter;
 import lombok.experimental.SuperBuilder;
 
@@ -23,50 +24,88 @@ public class ProductCategoryRoot extends AggregateRoot<ProductCategoryRoot, Prod
     @Getter private String image; //Fixme when file storage is implemented, change it to Image value object
 
     public static ProductCategoryRoot initialize(ProductCategoryCreateCommand command) {
-        return ProductCategoryRoot.builder()
+        var productCategory = ProductCategoryRoot.builder()
                 .id(ProductCategoryId.random())
                 .name(command.getName())
                 .description(command.getDescription())
                 .path(command.getPath())
                 .build();
-        //Fixme when implement event system, add event for category creation
+
+        var event = ProductCategoryCreatedEvent.of(
+                productCategory.getRootID().value().toString(),
+                productCategory.getModificationTs().toOffsetDateTime(),
+                productCategory.getName().value(),
+                productCategory.getPath().value(),
+                productCategory.getDescription().value(),
+                productCategory.getImage()
+        );
+
+        productCategory.addEvent(event);
+        return productCategory;
     }
 
-    public final ProductCategoryRoot changeImage(ProductCategoryChangeImageCommand command) {
-        return this.toBuilder()
+    public ProductCategoryRoot changeImage(ProductCategoryChangeImageCommand command) {
+        var productCategory = this.toBuilder()
                 .image(command.getImage())
                 .modificationTs(SeDateTime.now())
                 .build();
 
-        //Fixme when implement event system, add event for image change
+        var event = ProductCategoryImageChangedEvent.of(
+                productCategory.getRootID().value().toString(),
+                productCategory.getModificationTs().toOffsetDateTime(),
+                productCategory.getImage()
+        );
+
+        productCategory.addEvent(event);
+        return productCategory;
     }
 
-    public final ProductCategoryRoot changeInformation(ProductCategoryChangeInformationCommand command) {
-        return this.toBuilder()
+    public ProductCategoryRoot changeInformation(ProductCategoryChangeInformationCommand command) {
+        var productCategory = this.toBuilder()
                 .name(command.getName())
                 .description(command.getDescription())
                 .path(command.getPath())
                 .modificationTs(SeDateTime.now())
                 .build();
 
-        //Fixme when implement event system, add event for category information change
+        var event = ProductCategoryInformationChangedEvent.of(
+                productCategory.getRootID().value().toString(),
+                productCategory.getModificationTs().toOffsetDateTime(),
+                productCategory.getName().value(),
+                productCategory.getPath().value(),
+                productCategory.getDescription().value()
+        );
+
+        productCategory.addEvent(event);
+        return productCategory;
     }
 
     public ProductCategoryRoot changeParent(ProductCategoryId parentId) {
-        return this.toBuilder()
+        var productCategory = this.toBuilder()
                 .parent(parentId)
                 .modificationTs(SeDateTime.now())
                 .build();
 
-        //Fixme when implement event system, add event for category parent change
+        var event = ProductCategoryParentChangedEvent.of(
+                productCategory.getRootID().value().toString(),
+                productCategory.getModificationTs().toOffsetDateTime(),
+                productCategory.getParent().value()
+        );
+        productCategory.addEvent(event);
+        return productCategory;
     }
 
     public ProductCategoryRoot removeParent() {
-        return this.toBuilder()
+        var productCategory = this.toBuilder()
                 .parent(null)
                 .modificationTs(SeDateTime.now())
                 .build();
 
-        //Fixme when implement event system, add event for category parent removal
+        var event = ProductCategoryParentRemovedEvent.of(
+                productCategory.getRootID().value().toString(),
+                productCategory.getModificationTs().toOffsetDateTime()
+        );
+        productCategory.addEvent(event);
+        return productCategory;
     }
 }

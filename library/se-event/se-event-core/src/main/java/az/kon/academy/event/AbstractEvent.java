@@ -17,25 +17,28 @@ public abstract class AbstractEvent {
     private final OffsetDateTime timestamp;
     private final Integer version;
 
-    public AbstractEvent(UUID eventId, String aggregateId, OffsetDateTime timestamp) {
+    protected AbstractEvent(UUID eventId, String aggregateId, OffsetDateTime timestamp, Integer version){
         Objects.requireNonNull(eventId, "EventId must not be null");
         Objects.requireNonNull(aggregateId, "aggregateId must not be null");
         Objects.requireNonNull(timestamp, "timestamp must not be null");
-
         this.eventId = eventId;
         this.aggregateId = aggregateId;
         this.timestamp = timestamp;
-        this.version = this.extractVersion();
+        this.version = Objects.isNull(version) ? extractVersion(getClass()) : version;
+    }
+
+    protected AbstractEvent(UUID eventId, String aggregateId, OffsetDateTime timestamp) {
+        this(eventId, aggregateId, timestamp, null);
     }
 
     protected AbstractEvent(String aggregateId, OffsetDateTime timestamp) {
         this(UUID.randomUUID(), aggregateId, timestamp);
     }
 
-    private Integer extractVersion() {
-        Optional<Event> annotation = Optional.ofNullable(this.getClass().getAnnotation(Event.class));
+    private static Integer extractVersion(Class<?> clazz) {
+        Optional<Event> annotation = Optional.ofNullable(clazz.getAnnotation(Event.class));
         if(annotation.isEmpty()) {
-            throw new IllegalStateException(this.getClass().getSimpleName() + " must be annotated with @Event");
+            throw new IllegalStateException(clazz.getSimpleName() + " must be annotated with @Event");
         }
         return annotation.get().version();
     }
