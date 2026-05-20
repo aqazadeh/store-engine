@@ -9,8 +9,6 @@ import java.util.UUID;
 @Getter
 @Setter
 @NoArgsConstructor
-public class BrandChangeInformationRequest {
+public class BrandSentToApprovalRequest {
     private UUID brandId;
-    private String name;
-    private String description;
 }

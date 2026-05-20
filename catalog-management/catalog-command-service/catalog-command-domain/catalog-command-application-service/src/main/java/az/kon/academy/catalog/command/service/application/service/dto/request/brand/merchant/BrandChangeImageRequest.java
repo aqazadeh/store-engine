@@ -9,8 +9,7 @@ import java.util.UUID;
 @Getter
 @Setter
 @NoArgsConstructor
-public class BrandChangeInformationRequest {
+public class BrandChangeImageRequest {
     private UUID brandId;
-    private String name;
-    private String description;
+    private String image;
 }

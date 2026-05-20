@@ -1,4 +1,4 @@
-package az.kon.academy.catalog.command.service.application.service.dto.request.brand.merchant;
+package az.kon.academy.catalog.command.service.application.service.dto.request.specification;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -9,8 +9,8 @@ import java.util.UUID;
 @Getter
 @Setter
 @NoArgsConstructor
-public class BrandChangeInformationRequest {
-    private UUID brandId;
+public class SpecificationChangeInformationRequest {
+    private UUID specificationId;
     private String name;
     private String description;
 }
