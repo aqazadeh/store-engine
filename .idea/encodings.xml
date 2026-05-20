@@ -16,20 +16,20 @@
     <file url="file://$PROJECT_DIR$/catalog-management/catalog-command-service/catalog-command-domain/catalog-command-domain-core/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/catalog-management/catalog-command-service/catalog-command-shared/catalog-command-domain-vo/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/catalog-management/catalog-command-service/catalog-command-shared/catalog-command-domain-vo/src/main/resources" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/catalog-management/catalog-command-service/catalog-command-shared/catalog-command-event-avro/src/main/java" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/catalog-management/catalog-command-service/catalog-command-shared/catalog-command-event-avro/src/main/resources" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/catalog-management/catalog-command-service/catalog-command-shared/catalog-domain-event/src/main/java" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/catalog-management/catalog-command-service/catalog-command-shared/catalog-domain-event/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/catalog-management/catalog-command-service/catalog-command-shared/catalog-event-avro/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/catalog-management/catalog-command-service/catalog-command-shared/catalog-event-avro/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/catalog-management/catalog-command-service/catalog-command-shared/catalog-event/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/catalog-management/catalog-command-service/catalog-command-shared/catalog-event/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/catalog-management/catalog-command-service/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/catalog-management/catalog-command-service/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/catalog-management/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/catalog-management/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/example/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/example/src/main/resources" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/library/avro-event-maven-plugin/src/main/java" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/library/avro-event-maven-plugin/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/library/se-aggregate/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/library/se-aggregate/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/library/se-avro-avsc-maven-plugin/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/library/se-avro-avsc-maven-plugin/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/library/se-event/se-event-core/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/library/se-event/se-event-core/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/library/se-event/se-event-dispatcher-internal/src/main/java" charset="UTF-8" />
@@ -50,6 +50,8 @@
     <file url="file://$PROJECT_DIR$/library/se-exception/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/library/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/library/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/shared/se-event-generator-parent/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/shared/se-event-generator-parent/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/shared/store-engine-parent/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/shared/store-engine-parent/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/src/main/java" charset="UTF-8" />

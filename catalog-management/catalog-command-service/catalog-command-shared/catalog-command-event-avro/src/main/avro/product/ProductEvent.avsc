@@ -1,6 +1,0 @@
-{
-  "type" : "record",
-  "name" : "ProductAvroModel",
-  "namespace" : "az.kon.academy.catalog.avro.model.product",
-  "fields" : [ ]
-}

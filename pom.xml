@@ -7,7 +7,7 @@
     <parent>
         <groupId>az.kon.academy</groupId>
         <artifactId>store-engine-parent</artifactId>
-        <version>${revision}</version>
+        <version>1.0.0-ALPHA</version>
         <relativePath>./shared/store-engine-parent/pom.xml</relativePath>
     </parent>
 
@@ -16,6 +16,7 @@
     <modules>
         <module>shared/store-engine-parent</module>
         <module>library</module>
+        <module>shared/se-event-generator-parent</module>
         <module>catalog-management</module>
         <module>example</module>
     </modules>

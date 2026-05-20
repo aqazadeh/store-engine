@@ -1,6 +1,0 @@
-{
-  "type" : "record",
-  "name" : "ProductSpecificationAvroModel",
-  "namespace" : "az.kon.academy.catalog.avro.model.management.specification",
-  "fields" : [ ]
-}

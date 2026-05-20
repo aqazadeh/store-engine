@@ -1,6 +1,0 @@
-{
-  "type" : "record",
-  "name" : "BrandRejectionReasonAvroModel",
-  "namespace" : "az.kon.academy.catalog.avro.model.management.rejection",
-  "fields" : [ ]
-}

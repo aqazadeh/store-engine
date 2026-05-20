@@ -6,7 +6,7 @@
 
     <groupId>az.kon.academy</groupId>
     <artifactId>store-engine-parent</artifactId>
-    <version>${revision}</version>
+    <version>1.0.0-ALPHA</version>
     <packaging>pom</packaging>
 
     <name>store-engine-parent</name>
@@ -41,6 +41,7 @@
 
         <kafka-serializer.version>8.2.1</kafka-serializer.version>
         <grpc-version>1.81.0</grpc-version>
+        <mapstruct.version>1.6.3</mapstruct.version>
 
     </properties>
 
@@ -91,6 +92,12 @@
                 <version>${grpc-version}</version>
                 <scope>import</scope>
                 <type>pom</type>
+            </dependency>
+
+            <dependency>
+                <groupId>org.mapstruct</groupId>
+                <artifactId>mapstruct</artifactId>
+                <version>${mapstruct.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

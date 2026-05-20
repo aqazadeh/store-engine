@@ -6,7 +6,7 @@
     <parent>
         <groupId>az.kon.academy</groupId>
         <artifactId>store-engine-parent</artifactId>
-        <version>${revision}</version>
+        <version>1.0.0-ALPHA</version>
         <relativePath>../shared/store-engine-parent/pom.xml</relativePath>
     </parent>
 
@@ -17,8 +17,8 @@
 
     <modules>
         <module>catalog-command-service</module>
-        <module>catalog-command-service/catalog-command-shared/catalog-domain-event</module>
-        <module>catalog-command-service/catalog-command-shared/catalog-command-event-avro</module>
+        <module>catalog-command-service/catalog-command-shared/catalog-event</module>
+        <module>catalog-command-service/catalog-command-shared/catalog-event-avro</module>
     </modules>
 
     <properties>
@@ -30,7 +30,7 @@
             <dependency>
                 <groupId>az.kon.academy</groupId>
                 <artifactId>store-engine-lib-parent</artifactId>
-                <version>${library-revision}</version>
+                <version>1.0.0</version>
                 <scope>import</scope>
                 <type>pom</type>
             </dependency>

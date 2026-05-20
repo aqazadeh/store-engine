@@ -23,7 +23,7 @@
         </dependency>
         <dependency>
             <groupId>az.kon.academy.catalog.event</groupId>
-            <artifactId>catalog-domain-event</artifactId>
+            <artifactId>catalog-event</artifactId>
             <version>1.0.0-SNAPSHOT</version>
         </dependency>
 
