@@ -9,11 +9,11 @@ import az.kon.academy.catalog.command.service.application.service.dto.request.ca
 
 public interface CategoryRestPort {
 
-    void createCategory(ProductCategoryCreateRequest request);
+    void create(ProductCategoryCreateRequest request);
 
-    void activateCategory(ProductCategoryActivateRequest request);
+    void activate(ProductCategoryActivateRequest request);
 
-    void archiveCategory(ProductCategoryArchiveRequest request);
+    void archive(ProductCategoryArchiveRequest request);
 
     void changeImage(ProductCategoryChangeImageRequest request);
 

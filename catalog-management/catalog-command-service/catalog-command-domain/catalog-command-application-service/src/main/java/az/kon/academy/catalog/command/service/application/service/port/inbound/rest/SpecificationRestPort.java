@@ -8,11 +8,11 @@ import az.kon.academy.catalog.command.service.application.service.dto.request.sp
 
 public interface SpecificationRestPort {
 
-    void createSpecification(SpecificationCreateRequest request);
+    void create(SpecificationCreateRequest request);
 
     void changeInformation(SpecificationChangeInformationRequest request);
 
-    void deleteSpecification(SpecificationDeleteRequest request);
+    void delete(SpecificationDeleteRequest request);
 
     void assignCategory(SpecificationAssignCategoryRequest request);
 

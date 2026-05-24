@@ -8,6 +8,7 @@ import az.kon.academy.catalog.command.service.domain.core.command.brand.manageme
 import az.kon.academy.catalog.command.service.domain.core.service.brand.BrandManagementDomainService;
 import az.kon.academy.domain.core.SeDomainContext;
 import az.kon.academy.event.handler.DomainEventPublisher;
+import org.springframework.beans.factory.annotation.Qualifier;
 
 @CommandHandler(
         roles = SecurityPermissions.Role.ROLE_DOMAIN_MODERATOR,
@@ -20,7 +21,7 @@ public class BrandRejectCommandHandler implements AbstractCommandHandler<BrandRe
 
     public BrandRejectCommandHandler(SeDomainContext domainContext,
                                      DomainEventPublisher domainEventPublisher,
-                                     BrandManagementDomainService brandManagementDomainService) {
+                                     @Qualifier("brandManagementDomainService") BrandManagementDomainService brandManagementDomainService) {
         this.domainContext = domainContext;
         this.domainEventPublisher = domainEventPublisher;
         this.brandManagementDomainService = brandManagementDomainService;

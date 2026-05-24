@@ -120,7 +120,7 @@ class ProductRestAdapter implements ProductRestPort {
     }
 
     @Override
-    public void createProduct(ProductCreateRequest request) {
+    public void create(ProductCreateRequest request) {
         var currentUser = this.securityContextHolder.getUser().getUserId();
         var command = ProductCreateCommand.builder()
                 .merchantId(MerchantId.from(currentUser))
@@ -144,7 +144,7 @@ class ProductRestAdapter implements ProductRestPort {
     }
 
     @Override
-    public void archiveProduct(ProductArchiveRequest request) {
+    public void archive(ProductArchiveRequest request) {
         var command = ProductArchiveCommand.builder()
                 .productId(ProductId.from(request.getProductId()))
                 .build();

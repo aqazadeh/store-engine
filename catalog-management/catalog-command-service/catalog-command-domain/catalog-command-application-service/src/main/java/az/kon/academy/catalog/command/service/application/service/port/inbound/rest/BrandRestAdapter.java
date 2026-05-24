@@ -75,7 +75,7 @@ class BrandRestAdapter implements BrandRestPort {
     }
 
     @Override
-    public BrandCreateCommandResult createGlobalBrand(BrandCreateGlobalRequest request) {
+    public BrandCreateCommandResult createGlobal(BrandCreateGlobalRequest request) {
         var command = BrandCreateForGlobalCommand.builder()
                 .owner(Objects.isNull(request.getOwner()) ? null : MerchantId.from(request.getOwner()))
                 .name(BrandName.of(request.getName()))
@@ -86,7 +86,7 @@ class BrandRestAdapter implements BrandRestPort {
     }
 
     @Override
-    public BrandCreateCommandResult createMerchantBrand(BrandCreateForMerchantRequest request) {
+    public BrandCreateCommandResult createMerchant(BrandCreateForMerchantRequest request) {
         var currentUser = this.securityContextHolder.getUser().getUserId();
         var command = BrandCreateForMerchantCommand.builder()
                 .owner(MerchantId.from(currentUser))
@@ -98,7 +98,7 @@ class BrandRestAdapter implements BrandRestPort {
     }
 
     @Override
-    public void approveBrand(BrandApproveRequest request) {
+    public void approve(BrandApproveRequest request) {
         var command = BrandApproveCommand.builder()
                 .brandId(BrandId.from(request.getBrandId()))
                 .build();
@@ -106,7 +106,8 @@ class BrandRestAdapter implements BrandRestPort {
     }
 
     @Override
-    public void rejectBrand(BrandRejectRequest request) {
+    public void reject(BrandRejectRequest request) {
+        //FIXME call reject reason first
         var command = BrandRejectCommand.builder()
                 .brandId(BrandId.from(request.getBrandId()))
                 .build();

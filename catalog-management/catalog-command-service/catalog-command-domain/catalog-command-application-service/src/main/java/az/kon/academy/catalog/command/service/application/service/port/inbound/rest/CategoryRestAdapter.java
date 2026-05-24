@@ -49,7 +49,7 @@ class CategoryRestAdapter implements CategoryRestPort {
     }
 
     @Override
-    public void createCategory(ProductCategoryCreateRequest request) {
+    public void create(ProductCategoryCreateRequest request) {
         var command = ProductCategoryCreateCommand.builder()
                 .name(ProductCategoryName.of(request.getName()))
                 .description(ProductCategoryDescription.of(request.getDescription()))
@@ -59,7 +59,7 @@ class CategoryRestAdapter implements CategoryRestPort {
     }
 
     @Override
-    public void activateCategory(ProductCategoryActivateRequest request) {
+    public void activate(ProductCategoryActivateRequest request) {
         var command = ProductCategoryActivateCommand.builder()
                 .productCategoryId(ProductCategoryId.from(request.getCategoryId()))
                 .build();
@@ -67,7 +67,7 @@ class CategoryRestAdapter implements CategoryRestPort {
     }
 
     @Override
-    public void archiveCategory(ProductCategoryArchiveRequest request) {
+    public void archive(ProductCategoryArchiveRequest request) {
         var command = ProductCategoryArchiveCommand.builder()
                 .productCategoryId(ProductCategoryId.from(request.getCategoryId()))
                 .build();

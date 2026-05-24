@@ -43,7 +43,7 @@ class SpecificationRestAdapter implements SpecificationRestPort {
     }
 
     @Override
-    public void createSpecification(SpecificationCreateRequest request) {
+    public void create(SpecificationCreateRequest request) {
         var command = SpecificationCreateCommand.builder()
                 .name(SpecificationName.of(request.getName()))
                 .description(SpecificationDescription.of(request.getDescription()))
@@ -62,7 +62,7 @@ class SpecificationRestAdapter implements SpecificationRestPort {
     }
 
     @Override
-    public void deleteSpecification(SpecificationDeleteRequest request) {
+    public void delete(SpecificationDeleteRequest request) {
         var command = SpecificationDeleteCommand.builder()
                 .specificationId(ProductSpecificationId.from(request.getSpecificationId()))
                 .build();
