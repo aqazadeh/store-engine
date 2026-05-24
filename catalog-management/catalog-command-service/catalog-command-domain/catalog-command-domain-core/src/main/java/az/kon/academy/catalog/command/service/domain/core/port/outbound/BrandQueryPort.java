@@ -22,9 +22,15 @@ public interface BrandQueryPort {
         return this.findByIdAndMerchantIdAndRowStatusActive(brandId, merchantId).orElseThrow(() ->
                 new BrandDomainException(BrandDomainErrorCodes.ENTITY_NOT_FOUND, List.of(brandId.toString())));
     }
+
     Optional<BrandRoot> findByIdAndMerchantIdAndRowStatusActive(BrandId brandId, MerchantId merchantId);
 
-    BrandRoot fetchByIdAndRowStatusActive(BrandId id);
+    Optional<BrandRoot> findByIdAndRowStatusActive(BrandId id);
+
+    default BrandRoot fetchByIdAndRowStatusActive(BrandId id){
+        return this.findByIdAndRowStatusActive(id).orElseThrow(() ->
+                new BrandDomainException(BrandDomainErrorCodes.ENTITY_NOT_FOUND, List.of(id.toString())));
+    }
 
     List<BrandRoot> fetchAllByMerchantIdAndRowStatusActive(MerchantId merchantId);
 

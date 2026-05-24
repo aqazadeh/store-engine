@@ -25,6 +25,11 @@
             <version>1.0.0</version>
         </dependency>
         <dependency>
+            <groupId>az.kon.academy.event</groupId>
+            <artifactId>se-event-handler-spring-boot-starter</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+        <dependency>
             <groupId>az.kon.academy</groupId>
             <artifactId>se-application-core</artifactId>
             <version>1.0.0</version>

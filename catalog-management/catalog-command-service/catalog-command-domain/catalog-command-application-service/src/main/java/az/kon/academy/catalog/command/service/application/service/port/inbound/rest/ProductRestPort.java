@@ -18,11 +18,11 @@ import az.kon.academy.catalog.command.service.application.service.dto.request.pr
 
 public interface ProductRestPort {
 
-    void createProduct(ProductCreateRequest request);
+    void create(ProductCreateRequest request);
 
     void changeInformation(ProductChangeInformationRequest request);
 
-    void archiveProduct(ProductArchiveRequest request);
+    void archive(ProductArchiveRequest request);
 
     void assignBrand(ProductAssignBrandRequest request);
 

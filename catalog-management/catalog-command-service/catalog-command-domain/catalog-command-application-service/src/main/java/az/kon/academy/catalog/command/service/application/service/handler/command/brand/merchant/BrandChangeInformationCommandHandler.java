@@ -8,6 +8,7 @@ import az.kon.academy.catalog.command.service.domain.core.command.brand.merchant
 import az.kon.academy.catalog.command.service.domain.core.service.brand.BrandModificationDomainService;
 import az.kon.academy.domain.core.SeDomainContext;
 import az.kon.academy.event.handler.DomainEventPublisher;
+import org.springframework.beans.factory.annotation.Qualifier;
 
 @CommandHandler(
         roles = SecurityPermissions.Role.ROLE_MERCHANT,
@@ -20,7 +21,7 @@ public class BrandChangeInformationCommandHandler implements AbstractCommandHand
 
     public BrandChangeInformationCommandHandler(SeDomainContext domainContext,
                                                 DomainEventPublisher domainEventPublisher,
-                                                BrandModificationDomainService brandModificationDomainService) {
+                                                @Qualifier("brandModificationDomainService") BrandModificationDomainService brandModificationDomainService) {
         this.domainContext = domainContext;
         this.domainEventPublisher = domainEventPublisher;
         this.brandModificationDomainService = brandModificationDomainService;

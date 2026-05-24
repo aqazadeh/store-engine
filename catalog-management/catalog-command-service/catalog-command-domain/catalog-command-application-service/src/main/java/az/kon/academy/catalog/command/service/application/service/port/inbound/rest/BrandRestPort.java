@@ -13,13 +13,13 @@ import az.kon.academy.catalog.command.service.application.service.dto.result.Bra
 
 public interface BrandRestPort {
 
-    BrandCreateCommandResult createGlobalBrand(BrandCreateGlobalRequest request);
+    BrandCreateCommandResult createGlobal(BrandCreateGlobalRequest request);
 
-    BrandCreateCommandResult createMerchantBrand(BrandCreateForMerchantRequest request);
+    BrandCreateCommandResult createMerchant(BrandCreateForMerchantRequest request);
 
-    void approveBrand(BrandApproveRequest request);
+    void approve(BrandApproveRequest request);
 
-    void rejectBrand(BrandRejectRequest request);
+    void reject(BrandRejectRequest request);
 
     void changeOwner(BrandChangeOwnerRequest request);
 
