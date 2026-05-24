@@ -1,7 +1,7 @@
 package az.kon.academy.catalog.command.service.domain.core.aggregate.management.rejection;
 
 import az.kon.academy.aggragate.AggregateRoot;
-import az.kon.academy.catalog.command.service.domain.core.command.brand.BrandCreateRejectionReasonCommand;
+import az.kon.academy.catalog.command.service.domain.core.command.brand.management.BrandCreateRejectionReasonCommand;
 import az.kon.academy.catalog.command.service.domain.core.vo.brand.BrandId;
 import az.kon.academy.catalog.command.service.domain.core.vo.brand.BrandRejectionReasonId;
 import az.kon.academy.catalog.command.service.domain.core.vo.moderation.ModeratorId;

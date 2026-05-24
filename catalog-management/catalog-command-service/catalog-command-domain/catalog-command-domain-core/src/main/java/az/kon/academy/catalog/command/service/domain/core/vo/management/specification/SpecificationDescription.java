@@ -12,6 +12,10 @@ public final class SpecificationDescription {
 
     private final String value;
 
+    public static SpecificationDescription of(String value) {
+        return new SpecificationDescription(value);
+    }
+
     public SpecificationDescription(String value) {
         if (Objects.isNull(value) || value.isBlank()) {
             throw new ProductCategoryDomainException(ProductCategoryDomainErrorCodes.DESCRIPTION_REQUIRED);

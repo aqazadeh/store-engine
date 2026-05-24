@@ -12,6 +12,10 @@ public final class SpecificationName {
 
     private final String value;
 
+    public static SpecificationName of(String value) {
+        return new SpecificationName(value);
+    }
+
     public SpecificationName(String value) {
         if (Objects.isNull(value) || value.isBlank()) {
             throw new ProductCategoryDomainException(ProductCategoryDomainErrorCodes.NAME_REQUIRED);

@@ -14,13 +14,23 @@ public interface BrandQueryPort {
     Optional<BrandRoot> fetchById(BrandId id);
 
     default BrandRoot fetchByIdAndStatusSentToApproval(BrandId id){
-        return this.fetchById(id).orElseThrow(() -> new BrandDomainException(
-                BrandDomainErrorCodes.ENTITY_NOT_FOUND,
-                List.of(id.toString()))
-        );
+        return this.fetchById(id).orElseThrow(() ->
+                new BrandDomainException(BrandDomainErrorCodes.ENTITY_NOT_FOUND, List.of(id.toString())));
     }
 
-    BrandRoot fetchByIdAndRowStatusActive(BrandId id);
+    default BrandRoot fetchByIdAndMerchantIdAndRowStatusActive(BrandId brandId, MerchantId merchantId) {
+        return this.findByIdAndMerchantIdAndRowStatusActive(brandId, merchantId).orElseThrow(() ->
+                new BrandDomainException(BrandDomainErrorCodes.ENTITY_NOT_FOUND, List.of(brandId.toString())));
+    }
+
+    Optional<BrandRoot> findByIdAndMerchantIdAndRowStatusActive(BrandId brandId, MerchantId merchantId);
+
+    Optional<BrandRoot> findByIdAndRowStatusActive(BrandId id);
+
+    default BrandRoot fetchByIdAndRowStatusActive(BrandId id){
+        return this.findByIdAndRowStatusActive(id).orElseThrow(() ->
+                new BrandDomainException(BrandDomainErrorCodes.ENTITY_NOT_FOUND, List.of(id.toString())));
+    }
 
     List<BrandRoot> fetchAllByMerchantIdAndRowStatusActive(MerchantId merchantId);
 

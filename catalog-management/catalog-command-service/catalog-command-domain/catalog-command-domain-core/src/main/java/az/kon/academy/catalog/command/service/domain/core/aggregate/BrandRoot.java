@@ -2,10 +2,11 @@ package az.kon.academy.catalog.command.service.domain.core.aggregate;
 
 import az.kon.academy.aggragate.AggregateRoot;
 import az.kon.academy.aggragate.valueobject.SeDateTime;
-import az.kon.academy.catalog.command.service.domain.core.command.brand.BrandChangeImageCommand;
-import az.kon.academy.catalog.command.service.domain.core.command.brand.BrandChangeInformationCommand;
-import az.kon.academy.catalog.command.service.domain.core.command.brand.BrandChangeOwnerCommand;
-import az.kon.academy.catalog.command.service.domain.core.command.brand.BrandCreateCommand;
+import az.kon.academy.catalog.command.service.domain.core.command.brand.BrandCreateForGlobalCommand;
+import az.kon.academy.catalog.command.service.domain.core.command.brand.merchant.BrandChangeImageCommand;
+import az.kon.academy.catalog.command.service.domain.core.command.brand.merchant.BrandChangeInformationCommand;
+import az.kon.academy.catalog.command.service.domain.core.command.brand.management.BrandChangeOwnerCommand;
+import az.kon.academy.catalog.command.service.domain.core.command.brand.merchant.BrandCreateForMerchantCommand;
 import az.kon.academy.catalog.command.service.domain.core.exception.brand.BrandDomainErrorCodes;
 import az.kon.academy.catalog.command.service.domain.core.exception.brand.BrandDomainException;
 import az.kon.academy.catalog.command.service.domain.core.vo.brand.*;
@@ -27,7 +28,7 @@ public class BrandRoot extends AggregateRoot<BrandRoot, BrandId> {
     @Getter private Boolean isGlobal;
     @Getter private BrandStatus status;
 
-    public static BrandRoot initializeForMerchant(BrandCreateCommand command) {
+    public static BrandRoot initializeForMerchant(BrandCreateForMerchantCommand command) {
         var brand = BrandRoot.builder()
                 .id(BrandId.random())
                 .owner(command.getOwner())
@@ -51,7 +52,7 @@ public class BrandRoot extends AggregateRoot<BrandRoot, BrandId> {
         return brand;
     }
 
-    public static BrandRoot initializeGlobal(BrandCreateCommand command) {
+    public static BrandRoot initializeForGlobal(BrandCreateForGlobalCommand command) {
         var brand = BrandRoot.builder()
                 .id(BrandId.random())
                 .owner(command.getOwner())
@@ -158,7 +159,6 @@ public class BrandRoot extends AggregateRoot<BrandRoot, BrandId> {
         var brand = this.toBuilder()
                 .name(command.getName())
                 .description(command.getDescription())
-                .path(command.getPath())
                 .modificationTs(SeDateTime.now())
                 .build();
 
@@ -166,8 +166,7 @@ public class BrandRoot extends AggregateRoot<BrandRoot, BrandId> {
                 brand.getRootID().value().toString(),
                 brand.getModificationTs().toOffsetDateTime(),
                 brand.getName().value(),
-                brand.getDescription().value(),
-                brand.getPath().value()
+                brand.getDescription().value()
         );
         brand.addEvent(event);
 

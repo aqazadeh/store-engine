@@ -11,6 +11,10 @@ public final class ProductSpecificationValue {
 
     private final String value;
 
+    public static ProductSpecificationValue of(String value) {
+        return new ProductSpecificationValue(value);
+    }
+
     public ProductSpecificationValue(String value) {
         if (Objects.isNull(value) || value.isBlank()) {
             throw new ProductCategoryDomainException(ProductCategoryDomainErrorCodes.SPECIFICATION_VALUE_REQUIRED);

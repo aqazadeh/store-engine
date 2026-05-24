@@ -12,6 +12,10 @@ public final class VariantName {
 
     private final String value;
 
+    public static VariantName of(String value) {
+        return new VariantName(value);
+    }
+
     public VariantName(String value) {
         if (Objects.isNull(value) || value.isBlank()) {
             throw new BrandDomainException(BrandDomainErrorCodes.NAME_REQUIRED);

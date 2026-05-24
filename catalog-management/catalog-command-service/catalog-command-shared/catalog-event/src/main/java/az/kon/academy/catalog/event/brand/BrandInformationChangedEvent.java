@@ -13,26 +13,21 @@ import java.util.UUID;
 public final class BrandInformationChangedEvent extends DomainEvent implements BrandEvent {
     private final String name;
     private final String description;
-    private final String path;
 
     public BrandInformationChangedEvent(UUID eventId, String aggregateId, OffsetDateTime timestamp, Integer version,
-                                        String name, String description, String path) {
+                                        String name, String description) {
         super(eventId, aggregateId, timestamp, version);
         this.name = name;
         this.description = description;
-        this.path = path;
     }
 
-    private BrandInformationChangedEvent(String aggregateId, OffsetDateTime timestamp,String name,
-                                        String description, String path) {
+    private BrandInformationChangedEvent(String aggregateId, OffsetDateTime timestamp,String name, String description) {
         super(aggregateId, timestamp);
         this.name = name;
         this.description = description;
-        this.path = path;
     }
 
-    public static BrandInformationChangedEvent of(String aggregateId, OffsetDateTime timestamp, String name,
-                                                  String description, String path){
-        return new BrandInformationChangedEvent(aggregateId, timestamp, name, description, path);
+    public static BrandInformationChangedEvent of(String aggregateId, OffsetDateTime timestamp, String name, String description){
+        return new BrandInformationChangedEvent(aggregateId, timestamp, name, description);
     }
 }

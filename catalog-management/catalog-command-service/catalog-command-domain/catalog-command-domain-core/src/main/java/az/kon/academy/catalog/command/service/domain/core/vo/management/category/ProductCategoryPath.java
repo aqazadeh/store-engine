@@ -12,6 +12,10 @@ public final class ProductCategoryPath {
 
     private final String value;
 
+    public static ProductCategoryPath of(String value) {
+        return new ProductCategoryPath(value);
+    }
+
     public ProductCategoryPath(String value) {
         if (Objects.isNull(value) || value.isBlank()) {
             throw new ProductCategoryDomainException(ProductCategoryDomainErrorCodes.PATH_REQUIRED);

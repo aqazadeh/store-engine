@@ -12,6 +12,10 @@ public final class ProductCategoryName {
 
     private final String value;
 
+    public static ProductCategoryName of(String value) {
+        return new ProductCategoryName(value);
+    }
+
     public ProductCategoryName(String value) {
         if (Objects.isNull(value) || value.isBlank()) {
             throw new ProductCategoryDomainException(ProductCategoryDomainErrorCodes.NAME_REQUIRED);
