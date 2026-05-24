@@ -12,4 +12,11 @@
 
     <artifactId>catalog-domain-outbound-dao</artifactId>
 
+    <dependencies>
+        <dependency>
+            <groupId>az.kon.academy.catalog</groupId>
+            <artifactId>catalog-command-application-service</artifactId>
+        </dependency>
+    </dependencies>
+
 </project>
