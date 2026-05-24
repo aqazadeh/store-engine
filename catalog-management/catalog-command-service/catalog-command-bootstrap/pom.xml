@@ -16,6 +16,32 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-autoconfigure</artifactId>
         </dependency>
+
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-actuator</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.micrometer</groupId>
+            <artifactId>micrometer-registry-prometheus</artifactId>
+            <scope>runtime</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>az.kon.academy.catalog</groupId>
+            <artifactId>catalog-command-inbound-rest</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>az.kon.academy.event</groupId>
+            <artifactId>se-event-dispatcher-spring-boot-starter</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+        <dependency>
+            <groupId>az.kon.academy.event</groupId>
+            <artifactId>se-event-dispatcher-internal</artifactId>
+            <version>1.0.0</version>
+        </dependency>
     </dependencies>
 
 </project>

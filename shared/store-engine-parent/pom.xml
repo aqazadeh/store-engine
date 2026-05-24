@@ -37,6 +37,7 @@
         <!-- Spring Boot -->
         <spring-boot.version>4.0.6</spring-boot.version>
         <spring-cloud.version>2025.1.1</spring-cloud.version>
+        <springdoc.version>3.0.3</springdoc.version>
 
 
         <kafka-serializer.version>8.2.1</kafka-serializer.version>
@@ -92,6 +93,15 @@
                 <version>${grpc-version}</version>
                 <scope>import</scope>
                 <type>pom</type>
+            </dependency>
+
+            <!-- Springdoc -->
+            <dependency>
+                <groupId>org.springdoc</groupId>
+                <artifactId>springdoc-openapi-bom</artifactId>
+                <version>${springdoc.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
             </dependency>
 
             <dependency>

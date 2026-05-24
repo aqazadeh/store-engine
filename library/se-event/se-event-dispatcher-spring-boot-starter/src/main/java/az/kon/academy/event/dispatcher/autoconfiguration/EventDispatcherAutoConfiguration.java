@@ -31,7 +31,7 @@ public class EventDispatcherAutoConfiguration {
     }
 
     @Bean
-    @ConditionalOnMissingBean
+    @ConditionalOnMissingBean(EventDispatcher.class)
     public EventDispatcher eventDispatcher(EventDispatchStrategyRegistry registry, EventDispatchMonitor monitor) {
         return new DefaultEventDispatcher(registry, monitor);
     }

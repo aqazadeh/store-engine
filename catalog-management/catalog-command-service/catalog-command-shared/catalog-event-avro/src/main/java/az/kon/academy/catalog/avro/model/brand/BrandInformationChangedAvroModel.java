@@ -13,10 +13,10 @@ import org.apache.avro.message.SchemaStore;
 import java.util.Optional;
 @org.apache.avro.specific.AvroGenerated
 public class BrandInformationChangedAvroModel extends org.apache.avro.specific.SpecificRecordBase implements org.apache.avro.specific.SpecificRecord {
-  private static final long serialVersionUID = -8347980948221518925L;
+  private static final long serialVersionUID = 7036576962987545401L;
 
 
-  public static final org.apache.avro.Schema SCHEMA$ = new org.apache.avro.Schema.Parser().parse("{\"type\":\"record\",\"name\":\"BrandInformationChangedAvroModel\",\"namespace\":\"az.kon.academy.catalog.avro.model.brand\",\"fields\":[{\"name\":\"description\",\"type\":\"string\"},{\"name\":\"name\",\"type\":\"string\"},{\"name\":\"path\",\"type\":\"string\"},{\"name\":\"aggregateId\",\"type\":\"string\"},{\"name\":\"eventId\",\"type\":{\"type\":\"string\",\"logicalType\":\"uuid\"}},{\"name\":\"timestamp\",\"type\":{\"type\":\"long\",\"logicalType\":\"timestamp-millis\"}},{\"name\":\"version\",\"type\":\"int\"}]}");
+  public static final org.apache.avro.Schema SCHEMA$ = new org.apache.avro.Schema.Parser().parse("{\"type\":\"record\",\"name\":\"BrandInformationChangedAvroModel\",\"namespace\":\"az.kon.academy.catalog.avro.model.brand\",\"fields\":[{\"name\":\"description\",\"type\":\"string\"},{\"name\":\"name\",\"type\":\"string\"},{\"name\":\"aggregateId\",\"type\":\"string\"},{\"name\":\"eventId\",\"type\":{\"type\":\"string\",\"logicalType\":\"uuid\"}},{\"name\":\"timestamp\",\"type\":{\"type\":\"long\",\"logicalType\":\"timestamp-millis\"}},{\"name\":\"version\",\"type\":\"int\"}]}");
   public static org.apache.avro.Schema getClassSchema() { return SCHEMA$; }
 
   private static final SpecificData MODEL$ = new SpecificData();
@@ -78,7 +78,6 @@ public class BrandInformationChangedAvroModel extends org.apache.avro.specific.S
 
   private java.lang.CharSequence description;
   private java.lang.CharSequence name;
-  private java.lang.CharSequence path;
   private java.lang.CharSequence aggregateId;
   private java.util.UUID eventId;
   private java.time.Instant timestamp;
@@ -95,16 +94,14 @@ public class BrandInformationChangedAvroModel extends org.apache.avro.specific.S
    * All-args constructor.
    * @param description The new value for description
    * @param name The new value for name
-   * @param path The new value for path
    * @param aggregateId The new value for aggregateId
    * @param eventId The new value for eventId
    * @param timestamp The new value for timestamp
    * @param version The new value for version
    */
-  public BrandInformationChangedAvroModel(java.lang.CharSequence description, java.lang.CharSequence name, java.lang.CharSequence path, java.lang.CharSequence aggregateId, java.util.UUID eventId, java.time.Instant timestamp, java.lang.Integer version) {
+  public BrandInformationChangedAvroModel(java.lang.CharSequence description, java.lang.CharSequence name, java.lang.CharSequence aggregateId, java.util.UUID eventId, java.time.Instant timestamp, java.lang.Integer version) {
     this.description = description;
     this.name = name;
-    this.path = path;
     this.aggregateId = aggregateId;
     this.eventId = eventId;
     this.timestamp = timestamp.truncatedTo(java.time.temporal.ChronoUnit.MILLIS);
@@ -123,18 +120,16 @@ public class BrandInformationChangedAvroModel extends org.apache.avro.specific.S
     switch (field$) {
     case 0: return description;
     case 1: return name;
-    case 2: return path;
-    case 3: return aggregateId;
-    case 4: return eventId;
-    case 5: return timestamp;
-    case 6: return version;
+    case 2: return aggregateId;
+    case 3: return eventId;
+    case 4: return timestamp;
+    case 5: return version;
     default: throw new IndexOutOfBoundsException("Invalid index: " + field$);
     }
   }
 
   private static final org.apache.avro.Conversion<?>[] conversions =
       new org.apache.avro.Conversion<?>[] {
-      null,
       null,
       null,
       null,
@@ -156,11 +151,10 @@ public class BrandInformationChangedAvroModel extends org.apache.avro.specific.S
     switch (field$) {
     case 0: description = (java.lang.CharSequence)value$; break;
     case 1: name = (java.lang.CharSequence)value$; break;
-    case 2: path = (java.lang.CharSequence)value$; break;
-    case 3: aggregateId = (java.lang.CharSequence)value$; break;
-    case 4: eventId = (java.util.UUID)value$; break;
-    case 5: timestamp = (java.time.Instant)value$; break;
-    case 6: version = (java.lang.Integer)value$; break;
+    case 2: aggregateId = (java.lang.CharSequence)value$; break;
+    case 3: eventId = (java.util.UUID)value$; break;
+    case 4: timestamp = (java.time.Instant)value$; break;
+    case 5: version = (java.lang.Integer)value$; break;
     default: throw new IndexOutOfBoundsException("Invalid index: " + field$);
     }
   }
@@ -211,30 +205,6 @@ public class BrandInformationChangedAvroModel extends org.apache.avro.specific.S
    */
   public void setName(java.lang.CharSequence value) {
     this.name = value;
-  }
-
-  /**
-   * Gets the value of the 'path' field.
-   * @return The value of the 'path' field.
-   */
-  public java.lang.CharSequence getPath() {
-    return path;
-  }
-
-  /**
-   * Gets the value of the 'path' field as an Optional&lt;java.lang.CharSequence&gt;.
-   * @return The value wrapped in an Optional&lt;java.lang.CharSequence&gt;.
-   */
-  public Optional<java.lang.CharSequence> getOptionalPath() {
-    return Optional.<java.lang.CharSequence>ofNullable(path);
-  }
-
-  /**
-   * Sets the value of the 'path' field.
-   * @param value the value to set.
-   */
-  public void setPath(java.lang.CharSequence value) {
-    this.path = value;
   }
 
   /**
@@ -376,7 +346,6 @@ public class BrandInformationChangedAvroModel extends org.apache.avro.specific.S
 
     private java.lang.CharSequence description;
     private java.lang.CharSequence name;
-    private java.lang.CharSequence path;
     private java.lang.CharSequence aggregateId;
     private java.util.UUID eventId;
     private java.time.Instant timestamp;
@@ -401,25 +370,21 @@ public class BrandInformationChangedAvroModel extends org.apache.avro.specific.S
         this.name = data().deepCopy(fields()[1].schema(), other.name);
         fieldSetFlags()[1] = other.fieldSetFlags()[1];
       }
-      if (isValidValue(fields()[2], other.path)) {
-        this.path = data().deepCopy(fields()[2].schema(), other.path);
+      if (isValidValue(fields()[2], other.aggregateId)) {
+        this.aggregateId = data().deepCopy(fields()[2].schema(), other.aggregateId);
         fieldSetFlags()[2] = other.fieldSetFlags()[2];
       }
-      if (isValidValue(fields()[3], other.aggregateId)) {
-        this.aggregateId = data().deepCopy(fields()[3].schema(), other.aggregateId);
+      if (isValidValue(fields()[3], other.eventId)) {
+        this.eventId = data().deepCopy(fields()[3].schema(), other.eventId);
         fieldSetFlags()[3] = other.fieldSetFlags()[3];
       }
-      if (isValidValue(fields()[4], other.eventId)) {
-        this.eventId = data().deepCopy(fields()[4].schema(), other.eventId);
+      if (isValidValue(fields()[4], other.timestamp)) {
+        this.timestamp = data().deepCopy(fields()[4].schema(), other.timestamp);
         fieldSetFlags()[4] = other.fieldSetFlags()[4];
       }
-      if (isValidValue(fields()[5], other.timestamp)) {
-        this.timestamp = data().deepCopy(fields()[5].schema(), other.timestamp);
+      if (isValidValue(fields()[5], other.version)) {
+        this.version = data().deepCopy(fields()[5].schema(), other.version);
         fieldSetFlags()[5] = other.fieldSetFlags()[5];
-      }
-      if (isValidValue(fields()[6], other.version)) {
-        this.version = data().deepCopy(fields()[6].schema(), other.version);
-        fieldSetFlags()[6] = other.fieldSetFlags()[6];
       }
     }
 
@@ -437,25 +402,21 @@ public class BrandInformationChangedAvroModel extends org.apache.avro.specific.S
         this.name = data().deepCopy(fields()[1].schema(), other.name);
         fieldSetFlags()[1] = true;
       }
-      if (isValidValue(fields()[2], other.path)) {
-        this.path = data().deepCopy(fields()[2].schema(), other.path);
+      if (isValidValue(fields()[2], other.aggregateId)) {
+        this.aggregateId = data().deepCopy(fields()[2].schema(), other.aggregateId);
         fieldSetFlags()[2] = true;
       }
-      if (isValidValue(fields()[3], other.aggregateId)) {
-        this.aggregateId = data().deepCopy(fields()[3].schema(), other.aggregateId);
+      if (isValidValue(fields()[3], other.eventId)) {
+        this.eventId = data().deepCopy(fields()[3].schema(), other.eventId);
         fieldSetFlags()[3] = true;
       }
-      if (isValidValue(fields()[4], other.eventId)) {
-        this.eventId = data().deepCopy(fields()[4].schema(), other.eventId);
+      if (isValidValue(fields()[4], other.timestamp)) {
+        this.timestamp = data().deepCopy(fields()[4].schema(), other.timestamp);
         fieldSetFlags()[4] = true;
       }
-      if (isValidValue(fields()[5], other.timestamp)) {
-        this.timestamp = data().deepCopy(fields()[5].schema(), other.timestamp);
+      if (isValidValue(fields()[5], other.version)) {
+        this.version = data().deepCopy(fields()[5].schema(), other.version);
         fieldSetFlags()[5] = true;
-      }
-      if (isValidValue(fields()[6], other.version)) {
-        this.version = data().deepCopy(fields()[6].schema(), other.version);
-        fieldSetFlags()[6] = true;
       }
     }
 
@@ -554,53 +515,6 @@ public class BrandInformationChangedAvroModel extends org.apache.avro.specific.S
     }
 
     /**
-      * Gets the value of the 'path' field.
-      * @return The value.
-      */
-    public java.lang.CharSequence getPath() {
-      return path;
-    }
-
-    /**
-      * Gets the value of the 'path' field as an Optional&lt;java.lang.CharSequence&gt;.
-      * @return The value wrapped in an Optional&lt;java.lang.CharSequence&gt;.
-      */
-    public Optional<java.lang.CharSequence> getOptionalPath() {
-      return Optional.<java.lang.CharSequence>ofNullable(path);
-    }
-
-    /**
-      * Sets the value of the 'path' field.
-      * @param value The value of 'path'.
-      * @return This builder.
-      */
-    public az.kon.academy.catalog.avro.model.brand.BrandInformationChangedAvroModel.Builder setPath(java.lang.CharSequence value) {
-      validate(fields()[2], value);
-      this.path = value;
-      fieldSetFlags()[2] = true;
-      return this;
-    }
-
-    /**
-      * Checks whether the 'path' field has been set.
-      * @return True if the 'path' field has been set, false otherwise.
-      */
-    public boolean hasPath() {
-      return fieldSetFlags()[2];
-    }
-
-
-    /**
-      * Clears the value of the 'path' field.
-      * @return This builder.
-      */
-    public az.kon.academy.catalog.avro.model.brand.BrandInformationChangedAvroModel.Builder clearPath() {
-      path = null;
-      fieldSetFlags()[2] = false;
-      return this;
-    }
-
-    /**
       * Gets the value of the 'aggregateId' field.
       * @return The value.
       */
@@ -622,9 +536,9 @@ public class BrandInformationChangedAvroModel extends org.apache.avro.specific.S
       * @return This builder.
       */
     public az.kon.academy.catalog.avro.model.brand.BrandInformationChangedAvroModel.Builder setAggregateId(java.lang.CharSequence value) {
-      validate(fields()[3], value);
+      validate(fields()[2], value);
       this.aggregateId = value;
-      fieldSetFlags()[3] = true;
+      fieldSetFlags()[2] = true;
       return this;
     }
 
@@ -633,7 +547,7 @@ public class BrandInformationChangedAvroModel extends org.apache.avro.specific.S
       * @return True if the 'aggregateId' field has been set, false otherwise.
       */
     public boolean hasAggregateId() {
-      return fieldSetFlags()[3];
+      return fieldSetFlags()[2];
     }
 
 
@@ -643,7 +557,7 @@ public class BrandInformationChangedAvroModel extends org.apache.avro.specific.S
       */
     public az.kon.academy.catalog.avro.model.brand.BrandInformationChangedAvroModel.Builder clearAggregateId() {
       aggregateId = null;
-      fieldSetFlags()[3] = false;
+      fieldSetFlags()[2] = false;
       return this;
     }
 
@@ -669,9 +583,9 @@ public class BrandInformationChangedAvroModel extends org.apache.avro.specific.S
       * @return This builder.
       */
     public az.kon.academy.catalog.avro.model.brand.BrandInformationChangedAvroModel.Builder setEventId(java.util.UUID value) {
-      validate(fields()[4], value);
+      validate(fields()[3], value);
       this.eventId = value;
-      fieldSetFlags()[4] = true;
+      fieldSetFlags()[3] = true;
       return this;
     }
 
@@ -680,7 +594,7 @@ public class BrandInformationChangedAvroModel extends org.apache.avro.specific.S
       * @return True if the 'eventId' field has been set, false otherwise.
       */
     public boolean hasEventId() {
-      return fieldSetFlags()[4];
+      return fieldSetFlags()[3];
     }
 
 
@@ -690,7 +604,7 @@ public class BrandInformationChangedAvroModel extends org.apache.avro.specific.S
       */
     public az.kon.academy.catalog.avro.model.brand.BrandInformationChangedAvroModel.Builder clearEventId() {
       eventId = null;
-      fieldSetFlags()[4] = false;
+      fieldSetFlags()[3] = false;
       return this;
     }
 
@@ -716,9 +630,9 @@ public class BrandInformationChangedAvroModel extends org.apache.avro.specific.S
       * @return This builder.
       */
     public az.kon.academy.catalog.avro.model.brand.BrandInformationChangedAvroModel.Builder setTimestamp(java.time.Instant value) {
-      validate(fields()[5], value);
+      validate(fields()[4], value);
       this.timestamp = value.truncatedTo(java.time.temporal.ChronoUnit.MILLIS);
-      fieldSetFlags()[5] = true;
+      fieldSetFlags()[4] = true;
       return this;
     }
 
@@ -727,7 +641,7 @@ public class BrandInformationChangedAvroModel extends org.apache.avro.specific.S
       * @return True if the 'timestamp' field has been set, false otherwise.
       */
     public boolean hasTimestamp() {
-      return fieldSetFlags()[5];
+      return fieldSetFlags()[4];
     }
 
 
@@ -736,7 +650,7 @@ public class BrandInformationChangedAvroModel extends org.apache.avro.specific.S
       * @return This builder.
       */
     public az.kon.academy.catalog.avro.model.brand.BrandInformationChangedAvroModel.Builder clearTimestamp() {
-      fieldSetFlags()[5] = false;
+      fieldSetFlags()[4] = false;
       return this;
     }
 
@@ -762,9 +676,9 @@ public class BrandInformationChangedAvroModel extends org.apache.avro.specific.S
       * @return This builder.
       */
     public az.kon.academy.catalog.avro.model.brand.BrandInformationChangedAvroModel.Builder setVersion(int value) {
-      validate(fields()[6], value);
+      validate(fields()[5], value);
       this.version = value;
-      fieldSetFlags()[6] = true;
+      fieldSetFlags()[5] = true;
       return this;
     }
 
@@ -773,7 +687,7 @@ public class BrandInformationChangedAvroModel extends org.apache.avro.specific.S
       * @return True if the 'version' field has been set, false otherwise.
       */
     public boolean hasVersion() {
-      return fieldSetFlags()[6];
+      return fieldSetFlags()[5];
     }
 
 
@@ -782,7 +696,7 @@ public class BrandInformationChangedAvroModel extends org.apache.avro.specific.S
       * @return This builder.
       */
     public az.kon.academy.catalog.avro.model.brand.BrandInformationChangedAvroModel.Builder clearVersion() {
-      fieldSetFlags()[6] = false;
+      fieldSetFlags()[5] = false;
       return this;
     }
 
@@ -793,11 +707,10 @@ public class BrandInformationChangedAvroModel extends org.apache.avro.specific.S
         BrandInformationChangedAvroModel record = new BrandInformationChangedAvroModel();
         record.description = fieldSetFlags()[0] ? this.description : (java.lang.CharSequence) defaultValue(fields()[0]);
         record.name = fieldSetFlags()[1] ? this.name : (java.lang.CharSequence) defaultValue(fields()[1]);
-        record.path = fieldSetFlags()[2] ? this.path : (java.lang.CharSequence) defaultValue(fields()[2]);
-        record.aggregateId = fieldSetFlags()[3] ? this.aggregateId : (java.lang.CharSequence) defaultValue(fields()[3]);
-        record.eventId = fieldSetFlags()[4] ? this.eventId : (java.util.UUID) defaultValue(fields()[4]);
-        record.timestamp = fieldSetFlags()[5] ? this.timestamp : (java.time.Instant) defaultValue(fields()[5]);
-        record.version = fieldSetFlags()[6] ? this.version : (java.lang.Integer) defaultValue(fields()[6]);
+        record.aggregateId = fieldSetFlags()[2] ? this.aggregateId : (java.lang.CharSequence) defaultValue(fields()[2]);
+        record.eventId = fieldSetFlags()[3] ? this.eventId : (java.util.UUID) defaultValue(fields()[3]);
+        record.timestamp = fieldSetFlags()[4] ? this.timestamp : (java.time.Instant) defaultValue(fields()[4]);
+        record.version = fieldSetFlags()[5] ? this.version : (java.lang.Integer) defaultValue(fields()[5]);
         return record;
       } catch (org.apache.avro.AvroMissingFieldException e) {
         throw e;
@@ -831,7 +744,6 @@ public class BrandInformationChangedAvroModel extends org.apache.avro.specific.S
     int result = 1;
     result = 31 * result + (description == null ? 0 : description.hashCode());
     result = 31 * result + (name == null ? 0 : name.hashCode());
-    result = 31 * result + (path == null ? 0 : path.hashCode());
     result = 31 * result + (aggregateId == null ? 0 : aggregateId.hashCode());
     result = 31 * result + (eventId == null ? 0 : eventId.hashCode());
     result = 31 * result + (timestamp == null ? 0 : timestamp.hashCode());
@@ -852,9 +764,6 @@ public class BrandInformationChangedAvroModel extends org.apache.avro.specific.S
       return false;
     }
     if (Utf8.compareSequences(this.name, other.name) != 0) {
-      return false;
-    }
-    if (Utf8.compareSequences(this.path, other.path) != 0) {
       return false;
     }
     if (Utf8.compareSequences(this.aggregateId, other.aggregateId) != 0) {

@@ -9,9 +9,6 @@
     "name" : "name",
     "type" : "string"
   }, {
-    "name" : "path",
-    "type" : "string"
-  }, {
     "name" : "aggregateId",
     "type" : "string"
   }, {
