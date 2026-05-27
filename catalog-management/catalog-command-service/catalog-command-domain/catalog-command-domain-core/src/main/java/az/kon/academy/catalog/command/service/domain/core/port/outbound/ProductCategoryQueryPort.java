@@ -4,11 +4,12 @@ import az.kon.academy.catalog.command.service.domain.core.aggregate.management.P
 import az.kon.academy.catalog.command.service.domain.core.exception.category.ProductCategoryDomainErrorCodes;
 import az.kon.academy.catalog.command.service.domain.core.exception.category.ProductCategoryEntityNotFoundException;
 import az.kon.academy.catalog.command.service.domain.core.vo.management.category.ProductCategoryId;
+import az.kon.academy.domain.core.BaseQueryPort;
 
 import java.util.List;
 import java.util.Optional;
 
-public interface ProductCategoryQueryPort {
+public interface ProductCategoryQueryPort extends BaseQueryPort {
 
     Optional<ProductCategoryRoot> findByIdAndRowStatusActive(ProductCategoryId id);
 

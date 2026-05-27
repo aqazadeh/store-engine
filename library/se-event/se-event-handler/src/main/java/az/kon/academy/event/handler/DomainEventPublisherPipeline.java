@@ -42,7 +42,9 @@ public class DomainEventPublisherPipeline implements DomainEventPublisher, Event
             var handler = this.domainEventHandlerRegistry.getHandlerForEvent(event.getClass());
             if (handler.isEmpty()) {
                 monitor.reportHandlerNotFound(eventName);
-                throw new EventHandlerNotFoundException("No handler found for event type: " + event.getClass());
+                logger.warn("No handler found for event type: {}", event.getClass().getName());
+                return;
+//                throw new EventHandlerNotFoundException("No handler found for event type: " + event.getClass());
             }
 
             interceptors.forEach(interceptor -> notifyInterceptor(event, interceptor::preExecution));

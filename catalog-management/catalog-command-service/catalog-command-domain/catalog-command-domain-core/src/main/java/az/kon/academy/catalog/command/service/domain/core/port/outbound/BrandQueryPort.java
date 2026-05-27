@@ -6,11 +6,12 @@ import az.kon.academy.catalog.command.service.domain.core.exception.brand.BrandD
 import az.kon.academy.catalog.command.service.domain.core.vo.brand.BrandId;
 import az.kon.academy.catalog.command.service.domain.core.vo.brand.BrandName;
 import az.kon.academy.catalog.command.service.domain.core.vo.merchent.MerchantId;
+import az.kon.academy.domain.core.BaseQueryPort;
 
 import java.util.List;
 import java.util.Optional;
 
-public interface BrandQueryPort {
+public interface BrandQueryPort extends BaseQueryPort {
     Optional<BrandRoot> fetchById(BrandId id);
 
     default BrandRoot fetchByIdAndStatusSentToApproval(BrandId id){

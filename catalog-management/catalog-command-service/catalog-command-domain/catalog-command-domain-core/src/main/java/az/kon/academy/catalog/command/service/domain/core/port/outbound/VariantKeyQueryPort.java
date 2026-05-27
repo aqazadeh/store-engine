@@ -4,11 +4,12 @@ import az.kon.academy.catalog.command.service.domain.core.aggregate.management.V
 import az.kon.academy.catalog.command.service.domain.core.exception.variant.VariantDomainErrorCodes;
 import az.kon.academy.catalog.command.service.domain.core.exception.variant.VariantEntityNotFoundException;
 import az.kon.academy.catalog.command.service.domain.core.vo.management.variant.VariantKeyId;
+import az.kon.academy.domain.core.BaseQueryPort;
 
 import java.util.List;
 import java.util.Optional;
 
-public interface VariantKeyQueryPort {
+public interface VariantKeyQueryPort extends BaseQueryPort {
 
     Optional<VariantKeyRoot> findById(VariantKeyId id);
 
