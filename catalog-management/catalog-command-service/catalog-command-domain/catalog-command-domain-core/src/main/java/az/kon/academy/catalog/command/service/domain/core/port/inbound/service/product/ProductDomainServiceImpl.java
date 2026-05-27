@@ -1,4 +1,4 @@
-package az.kon.academy.catalog.command.service.domain.core.service.product;
+package az.kon.academy.catalog.command.service.domain.core.port.inbound.service.product;
 
 import az.kon.academy.catalog.command.service.domain.core.aggregate.ProductPriceRoot;
 import az.kon.academy.catalog.command.service.domain.core.aggregate.ProductRoot;

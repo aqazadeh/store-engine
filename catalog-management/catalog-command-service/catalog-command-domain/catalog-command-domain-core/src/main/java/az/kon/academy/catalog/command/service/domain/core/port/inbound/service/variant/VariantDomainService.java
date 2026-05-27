@@ -1,4 +1,4 @@
-package az.kon.academy.catalog.command.service.domain.core.service.variant;
+package az.kon.academy.catalog.command.service.domain.core.port.inbound.service.variant;
 
 import az.kon.academy.catalog.command.service.domain.core.aggregate.management.VariantKeyRoot;
 import az.kon.academy.catalog.command.service.domain.core.aggregate.management.VariantValueRoot;

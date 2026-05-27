@@ -1,4 +1,4 @@
-package az.kon.academy.catalog.command.service.domain.core.service.brand;
+package az.kon.academy.catalog.command.service.domain.core.port.inbound.service.brand;
 
 import az.kon.academy.catalog.command.service.domain.core.aggregate.BrandRoot;
 import az.kon.academy.catalog.command.service.domain.core.command.brand.BrandApproveCommand;
@@ -40,11 +40,9 @@ public final class BrandDomainServiceImpl implements BrandModificationDomainServ
     public BrandRoot changeBrandOwner(SeDomainContext context, BrandChangeOwnerCommand command) {
         var brandQueryPort = context.getQueryPort(BrandQueryPort.class);
         var merchantQueryPort = context.getQueryPort(MerchantQueryPort.class);
-        if(!Objects.isNull(command.getOwner())) {
-            var merchantIsExists = merchantQueryPort.isMerchantExists(command.getOwner());
-            if(merchantIsExists == Boolean.FALSE){
-                throw new BrandDomainException(BrandDomainErrorCodes.MERCHANT_NOT_FOUND, List.of(command.getOwner().toString()));
-            }
+        var merchantIsExists = merchantQueryPort.isMerchantExists(command.getOwner());
+        if(merchantIsExists == Boolean.FALSE){
+            throw new BrandDomainException(BrandDomainErrorCodes.MERCHANT_NOT_FOUND, List.of(command.getOwner().toString()));
         }
         var brand = brandQueryPort.fetchByIdAndRowStatusActive(command.getBrandId());
         return brand.changeOwner(command);

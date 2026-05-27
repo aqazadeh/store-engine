@@ -1,4 +1,4 @@
-package az.kon.academy.catalog.command.service.domain.core.service.brand;
+package az.kon.academy.catalog.command.service.domain.core.port.inbound.service.brand;
 
 import az.kon.academy.catalog.command.service.domain.core.aggregate.BrandRoot;
 import az.kon.academy.catalog.command.service.domain.core.command.brand.merchant.*;

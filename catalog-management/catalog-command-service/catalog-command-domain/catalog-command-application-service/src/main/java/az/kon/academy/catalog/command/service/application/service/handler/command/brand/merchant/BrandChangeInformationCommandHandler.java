@@ -5,7 +5,7 @@ import az.kon.academy.catalog.command.service.application.service.constant.Secur
 import az.kon.academy.catalog.command.service.application.service.handler.AbstractCommandHandler;
 import az.kon.academy.catalog.command.service.application.service.port.outbound.BrandCommandPort;
 import az.kon.academy.catalog.command.service.domain.core.command.brand.merchant.BrandChangeInformationCommand;
-import az.kon.academy.catalog.command.service.domain.core.service.brand.BrandModificationDomainService;
+import az.kon.academy.catalog.command.service.domain.core.port.inbound.service.brand.BrandModificationDomainService;
 import az.kon.academy.domain.core.SeDomainContext;
 import az.kon.academy.event.handler.DomainEventPublisher;
 import org.springframework.beans.factory.annotation.Qualifier;

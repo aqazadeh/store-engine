@@ -5,7 +5,7 @@ import az.kon.academy.catalog.command.service.application.service.constant.Secur
 import az.kon.academy.catalog.command.service.application.service.handler.AbstractCommandHandler;
 import az.kon.academy.catalog.command.service.application.service.port.outbound.ProductCommandPort;
 import az.kon.academy.catalog.command.service.domain.core.command.product.ProductRemoveSpecificationCommand;
-import az.kon.academy.catalog.command.service.domain.core.service.product.ProductDomainService;
+import az.kon.academy.catalog.command.service.domain.core.port.inbound.service.product.ProductDomainService;
 import az.kon.academy.domain.core.SeDomainContext;
 import az.kon.academy.event.handler.DomainEventPublisher;
 

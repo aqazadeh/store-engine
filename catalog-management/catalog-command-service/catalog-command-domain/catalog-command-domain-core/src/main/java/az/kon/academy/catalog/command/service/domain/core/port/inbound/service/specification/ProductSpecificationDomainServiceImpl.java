@@ -1,4 +1,4 @@
-package az.kon.academy.catalog.command.service.domain.core.service.specification;
+package az.kon.academy.catalog.command.service.domain.core.port.inbound.service.specification;
 
 import az.kon.academy.catalog.command.service.domain.core.aggregate.management.ProductSpecificationRoot;
 import az.kon.academy.catalog.command.service.domain.core.command.specification.*;
