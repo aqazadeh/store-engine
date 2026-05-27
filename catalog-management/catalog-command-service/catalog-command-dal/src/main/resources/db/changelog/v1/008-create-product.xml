@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                            http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+    <changeSet id="008-1" author="rovshan.aghayev">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="product"/>
+            </not>
+        </preConditions>
+
+        <createTable tableName="product" remarks="ProductRoot aggregate — merchant-owned product listing">
+            <column name="id" type="UUID" remarks="Primary key">
+                <constraints primaryKey="true" nullable="false" primaryKeyName="pk_product"/>
+            </column>
+            <column name="merchant_id" type="UUID" remarks="Owning merchant ID (immutable after creation)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="category_id" type="UUID" remarks="Assigned product category (nullable, FK to product_category)">
+                <constraints foreignKeyName="fk_product_category"
+                             references="product_category(id)"/>
+            </column>
+            <column name="brand_id" type="UUID" remarks="Assigned brand (nullable, FK to brand)">
+                <constraints foreignKeyName="fk_product_brand"
+                             references="brand(id)"/>
+            </column>
+            <column name="name" type="VARCHAR(20)" remarks="Product display name (5–20 chars)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="description" type="VARCHAR(150)" remarks="Product description (10–150 chars)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="barcode" type="VARCHAR(100)" remarks="Global product barcode (immutable, unique)">
+                <constraints nullable="false" unique="true" uniqueConstraintName="uq_product_barcode"/>
+            </column>
+            <column name="auto_price_update_enabled" type="BOOLEAN" defaultValueBoolean="false"
+                    remarks="Enables automatic price syncing from the brand's global price list">
+                <constraints nullable="false"/>
+            </column>
+            <column name="status" type="VARCHAR(30)" defaultValue="DRAFT"
+                    remarks="Approval lifecycle: DRAFT | SENT_TO_APPROVAL | APPROVED | REJECTED | ARCHIVED">
+                <constraints nullable="false"/>
+            </column>
+            <column name="version" type="BIGINT" defaultValueNumeric="1" remarks="Optimistic lock version">
+                <constraints nullable="false"/>
+            </column>
+            <column name="process_status" type="VARCHAR(20)" defaultValue="COMPLETED"
+                    remarks="Outbox process state: IN_PROGRESS | FAILED | COMPLETED | ROLL_BACKED">
+                <constraints nullable="false"/>
+            </column>
+            <column name="row_status" type="VARCHAR(20)" defaultValue="ACTIVE"
+                    remarks="Logical lifecycle: ACTIVE | HIDDEN | ARCHIVED | DELETED">
+                <constraints nullable="false"/>
+            </column>
+            <column name="creation_ts" type="TIMESTAMPTZ" remarks="Record creation timestamp">
+                <constraints nullable="false"/>
+            </column>
+            <column name="modification_ts" type="TIMESTAMPTZ" remarks="Last modification timestamp">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <rollback>
+            <dropTable tableName="product"/>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="008-2" author="rovshan.aghayev">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <indexExists indexName="idx_product_merchant_id"/>
+            </not>
+        </preConditions>
+
+        <createIndex tableName="product" indexName="idx_product_merchant_id">
+            <column name="merchant_id"/>
+        </createIndex>
+
+        <createIndex tableName="product" indexName="idx_product_category_id">
+            <column name="category_id"/>
+        </createIndex>
+
+        <createIndex tableName="product" indexName="idx_product_brand_id">
+            <column name="brand_id"/>
+        </createIndex>
+
+        <createIndex tableName="product" indexName="idx_product_status">
+            <column name="status"/>
+        </createIndex>
+
+        <createIndex tableName="product" indexName="idx_product_row_status">
+            <column name="row_status"/>
+        </createIndex>
+
+        <!-- Composite: most listing queries filter by merchant + status -->
+        <createIndex tableName="product" indexName="idx_product_merchant_status">
+            <column name="merchant_id"/>
+            <column name="status"/>
+        </createIndex>
+
+        <rollback>
+            <dropIndex tableName="product" indexName="idx_product_merchant_id"/>
+            <dropIndex tableName="product" indexName="idx_product_category_id"/>
+            <dropIndex tableName="product" indexName="idx_product_brand_id"/>
+            <dropIndex tableName="product" indexName="idx_product_status"/>
+            <dropIndex tableName="product" indexName="idx_product_row_status"/>
+            <dropIndex tableName="product" indexName="idx_product_merchant_status"/>
+        </rollback>
+    </changeSet>
+
+</databaseChangeLog>

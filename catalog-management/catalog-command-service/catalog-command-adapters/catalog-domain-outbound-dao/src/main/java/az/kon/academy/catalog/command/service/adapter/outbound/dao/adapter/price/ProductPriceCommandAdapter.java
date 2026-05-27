@@ -1,13 +1,30 @@
 package az.kon.academy.catalog.command.service.adapter.outbound.dao.adapter.price;
 
+import az.kon.academy.catalog.command.service.adapter.outbound.dao.mapper.ProductPriceMapper;
 import az.kon.academy.catalog.command.service.application.service.port.outbound.ProductPriceCommandPort;
 import az.kon.academy.catalog.command.service.domain.core.aggregate.ProductPriceRoot;
+import lombok.RequiredArgsConstructor;
+import org.jooq.DSLContext;
 import org.springframework.stereotype.Component;
 
-@Component //FIXME change to custom annotation. @CommandAdapter
+import static az.kon.academy.catalog.command.dal.Tables.PRODUCT_PRICE;
+
+@Component
+@RequiredArgsConstructor
 public class ProductPriceCommandAdapter implements ProductPriceCommandPort {
+
+    private final DSLContext dsl;
+    private final ProductPriceMapper mapper;
+
     @Override
     public ProductPriceRoot save(ProductPriceRoot aggregate) {
-        return null;
+        var record = mapper.toRecord(aggregate);
+        dsl.insertInto(PRODUCT_PRICE)
+                .set(record)
+                .onConflict(PRODUCT_PRICE.ID)
+                .doUpdate()
+                .set(record)
+                .execute();
+        return aggregate;
     }
 }

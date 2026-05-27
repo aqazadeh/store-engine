@@ -7,7 +7,6 @@
         <groupId>az.kon.academy.catalog</groupId>
         <artifactId>catalog-command-service</artifactId>
         <version>1.0.0-SNAPSHOT</version>
-        <relativePath>../../pom.xml</relativePath>
     </parent>
 
     <artifactId>catalog-domain-outbound-dao</artifactId>
@@ -16,6 +15,10 @@
         <dependency>
             <groupId>az.kon.academy.catalog</groupId>
             <artifactId>catalog-command-application-service</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>az.kon.academy.catalog</groupId>
+            <artifactId>catalog-command-dal</artifactId>
         </dependency>
     </dependencies>
 

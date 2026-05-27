@@ -15,8 +15,9 @@
     <packaging>pom</packaging>
     <modules>
         <module>shared/store-engine-parent</module>
-        <module>library</module>
         <module>shared/se-event-generator-parent</module>
+        <module>shared/se-dal-parent</module>
+        <module>library</module>
         <module>catalog-management</module>
         <module>example</module>
     </modules>

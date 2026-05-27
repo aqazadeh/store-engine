@@ -1,0 +1,13 @@
+services:
+  se-postgres:
+    image: postgres:18
+    container_name: se-postgres
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: ${POSTGRES_USERNAME}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    volumes:
+      - postgres_data:/var/lib/postgresql
+volumes:
+  postgres_data:

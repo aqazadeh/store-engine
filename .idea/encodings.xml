@@ -9,6 +9,8 @@
     <file url="file://$PROJECT_DIR$/catalog-management/catalog-command-service/catalog-command-adapters/catalog-domain-outbound-dao/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/catalog-management/catalog-command-service/catalog-command-bootstrap/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/catalog-management/catalog-command-service/catalog-command-bootstrap/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/catalog-management/catalog-command-service/catalog-command-dal/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/catalog-management/catalog-command-service/catalog-command-dal/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/catalog-management/catalog-command-service/catalog-command-domain/catalog-command-application-service/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/catalog-management/catalog-command-service/catalog-command-domain/catalog-command-application-service/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/catalog-management/catalog-command-service/catalog-command-domain/catalog-command-application/src/main/resources" charset="UTF-8" />
@@ -54,11 +56,15 @@
     <file url="file://$PROJECT_DIR$/library/se-exception/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/library/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/library/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/shared/se-dal-parent/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/shared/se-dal-parent/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/shared/se-event-generator-parent/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/shared/se-event-generator-parent/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/shared/store-engine-parent/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/shared/store-engine-parent/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/src/main/resources" charset="UTF-8" />
+    <file url="file://$USER_HOME$/src/main/java" charset="UTF-8" />
+    <file url="file://$USER_HOME$/src/main/resources" charset="UTF-8" />
   </component>
 </project>

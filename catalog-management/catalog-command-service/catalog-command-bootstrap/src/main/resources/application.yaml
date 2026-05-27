@@ -2,10 +2,15 @@ spring:
   application:
     name: catalog-command-service
     version: 1.0.0-BETA
+  datasource:
+    url: jdbc:postgresql://localhost:5432/catalog_command
+    username: postgres
+    password: postgres
   mvc:
     apiversion:
       default: 1.0
-      supported: 1.0
+      supported:
+        - 1.0
       use:
         header: X-API-Version
 

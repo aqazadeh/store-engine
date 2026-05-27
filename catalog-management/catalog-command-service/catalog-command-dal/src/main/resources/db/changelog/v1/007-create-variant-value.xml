@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                            http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+    <changeSet id="007-1" author="rovshan.aghayev">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="variant_value"/>
+            </not>
+        </preConditions>
+
+        <createTable tableName="variant_value"
+                     remarks="VariantValueRoot aggregate — concrete values for a variant dimension (e.g. Red, XL)">
+            <column name="id" type="UUID" remarks="Primary key">
+                <constraints primaryKey="true" nullable="false" primaryKeyName="pk_variant_value"/>
+            </column>
+            <column name="key_id" type="UUID" remarks="Owning variant dimension (FK to variant_key)">
+                <constraints nullable="false"
+                             foreignKeyName="fk_variant_value_key"
+                             references="variant_key(id)"/>
+            </column>
+            <column name="name" type="VARCHAR(20)" remarks="Variant value label (5–20 chars)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="version" type="BIGINT" defaultValueNumeric="1" remarks="Optimistic lock version">
+                <constraints nullable="false"/>
+            </column>
+            <column name="process_status" type="VARCHAR(20)" defaultValue="COMPLETED"
+                    remarks="Outbox process state: IN_PROGRESS | FAILED | COMPLETED | ROLL_BACKED">
+                <constraints nullable="false"/>
+            </column>
+            <column name="row_status" type="VARCHAR(20)" defaultValue="ACTIVE"
+                    remarks="Logical lifecycle: ACTIVE | HIDDEN | ARCHIVED | DELETED">
+                <constraints nullable="false"/>
+            </column>
+            <column name="creation_ts" type="TIMESTAMPTZ" remarks="Record creation timestamp">
+                <constraints nullable="false"/>
+            </column>
+            <column name="modification_ts" type="TIMESTAMPTZ" remarks="Last modification timestamp">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <!-- A key cannot have two values with the same label -->
+        <addUniqueConstraint
+                tableName="variant_value"
+                columnNames="key_id, name"
+                constraintName="uq_variant_value_key_name"/>
+
+        <rollback>
+            <dropTable tableName="variant_value"/>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="007-2" author="rovshan.aghayev">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <indexExists indexName="idx_variant_value_key_id"/>
+            </not>
+        </preConditions>
+
+        <createIndex tableName="variant_value" indexName="idx_variant_value_key_id">
+            <column name="key_id"/>
+        </createIndex>
+
+        <createIndex tableName="variant_value" indexName="idx_variant_value_row_status">
+            <column name="row_status"/>
+        </createIndex>
+
+        <rollback>
+            <dropIndex tableName="variant_value" indexName="idx_variant_value_key_id"/>
+            <dropIndex tableName="variant_value" indexName="idx_variant_value_row_status"/>
+        </rollback>
+    </changeSet>
+
+</databaseChangeLog>

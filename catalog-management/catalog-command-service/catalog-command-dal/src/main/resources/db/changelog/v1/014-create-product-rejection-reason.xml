@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                            http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+    <changeSet id="014-1" author="rovshan.aghayev">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="product_rejection_reason"/>
+            </not>
+        </preConditions>
+
+        <createTable tableName="product_rejection_reason"
+                     remarks="ProductRejectionReasonRoot aggregate — moderator rejection records for products">
+            <column name="id" type="UUID" remarks="Primary key">
+                <constraints primaryKey="true" nullable="false" primaryKeyName="pk_product_rejection_reason"/>
+            </column>
+            <column name="product_id" type="UUID" remarks="Rejected product reference (immutable after creation)">
+                <constraints nullable="false"
+                             foreignKeyName="fk_product_rejection_reason_product"
+                             references="product(id)"/>
+            </column>
+            <column name="reason" type="TEXT" remarks="Moderator-supplied rejection explanation">
+                <constraints nullable="false"/>
+            </column>
+            <column name="moderated_by" type="UUID" remarks="Moderator ID who issued the rejection (immutable)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="version" type="BIGINT" defaultValueNumeric="1" remarks="Optimistic lock version">
+                <constraints nullable="false"/>
+            </column>
+            <column name="process_status" type="VARCHAR(20)" defaultValue="COMPLETED"
+                    remarks="Outbox process state: IN_PROGRESS | FAILED | COMPLETED | ROLL_BACKED">
+                <constraints nullable="false"/>
+            </column>
+            <column name="row_status" type="VARCHAR(20)" defaultValue="ACTIVE"
+                    remarks="Logical lifecycle: ACTIVE | HIDDEN | ARCHIVED | DELETED">
+                <constraints nullable="false"/>
+            </column>
+            <column name="creation_ts" type="TIMESTAMPTZ" remarks="Record creation timestamp">
+                <constraints nullable="false"/>
+            </column>
+            <column name="modification_ts" type="TIMESTAMPTZ" remarks="Last modification timestamp">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <rollback>
+            <dropTable tableName="product_rejection_reason"/>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="014-2" author="rovshan.aghayev">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <indexExists indexName="idx_product_rejection_reason_product_id"/>
+            </not>
+        </preConditions>
+
+        <createIndex tableName="product_rejection_reason"
+                     indexName="idx_product_rejection_reason_product_id">
+            <column name="product_id"/>
+        </createIndex>
+
+        <createIndex tableName="product_rejection_reason"
+                     indexName="idx_product_rejection_reason_moderated_by">
+            <column name="moderated_by"/>
+        </createIndex>
+
+        <rollback>
+            <dropIndex tableName="product_rejection_reason"
+                       indexName="idx_product_rejection_reason_product_id"/>
+            <dropIndex tableName="product_rejection_reason"
+                       indexName="idx_product_rejection_reason_moderated_by"/>
+        </rollback>
+    </changeSet>
+
+</databaseChangeLog>

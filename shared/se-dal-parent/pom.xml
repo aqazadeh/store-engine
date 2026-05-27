@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>az.kon.academy</groupId>
+        <artifactId>store-engine-parent</artifactId>
+        <version>1.0.0-ALPHA</version>
+    </parent>
+
+    <groupId>az.kon.academy.dal</groupId>
+    <artifactId>se-dal-parent</artifactId>
+    <version>1.0.0-ALPHA</version>
+    <packaging>pom</packaging>
+
+    <properties>
+
+        <liquibase.version>4.33.0</liquibase.version>
+        <postgres.version>42.7.10</postgres.version>
+        <jooq.version>3.19.32</jooq.version>
+
+        <dal.database.type>postgresql</dal.database.type>
+        <dal.database.host>localhost</dal.database.host>
+        <dal.database.port>5432</dal.database.port>
+        <dal.database>catalog_command</dal.database>
+        <dal.database.username>postgres</dal.database.username>
+        <dal.database.password>postgres</dal.database.password>
+        <dal.export.package>az.kon.academy.dal</dal.export.package>
+    </properties>
+
+    <build>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.liquibase</groupId>
+                    <artifactId>liquibase-maven-plugin</artifactId>
+                    <version>${liquibase.version}</version>
+                    <dependencies>
+                        <dependency>
+                            <groupId>org.postgresql</groupId>
+                            <artifactId>postgresql</artifactId>
+                            <version>${postgres.version}</version>
+                        </dependency>
+                    </dependencies>
+                    <configuration>
+                        <searchPath>${project.basedir}/src/main/resources</searchPath>
+                        <changeLogFile>db/changelog/db.changelog-master.xml</changeLogFile>
+                        <url>jdbc:${dal.database.type}://${dal.database.host}:${dal.database.port}/${dal.database}</url>
+                        <username>${dal.database.username}</username>
+                        <password>${dal.database.password}</password>
+                    </configuration>
+                </plugin>
+                <plugin>
+                    <groupId>org.jooq</groupId>
+                    <artifactId>jooq-codegen-maven</artifactId>
+                    <version>${jooq.version}</version>
+                    <dependencies>
+                        <dependency>
+                            <groupId>org.postgresql</groupId>
+                            <artifactId>postgresql</artifactId>
+                            <version>${postgres.version}</version>
+                        </dependency>
+                    </dependencies>
+                    <configuration>
+                        <jdbc>
+                            <url>jdbc:${dal.database.type}://${dal.database.host}:${dal.database.port}/${dal.database}</url>
+                            <username>${dal.database.username}</username>
+                            <password>${dal.database.password}</password>
+                        </jdbc>
+                        <generator>
+                            <database>
+                                <name>org.jooq.meta.postgres.PostgresDatabase</name>
+                                <inputSchema>public</inputSchema>
+                                <excludes>DATABASECHANGELOG|DATABASECHANGELOGLOCK</excludes>
+                            </database>
+                            <generate>
+                                <fluentSetters>true</fluentSetters>
+                            </generate>
+                            <target>
+                                <packageName>${dal.export.package}</packageName>
+                                <directory>${project.build.directory}/generated-sources</directory>
+                            </target>
+                        </generator>
+                    </configuration>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+    </build>
+</project>

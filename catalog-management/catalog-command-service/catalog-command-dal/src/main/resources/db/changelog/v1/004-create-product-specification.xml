@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                            http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+    <changeSet id="004-1" author="rovshan.aghayev">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="product_specification"/>
+            </not>
+        </preConditions>
+
+        <createTable tableName="product_specification"
+                     remarks="ProductSpecificationRoot aggregate — named specification attributes assignable to products">
+            <column name="id" type="UUID" remarks="Primary key">
+                <constraints primaryKey="true" nullable="false" primaryKeyName="pk_product_specification"/>
+            </column>
+            <column name="name" type="VARCHAR(20)" remarks="Specification name (4–20 chars, immutable, unique)">
+                <constraints nullable="false" unique="true" uniqueConstraintName="uq_product_specification_name"/>
+            </column>
+            <column name="description" type="VARCHAR(255)" remarks="Specification description (10–255 chars, immutable)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="version" type="BIGINT" defaultValueNumeric="1" remarks="Optimistic lock version">
+                <constraints nullable="false"/>
+            </column>
+            <column name="process_status" type="VARCHAR(20)" defaultValue="COMPLETED"
+                    remarks="Outbox process state: IN_PROGRESS | FAILED | COMPLETED | ROLL_BACKED">
+                <constraints nullable="false"/>
+            </column>
+            <column name="row_status" type="VARCHAR(20)" defaultValue="ACTIVE"
+                    remarks="Logical lifecycle: ACTIVE | HIDDEN | ARCHIVED | DELETED">
+                <constraints nullable="false"/>
+            </column>
+            <column name="creation_ts" type="TIMESTAMPTZ" remarks="Record creation timestamp">
+                <constraints nullable="false"/>
+            </column>
+            <column name="modification_ts" type="TIMESTAMPTZ" remarks="Last modification timestamp">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <rollback>
+            <dropTable tableName="product_specification"/>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="004-2" author="rovshan.aghayev">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <indexExists indexName="idx_product_specification_row_status"/>
+            </not>
+        </preConditions>
+
+        <createIndex tableName="product_specification" indexName="idx_product_specification_row_status">
+            <column name="row_status"/>
+        </createIndex>
+
+        <rollback>
+            <dropIndex tableName="product_specification" indexName="idx_product_specification_row_status"/>
+        </rollback>
+    </changeSet>
+
+</databaseChangeLog>

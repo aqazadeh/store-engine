@@ -1,1 +1,0 @@
-package az.kon.academy.catalog.command.service.adapter.outbound.dao.mapper;
