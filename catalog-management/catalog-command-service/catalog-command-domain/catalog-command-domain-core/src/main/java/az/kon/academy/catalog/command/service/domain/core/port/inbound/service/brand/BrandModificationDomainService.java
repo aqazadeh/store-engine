@@ -1,6 +1,8 @@
 package az.kon.academy.catalog.command.service.domain.core.port.inbound.service.brand;
 
 import az.kon.academy.catalog.command.service.domain.core.aggregate.BrandRoot;
+import az.kon.academy.catalog.command.service.domain.core.aggregate.management.rejection.BrandRejectionReasonRoot;
+import az.kon.academy.catalog.command.service.domain.core.command.brand.management.BrandCreateRejectionReasonCommand;
 import az.kon.academy.catalog.command.service.domain.core.command.brand.merchant.*;
 import az.kon.academy.domain.core.SeDomainContext;
 
@@ -14,6 +16,4 @@ public interface BrandModificationDomainService {
     BrandRoot sentToApproval(SeDomainContext context, BrandSentToApprovalCommand command);
 
     BrandRoot moveToDraft(SeDomainContext context, BrandMoveToDraftCommand command);
-
-
 }

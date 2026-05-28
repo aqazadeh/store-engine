@@ -11,10 +11,7 @@ import az.kon.academy.catalog.command.service.application.service.dto.request.br
 import az.kon.academy.catalog.command.service.application.service.dto.request.brand.merchant.BrandMoveToDraftRequest;
 import az.kon.academy.catalog.command.service.application.service.dto.request.brand.merchant.BrandSentToApprovalRequest;
 import az.kon.academy.catalog.command.service.application.service.dto.result.BrandCreateCommandResult;
-import az.kon.academy.catalog.command.service.application.service.handler.command.brand.management.BrandApproveCommandHandler;
-import az.kon.academy.catalog.command.service.application.service.handler.command.brand.management.BrandChangeOwnerCommandHandler;
-import az.kon.academy.catalog.command.service.application.service.handler.command.brand.management.BrandCreateGlobalCommandHandler;
-import az.kon.academy.catalog.command.service.application.service.handler.command.brand.management.BrandRejectCommandHandler;
+import az.kon.academy.catalog.command.service.application.service.handler.command.brand.management.*;
 import az.kon.academy.catalog.command.service.application.service.handler.command.brand.merchant.BrandChangeImageCommandHandler;
 import az.kon.academy.catalog.command.service.application.service.handler.command.brand.merchant.BrandChangeInformationCommandHandler;
 import az.kon.academy.catalog.command.service.application.service.handler.command.brand.merchant.BrandCreateMerchantCommandHandler;
@@ -22,7 +19,7 @@ import az.kon.academy.catalog.command.service.application.service.handler.comman
 import az.kon.academy.catalog.command.service.application.service.handler.command.brand.merchant.BrandSentToApprovalCommandHandler;
 import az.kon.academy.catalog.command.service.domain.core.command.brand.BrandApproveCommand;
 import az.kon.academy.catalog.command.service.domain.core.command.brand.management.BrandChangeOwnerCommand;
-import az.kon.academy.catalog.command.service.domain.core.command.brand.management.BrandRejectCommand;
+import az.kon.academy.catalog.command.service.domain.core.command.brand.management.BrandCreateRejectionReasonCommand;
 import az.kon.academy.catalog.command.service.domain.core.command.brand.BrandCreateForGlobalCommand;
 import az.kon.academy.catalog.command.service.domain.core.command.brand.merchant.BrandChangeImageCommand;
 import az.kon.academy.catalog.command.service.domain.core.command.brand.merchant.BrandChangeInformationCommand;
@@ -34,6 +31,7 @@ import az.kon.academy.catalog.command.service.domain.core.vo.brand.BrandId;
 import az.kon.academy.catalog.command.service.domain.core.vo.brand.BrandName;
 import az.kon.academy.catalog.command.service.domain.core.vo.brand.BrandPath;
 import az.kon.academy.catalog.command.service.domain.core.vo.merchent.MerchantId;
+import az.kon.academy.catalog.command.service.domain.core.vo.moderation.ModeratorId;
 import az.kon.academy.domain.core.security.SeSecurityContextHolder;
 
 import java.util.Objects;
@@ -107,9 +105,11 @@ class BrandRestAdapter implements BrandRestPort {
 
     @Override
     public void reject(BrandRejectRequest request) {
-        //FIXME call reject reason first
-        var command = BrandRejectCommand.builder()
+        var currentUser = this.securityContextHolder.getUser().getUserId(); // Fixme  bug check role to
+        var command = BrandCreateRejectionReasonCommand.builder()
                 .brandId(BrandId.from(request.getBrandId()))
+                .reason(request.getReason())
+                .moderatedBy(ModeratorId.from(currentUser))
                 .build();
         this.brandRejectCommandHandler.handle(command);
     }

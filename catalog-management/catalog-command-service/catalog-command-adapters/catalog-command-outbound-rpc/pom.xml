@@ -10,16 +10,12 @@
         <relativePath>../../pom.xml</relativePath>
     </parent>
 
-    <artifactId>catalog-domain-outbound-dao</artifactId>
+    <artifactId>catalog-command-outbound-rpc</artifactId>
 
     <dependencies>
         <dependency>
             <groupId>az.kon.academy.catalog</groupId>
             <artifactId>catalog-command-application-service</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>az.kon.academy.catalog</groupId>
-            <artifactId>catalog-command-dal</artifactId>
         </dependency>
     </dependencies>
 

@@ -5,17 +5,20 @@ import az.kon.academy.domain.core.security.User;
 import org.springframework.context.annotation.Configuration;
 
 import java.util.List;
+import java.util.UUID;
 
 @Configuration
 public class SeSecurityContextHolderImpl implements SeSecurityContextHolder {
     @Override
     public Boolean isLoggedIn() {
-        return null;
+        return true;
     }
 
     @Override
     public User getUser() {
-        return null;
+        return User.builder()
+                .userId(UUID.fromString("9357a609-4403-4a57-8e75-194e1b70fc00"))
+                .build();
     }
 
     @Override

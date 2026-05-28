@@ -51,8 +51,7 @@ public class EventHandlerAutoConfiguration {
     }
 
     @Bean
-    public DomainEventPublisherPipeline eventBus(EventHandlerMonitor monitor) {
-        EventHandlerRegistry registry = this.eventHandlerRegistry();
+    public DomainEventPublisherPipeline eventBus(EventHandlerRegistry registry, EventHandlerMonitor monitor){
         DomainEventPublisherPipeline pipeline = new DomainEventPublisherPipeline(registry, monitor);
         this.registerEventHandlers(registry);
         this.registerEventHandlerInterceptors(pipeline);
