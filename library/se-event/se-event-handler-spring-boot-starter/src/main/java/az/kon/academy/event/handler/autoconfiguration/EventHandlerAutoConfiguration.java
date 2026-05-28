@@ -16,17 +16,20 @@ import az.kon.academy.event.handler.metric.EventHandlerMonitor;
 import io.micrometer.core.instrument.MeterRegistry;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.SmartInitializingSingleton;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBooleanProperty;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.core.GenericTypeResolver;
 
-public class EventHandlerAutoConfiguration {
+public class EventHandlerAutoConfiguration implements SmartInitializingSingleton {
 
     private static final Logger logger = LoggerFactory.getLogger(EventHandlerAutoConfiguration.class);
 
     private final ApplicationContext applicationContext;
+    private EventHandlerRegistry registry;
+    private DomainEventPublisherPipeline pipeline;
 
     public EventHandlerAutoConfiguration(ApplicationContext applicationContext) {
         this.applicationContext = applicationContext;
@@ -52,10 +55,15 @@ public class EventHandlerAutoConfiguration {
 
     @Bean
     public DomainEventPublisherPipeline eventBus(EventHandlerRegistry registry, EventHandlerMonitor monitor){
-        DomainEventPublisherPipeline pipeline = new DomainEventPublisherPipeline(registry, monitor);
+        this.registry = registry;
+        this.pipeline = new DomainEventPublisherPipeline(registry, monitor);
+        return this.pipeline;
+    }
+
+    @Override
+    public void afterSingletonsInstantiated() {
         this.registerEventHandlers(registry);
         this.registerEventHandlerInterceptors(pipeline);
-        return pipeline;
     }
 
     private void registerEventHandlerInterceptors(EventHandlerInterceptorRegistry registry) {

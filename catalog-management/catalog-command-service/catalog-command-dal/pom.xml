@@ -16,6 +16,7 @@
     <properties>
         <dal.database>catalog_command</dal.database>
         <dal.export.package>az.kon.academy.catalog.command.dal</dal.export.package>
+        <dal.default.schema>catalog</dal.default.schema>
 
     </properties>
 

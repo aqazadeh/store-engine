@@ -23,10 +23,11 @@
         <dal.database.type>postgresql</dal.database.type>
         <dal.database.host>localhost</dal.database.host>
         <dal.database.port>5432</dal.database.port>
-        <dal.database>catalog_command</dal.database>
+        <dal.database>postgres</dal.database>
         <dal.database.username>postgres</dal.database.username>
         <dal.database.password>postgres</dal.database.password>
         <dal.export.package>az.kon.academy.dal</dal.export.package>
+        <dal.default.schema>public</dal.default.schema>
     </properties>
 
     <build>
@@ -49,6 +50,8 @@
                         <url>jdbc:${dal.database.type}://${dal.database.host}:${dal.database.port}/${dal.database}</url>
                         <username>${dal.database.username}</username>
                         <password>${dal.database.password}</password>
+                        <changelogSchemaName>changelog</changelogSchemaName>
+                        <defaultSchemaName>${dal.default.schema}</defaultSchemaName>
                     </configuration>
                 </plugin>
                 <plugin>
@@ -71,8 +74,7 @@
                         <generator>
                             <database>
                                 <name>org.jooq.meta.postgres.PostgresDatabase</name>
-                                <inputSchema>public</inputSchema>
-                                <excludes>DATABASECHANGELOG|DATABASECHANGELOGLOCK</excludes>
+                                <inputSchema>${dal.default.schema}</inputSchema>
                             </database>
                             <generate>
                                 <fluentSetters>true</fluentSetters>
