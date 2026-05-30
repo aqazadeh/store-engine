@@ -12,43 +12,40 @@
             </not>
         </preConditions>
 
-        <createTable tableName="product_category"
-                     remarks="ProductCategoryRoot aggregate — hierarchical tree of product categories">
-            <column name="id" type="UUID" remarks="Primary key">
+        <createTable tableName="product_category">
+            <column name="id" type="UUID">
                 <constraints primaryKey="true" nullable="false" primaryKeyName="pk_product_category"/>
             </column>
-            <column name="parent_id" type="UUID"
-                    remarks="Parent category ID for tree hierarchy; NULL for root categories">
+            <column name="version" type="BIGINT" defaultValueNumeric="1">
+                <constraints nullable="false"/>
+            </column>
+            <column name="process_status" type="process_status">
+                <constraints nullable="false"/>
+            </column>
+            <column name="row_status" type="row_status_type">
+                <constraints nullable="false"/>
+            </column>
+            <column name="creation_ts" type="TIMESTAMPTZ">
+                <constraints nullable="false"/>
+            </column>
+            <column name="modification_ts" type="TIMESTAMPTZ">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="parent_id" type="UUID">
                 <constraints foreignKeyName="fk_product_category_parent"
                              references="product_category(id)"/>
             </column>
-            <column name="name" type="VARCHAR(40)" remarks="Category display name (4–40 chars)">
+            <column name="name" type="VARCHAR(40)">
                 <constraints nullable="false"/>
             </column>
-            <column name="path" type="VARCHAR(40)" remarks="URL-friendly slug (4–40 chars, unique)">
+            <column name="path" type="VARCHAR(40)">
                 <constraints nullable="false" unique="true" uniqueConstraintName="uq_product_category_path"/>
             </column>
-            <column name="description" type="VARCHAR(200)" remarks="Category description (10–200 chars)">
+            <column name="description" type="TEXT">
                 <constraints nullable="false"/>
             </column>
-            <column name="image" type="VARCHAR(512)" remarks="Image file reference path"/>
-            <column name="version" type="BIGINT" defaultValueNumeric="1" remarks="Optimistic lock version">
-                <constraints nullable="false"/>
-            </column>
-            <column name="process_status" type="VARCHAR(20)" defaultValue="COMPLETED"
-                    remarks="Outbox process state: IN_PROGRESS | FAILED | COMPLETED | ROLL_BACKED">
-                <constraints nullable="false"/>
-            </column>
-            <column name="row_status" type="VARCHAR(20)" defaultValue="ACTIVE"
-                    remarks="Logical lifecycle: ACTIVE | HIDDEN | ARCHIVED | DELETED">
-                <constraints nullable="false"/>
-            </column>
-            <column name="creation_ts" type="TIMESTAMPTZ" remarks="Record creation timestamp">
-                <constraints nullable="false"/>
-            </column>
-            <column name="modification_ts" type="TIMESTAMPTZ" remarks="Last modification timestamp">
-                <constraints nullable="false"/>
-            </column>
+            <column name="image" type="VARCHAR(512)"/>
         </createTable>
 
         <rollback>

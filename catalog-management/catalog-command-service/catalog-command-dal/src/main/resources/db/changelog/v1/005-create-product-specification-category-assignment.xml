@@ -16,20 +16,18 @@
             </not>
         </preConditions>
 
-        <createTable tableName="product_specification_category_assignment"
-                     remarks="Join table — SpecificationCategoryAssignment inside ProductSpecificationRoot">
-            <column name="specification_id" type="UUID" remarks="FK to product_specification">
+        <createTable tableName="product_specification_category_assignment">
+            <column name="specification_id" type="UUID">
                 <constraints nullable="false"
                              foreignKeyName="fk_spec_cat_asgn_specification"
                              references="product_specification(id)"/>
             </column>
-            <column name="category_id" type="UUID" remarks="FK to product_category">
+            <column name="category_id" type="UUID">
                 <constraints nullable="false"
                              foreignKeyName="fk_spec_cat_asgn_category"
                              references="product_category(id)"/>
             </column>
-            <column name="is_required" type="BOOLEAN" defaultValueBoolean="false"
-                    remarks="Whether this specification is mandatory for products in the category">
+            <column name="is_required" type="BOOLEAN" defaultValueBoolean="false">
                 <constraints nullable="false"/>
             </column>
         </createTable>

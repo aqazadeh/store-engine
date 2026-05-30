@@ -12,32 +12,30 @@
             </not>
         </preConditions>
 
-        <createTable tableName="variant_key"
-                     remarks="VariantKeyRoot aggregate — dimension types for product variants (e.g. Color, Size)">
-            <column name="id" type="UUID" remarks="Primary key">
+        <createTable tableName="variant_key">
+            <column name="id" type="UUID">
                 <constraints primaryKey="true" nullable="false" primaryKeyName="pk_variant_key"/>
             </column>
-            <column name="name" type="VARCHAR(20)" remarks="Variant dimension name (5–20 chars, unique)">
+            <column name="version" type="BIGINT" defaultValueNumeric="1">
+                <constraints nullable="false"/>
+            </column>
+            <column name="process_status" type="process_status">
+                <constraints nullable="false"/>
+            </column>
+            <column name="row_status" type="row_status_type">
+                <constraints nullable="false"/>
+            </column>
+            <column name="creation_ts" type="TIMESTAMPTZ">
+                <constraints nullable="false"/>
+            </column>
+            <column name="modification_ts" type="TIMESTAMPTZ">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="name" type="VARCHAR(20)">
                 <constraints nullable="false" unique="true" uniqueConstraintName="uq_variant_key_name"/>
             </column>
-            <column name="description" type="VARCHAR(500)" remarks="Human-readable explanation of the variant dimension">
-                <constraints nullable="false"/>
-            </column>
-            <column name="version" type="BIGINT" defaultValueNumeric="1" remarks="Optimistic lock version">
-                <constraints nullable="false"/>
-            </column>
-            <column name="process_status" type="VARCHAR(20)" defaultValue="COMPLETED"
-                    remarks="Outbox process state: IN_PROGRESS | FAILED | COMPLETED | ROLL_BACKED">
-                <constraints nullable="false"/>
-            </column>
-            <column name="row_status" type="VARCHAR(20)" defaultValue="ACTIVE"
-                    remarks="Logical lifecycle: ACTIVE | HIDDEN | ARCHIVED | DELETED">
-                <constraints nullable="false"/>
-            </column>
-            <column name="creation_ts" type="TIMESTAMPTZ" remarks="Record creation timestamp">
-                <constraints nullable="false"/>
-            </column>
-            <column name="modification_ts" type="TIMESTAMPTZ" remarks="Last modification timestamp">
+            <column name="description" type="VARCHAR(500)">
                 <constraints nullable="false"/>
             </column>
         </createTable>

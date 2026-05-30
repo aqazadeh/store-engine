@@ -2,6 +2,7 @@ package az.kon.academy.catalog.command.service.adapter.outbound.dao.adapter.cate
 
 import az.kon.academy.aggragate.valueobject.RowStatus;
 import az.kon.academy.application.core.annotation.QueryAdapter;
+import az.kon.academy.catalog.command.dal.enums.RowStatusType;
 import az.kon.academy.catalog.command.service.adapter.outbound.dao.mapper.ProductCategoryMapper;
 import az.kon.academy.catalog.command.service.domain.core.aggregate.management.ProductCategoryRoot;
 import az.kon.academy.catalog.command.service.domain.core.port.outbound.ProductCategoryQueryOutboundPort;
@@ -27,7 +28,7 @@ public class ProductCategoryQueryOutboundAdapter implements ProductCategoryQuery
     public Optional<ProductCategoryRoot> findByIdAndRowStatusActive(ProductCategoryId id) {
         return dsl.selectFrom(PRODUCT_CATEGORY)
                 .where(PRODUCT_CATEGORY.ID.eq(id.value())
-                        .and(PRODUCT_CATEGORY.ROW_STATUS.eq(RowStatus.ACTIVE.name())))
+                        .and(PRODUCT_CATEGORY.ROW_STATUS.eq(RowStatusType.ACTIVE)))
                 .fetchOptional()
                 .map(mapper::toDomain);
     }

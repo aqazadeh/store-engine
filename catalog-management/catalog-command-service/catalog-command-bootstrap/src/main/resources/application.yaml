@@ -6,6 +6,9 @@ spring:
     url: jdbc:postgresql://localhost:5432/catalog_command
     username: postgres
     password: postgres
+  jooq:
+    settings:
+      execute-with-optimistic-locking: true
   mvc:
     apiversion:
       default: 1.0

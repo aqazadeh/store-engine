@@ -16,21 +16,21 @@
             </not>
         </preConditions>
 
-        <createTable tableName="product_variant"
-                     remarks="ProductVariantRoot (NoAggregateRoot) — concrete variant of a product">
-            <column name="id" type="UUID" remarks="Primary key">
+        <createTable tableName="product_variant">
+            <column name="id" type="UUID">
                 <constraints primaryKey="true" nullable="false" primaryKeyName="pk_product_variant"/>
             </column>
-            <column name="product_id" type="UUID" remarks="Owning product aggregate (FK to product)">
+            <column name="creation_ts" type="TIMESTAMPTZ">
+                <constraints nullable="false"/>
+            </column>
+            <column name="modification_ts" type="TIMESTAMPTZ">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="product_id" type="UUID">
                 <constraints nullable="false"
                              foreignKeyName="fk_product_variant_product"
                              references="product(id)"/>
-            </column>
-            <column name="creation_ts" type="TIMESTAMPTZ" remarks="Record creation timestamp">
-                <constraints nullable="false"/>
-            </column>
-            <column name="modification_ts" type="TIMESTAMPTZ" remarks="Last modification timestamp">
-                <constraints nullable="false"/>
             </column>
         </createTable>
 

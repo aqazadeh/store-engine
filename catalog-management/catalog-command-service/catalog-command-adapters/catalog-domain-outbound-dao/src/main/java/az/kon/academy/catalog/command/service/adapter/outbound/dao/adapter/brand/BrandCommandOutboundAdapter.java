@@ -4,10 +4,15 @@ import az.kon.academy.application.core.annotation.CommandAdapter;
 import az.kon.academy.catalog.command.service.adapter.outbound.dao.mapper.BrandMapper;
 import az.kon.academy.catalog.command.service.application.service.port.outbound.BrandCommandOutboundPort;
 import az.kon.academy.catalog.command.service.domain.core.aggregate.BrandRoot;
+import lombok.extern.slf4j.Slf4j;
 import org.jooq.DSLContext;
+import org.springframework.dao.OptimisticLockingFailureException;
+
+import java.util.ConcurrentModificationException;
 
 import static az.kon.academy.catalog.command.dal.Tables.BRAND;
 
+@Slf4j
 @CommandAdapter
 public class BrandCommandOutboundAdapter implements BrandCommandOutboundPort {
 
@@ -22,12 +27,17 @@ public class BrandCommandOutboundAdapter implements BrandCommandOutboundPort {
     @Override
     public BrandRoot save(BrandRoot aggregate) {
         var record = mapper.toRecord(aggregate.increaseVersion());
-        dsl.insertInto(BRAND)
+        var result = dsl.insertInto(BRAND)
                 .set(record)
                 .onConflict(BRAND.ID)
                 .doUpdate()
                 .set(record)
+                .where(BRAND.VERSION.eq(aggregate.getVersion().value()))
                 .execute();
-        return aggregate;
+        if(result == 0){
+            log.error("Concurrent update detected for Brand id={}", aggregate.getRootID());
+            throw new OptimisticLockingFailureException("Concurrent update detected for Brand id=" + aggregate.getRootID());
+        }
+        return this.mapper.toDomain(record);
     }
 }

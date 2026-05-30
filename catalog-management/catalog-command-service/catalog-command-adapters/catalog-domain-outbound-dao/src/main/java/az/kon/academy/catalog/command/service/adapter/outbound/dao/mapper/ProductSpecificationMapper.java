@@ -4,6 +4,8 @@ import az.kon.academy.aggragate.valueobject.ProcessStatus;
 import az.kon.academy.aggragate.valueobject.RowStatus;
 import az.kon.academy.aggragate.valueobject.SeDateTime;
 import az.kon.academy.aggragate.valueobject.Version;
+import az.kon.academy.catalog.command.dal.enums.ProcessStatusType;
+import az.kon.academy.catalog.command.dal.enums.RowStatusType;
 import az.kon.academy.catalog.command.dal.tables.records.ProductSpecificationCategoryAssignmentRecord;
 import az.kon.academy.catalog.command.dal.tables.records.ProductSpecificationRecord;
 import az.kon.academy.catalog.command.service.domain.core.aggregate.management.ProductSpecificationRoot;
@@ -25,13 +27,14 @@ public class ProductSpecificationMapper {
     public ProductSpecificationRecord toRecord(ProductSpecificationRoot root) {
         return new ProductSpecificationRecord()
                 .setId(root.getRootID().value())
-                .setName(root.getName().value())
-                .setDescription(root.getDescription().value())
                 .setVersion(root.getVersion().value())
-                .setProcessStatus(root.getProcessStatus().name())
-                .setRowStatus(root.getRowStatus().name())
+                .setProcessStatus(ProcessStatusType.valueOf(root.getProcessStatus().name()))
+                .setRowStatus(RowStatusType.valueOf(root.getRowStatus().name()))
                 .setCreationTs(root.getCreationTs().toOffsetDateTime())
-                .setModificationTs(root.getModificationTs().toOffsetDateTime());
+                .setModificationTs(root.getModificationTs().toOffsetDateTime())
+
+                .setName(root.getName().value())
+                .setDescription(root.getDescription().value());
     }
 
     public ProductSpecificationCategoryAssignmentRecord toCategoryAssignmentRecord(
@@ -58,14 +61,15 @@ public class ProductSpecificationMapper {
 
         return ProductSpecificationRoot.builder()
                 .id(ProductSpecificationId.from(r.getId()))
+                .version(Version.of(r.getVersion()))
+                .processStatus(ProcessStatus.valueOf(r.getProcessStatus().name()))
+                .rowStatus(RowStatus.valueOf(r.getRowStatus().name()))
+                .creationTs(SeDateTime.of(r.getCreationTs()))
+                .modificationTs(SeDateTime.of(r.getModificationTs()))
+
                 .name(SpecificationName.of(r.getName()))
                 .description(SpecificationDescription.of(r.getDescription()))
                 .categories(assignments)
-                .version(Version.of(r.getVersion()))
-                .processStatus(ProcessStatus.valueOf(r.getProcessStatus()))
-                .rowStatus(RowStatus.valueOf(r.getRowStatus()))
-                .creationTs(SeDateTime.of(r.getCreationTs()))
-                .modificationTs(SeDateTime.of(r.getModificationTs()))
                 .build();
     }
 }

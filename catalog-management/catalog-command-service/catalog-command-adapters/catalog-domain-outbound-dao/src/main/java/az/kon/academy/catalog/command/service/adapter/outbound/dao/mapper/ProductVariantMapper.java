@@ -19,9 +19,10 @@ public class ProductVariantMapper {
     public ProductVariantRecord toRecord(ProductVariantRoot root, UUID productId) {
         return new ProductVariantRecord()
                 .setId(root.getRootID().value())
-                .setProductId(productId)
                 .setCreationTs(root.getCreationTs().toOffsetDateTime())
-                .setModificationTs(root.getModificationTs().toOffsetDateTime());
+                .setModificationTs(root.getModificationTs().toOffsetDateTime())
+
+                .setProductId(productId);
     }
 
     public ProductVariantAssignmentRecord toAssignmentRecord(UUID variantId, ProductVariantAssignment assignment) {
@@ -41,9 +42,10 @@ public class ProductVariantMapper {
 
         return ProductVariantRoot.builder()
                 .id(ProductVariantId.from(r.getId()))
-                .assignments(domainAssignments)
                 .creationTs(SeDateTime.of(r.getCreationTs()))
                 .modificationTs(SeDateTime.of(r.getModificationTs()))
+
+                .assignments(domainAssignments)
                 .build();
     }
 }

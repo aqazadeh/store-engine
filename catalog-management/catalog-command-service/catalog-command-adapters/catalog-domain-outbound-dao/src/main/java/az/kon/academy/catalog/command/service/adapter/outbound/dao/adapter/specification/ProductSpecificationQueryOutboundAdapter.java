@@ -2,6 +2,7 @@ package az.kon.academy.catalog.command.service.adapter.outbound.dao.adapter.spec
 
 import az.kon.academy.aggragate.valueobject.RowStatus;
 import az.kon.academy.application.core.annotation.QueryAdapter;
+import az.kon.academy.catalog.command.dal.enums.RowStatusType;
 import az.kon.academy.catalog.command.service.adapter.outbound.dao.mapper.ProductSpecificationMapper;
 import az.kon.academy.catalog.command.service.domain.core.aggregate.management.ProductSpecificationRoot;
 import az.kon.academy.catalog.command.service.domain.core.port.outbound.ProductSpecificationQueryOutboundPort;
@@ -28,7 +29,7 @@ public class ProductSpecificationQueryOutboundAdapter implements ProductSpecific
     public Optional<ProductSpecificationRoot> findByIdAndRowStatusActive(ProductSpecificationId id) {
         return dsl.selectFrom(PRODUCT_SPECIFICATION)
                 .where(PRODUCT_SPECIFICATION.ID.eq(id.value())
-                        .and(PRODUCT_SPECIFICATION.ROW_STATUS.eq(RowStatus.ACTIVE.name())))
+                        .and(PRODUCT_SPECIFICATION.ROW_STATUS.eq(RowStatusType.ACTIVE)))
                 .fetchOptional()
                 .map(record -> {
                     var categories = dsl.selectFrom(PRODUCT_SPECIFICATION_CATEGORY_ASSIGNMENT)

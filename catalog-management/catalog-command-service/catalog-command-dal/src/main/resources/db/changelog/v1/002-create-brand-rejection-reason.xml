@@ -12,42 +12,38 @@
             </not>
         </preConditions>
 
-        <createTable tableName="brand_rejection_reason"
-                     remarks="BrandRejectionReasonRoot aggregate — moderator rejection records for brands">
-            <column name="id" type="UUID" remarks="Primary key">
+        <createTable tableName="brand_rejection_reason">
+            <column name="id" type="UUID">
                 <constraints primaryKey="true" nullable="false" primaryKeyName="pk_brand_rejection_reason"/>
             </column>
-            <column name="brand_id" type="UUID" remarks="Rejected brand reference (immutable after creation)">
+            <column name="version" type="BIGINT" defaultValueNumeric="1">
+                <constraints nullable="false"/>
+            </column>
+            <column name="process_status" type="process_status">
+                <constraints nullable="false"/>
+            </column>
+            <column name="row_status" type="row_status_type">
+                <constraints nullable="false"/>
+            </column>
+            <column name="creation_ts" type="TIMESTAMPTZ">
+                <constraints nullable="false"/>
+            </column>
+            <column name="modification_ts" type="TIMESTAMPTZ">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="brand_id" type="UUID">
                 <constraints nullable="false"
                              foreignKeyName="fk_brand_rejection_reason_brand"
                              references="brand(id)"/>
             </column>
-            <column name="reason" type="TEXT" remarks="Moderator-supplied rejection explanation">
+            <column name="reason" type="TEXT">
                 <constraints nullable="false"/>
             </column>
-
-            <column name="solved" type="bool" remarks="Merchant solved this reason">
-                <constraints nullable="false" />
-            </column>
-
-            <column name="moderated_by" type="UUID" remarks="Moderator ID who issued the rejection (immutable)">
+            <column name="solved" type="bool">
                 <constraints nullable="false"/>
             </column>
-            <column name="version" type="BIGINT" defaultValueNumeric="1" remarks="Optimistic lock version">
-                <constraints nullable="false"/>
-            </column>
-            <column name="process_status" type="VARCHAR(20)" defaultValue="COMPLETED"
-                    remarks="Outbox process state: IN_PROGRESS | FAILED | COMPLETED | ROLL_BACKED">
-                <constraints nullable="false"/>
-            </column>
-            <column name="row_status" type="VARCHAR(20)" defaultValue="ACTIVE"
-                    remarks="Logical lifecycle: ACTIVE | HIDDEN | ARCHIVED | DELETED">
-                <constraints nullable="false"/>
-            </column>
-            <column name="creation_ts" type="TIMESTAMPTZ" remarks="Record creation timestamp">
-                <constraints nullable="false"/>
-            </column>
-            <column name="modification_ts" type="TIMESTAMPTZ" remarks="Last modification timestamp">
+            <column name="moderated_by" type="UUID">
                 <constraints nullable="false"/>
             </column>
         </createTable>

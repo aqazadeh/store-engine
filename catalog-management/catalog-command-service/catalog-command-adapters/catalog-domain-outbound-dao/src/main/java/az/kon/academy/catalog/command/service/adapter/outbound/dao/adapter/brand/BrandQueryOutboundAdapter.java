@@ -2,6 +2,7 @@ package az.kon.academy.catalog.command.service.adapter.outbound.dao.adapter.bran
 
 import az.kon.academy.aggragate.valueobject.RowStatus;
 import az.kon.academy.application.core.annotation.QueryAdapter;
+import az.kon.academy.catalog.command.dal.enums.RowStatusType;
 import az.kon.academy.catalog.command.service.adapter.outbound.dao.mapper.BrandMapper;
 import az.kon.academy.catalog.command.service.domain.core.aggregate.BrandRoot;
 import az.kon.academy.catalog.command.service.domain.core.exception.brand.BrandDomainErrorCodes;
@@ -31,7 +32,7 @@ public class BrandQueryOutboundAdapter implements BrandQueryOutboundPort {
     public Optional<BrandRoot> findById(final BrandId brandId) {
         return dsl.selectFrom(BRAND)
                 .where(BRAND.ID.eq(brandId.value())
-                        .and(BRAND.ROW_STATUS.eq(RowStatus.ACTIVE.name())))
+                        .and(BRAND.ROW_STATUS.eq(RowStatusType.ACTIVE)))
                 .fetchOptional()
                 .map(mapper::toDomain);
     }
@@ -47,7 +48,7 @@ public class BrandQueryOutboundAdapter implements BrandQueryOutboundPort {
         return dsl.selectFrom(BRAND)
                 .where(BRAND.ID.eq(brandId.value())
                         .and(BRAND.OWNER_ID.eq(merchantId.value()))
-                        .and(BRAND.ROW_STATUS.eq(RowStatus.ACTIVE.name())))
+                        .and(BRAND.ROW_STATUS.eq(RowStatusType.ACTIVE)))
                 .fetchOptional()
                 .map(mapper::toDomain);
     }
@@ -62,7 +63,7 @@ public class BrandQueryOutboundAdapter implements BrandQueryOutboundPort {
     public Optional<BrandRoot> findByIdAndIsGlobalTrue(BrandId brandId) {
         return dsl.selectFrom(BRAND)
                 .where(BRAND.ID.eq(brandId.value())
-                        .and(BRAND.ROW_STATUS.eq(RowStatus.ACTIVE.name()))
+                        .and(BRAND.ROW_STATUS.eq(RowStatusType.ACTIVE))
                         .and(BRAND.IS_GLOBAL.eq(Boolean.TRUE)))
                 .fetchOptional()
                 .map(mapper::toDomain);
@@ -79,7 +80,7 @@ public class BrandQueryOutboundAdapter implements BrandQueryOutboundPort {
         return dsl.selectCount()
                 .from(BRAND)
                 .where(BRAND.OWNER_ID.eq(merchantId.value())
-                        .and(BRAND.ROW_STATUS.eq(RowStatus.ACTIVE.name())))
+                        .and(BRAND.ROW_STATUS.eq(RowStatusType.ACTIVE)))
                 .fetchOne(0, Integer.class);
     }
 
@@ -88,7 +89,7 @@ public class BrandQueryOutboundAdapter implements BrandQueryOutboundPort {
         return dsl.fetchExists(
                 dsl.selectFrom(BRAND)
                         .where(BRAND.NAME.eq(name.value())
-                                .and(BRAND.ROW_STATUS.eq(RowStatus.ACTIVE.name())))
+                                .and(BRAND.ROW_STATUS.eq(RowStatusType.ACTIVE)))
         );
     }
 }

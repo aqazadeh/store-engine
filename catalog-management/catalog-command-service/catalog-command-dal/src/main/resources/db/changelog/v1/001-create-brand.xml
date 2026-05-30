@@ -6,51 +6,58 @@
                             http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
 
     <changeSet id="001-1" author="rovshan.aghayev">
+        <sql>
+            CREATE TYPE brand_status_type AS ENUM ('DRAFT', 'SENT_TO_APPROVAL', 'IN_REVIEW', 'APPROVED', 'REJECTED');
+        </sql>
+        <rollback>
+            DROP TYPE brand_status_type;
+        </rollback>
+    </changeSet>
+
+    <changeSet id="001-2" author="rovshan.aghayev">
         <preConditions onFail="MARK_RAN">
             <not>
                 <tableExists tableName="brand"/>
             </not>
         </preConditions>
 
-        <createTable tableName="brand" remarks="BrandRoot aggregate — merchant-owned or global product brands">
-            <column name="id" type="UUID" remarks="Primary key">
+        <createTable tableName="brand">
+            <column name="id" type="UUID">
                 <constraints primaryKey="true" nullable="false" primaryKeyName="pk_brand"/>
             </column>
-            <column name="owner_id" type="UUID" remarks="Owning merchant ID (immutable after creation)">
+            <column name="version" type="BIGINT" defaultValueNumeric="1">
                 <constraints nullable="false"/>
             </column>
-            <column name="name" type="VARCHAR(20)" remarks="Brand display name (5–20 chars)">
+            <column name="process_status" type="process_status">
                 <constraints nullable="false"/>
             </column>
-            <column name="description" type="VARCHAR(150)" remarks="Brand description (10–150 chars)">
+            <column name="row_status" type="row_status_type">
                 <constraints nullable="false"/>
             </column>
-            <column name="path" type="VARCHAR(20)" remarks="URL-friendly slug (5–20 chars, unique)">
+            <column name="creation_ts" type="TIMESTAMPTZ">
+                <constraints nullable="false"/>
+            </column>
+            <column name="modification_ts" type="TIMESTAMPTZ">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="owner_id" type="UUID">
+                <constraints nullable="false"/>
+            </column>
+            <column name="name" type="VARCHAR(20)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="description" type="TEXT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="path" type="VARCHAR(20)">
                 <constraints nullable="false" unique="true" uniqueConstraintName="uq_brand_path"/>
             </column>
-            <column name="image" type="VARCHAR(512)" remarks="Image file reference path"/>
-            <column name="is_global" type="BOOLEAN" defaultValueBoolean="false" remarks="True when brand is shared across all merchants">
+            <column name="image" type="VARCHAR(512)"/>
+            <column name="is_global" type="BOOLEAN" defaultValueBoolean="false">
                 <constraints nullable="false"/>
             </column>
-            <column name="status" type="VARCHAR(30)" defaultValue="DRAFT"
-                    remarks="Approval lifecycle: DRAFT | SENT_TO_APPROVAL | APPROVED | REJECTED | IN_REVIEW">
-                <constraints nullable="false"/>
-            </column>
-            <column name="version" type="BIGINT" defaultValueNumeric="1" remarks="Optimistic lock version">
-                <constraints nullable="false"/>
-            </column>
-            <column name="process_status" type="VARCHAR(20)" defaultValue="COMPLETED"
-                    remarks="Outbox process state: IN_PROGRESS | FAILED | COMPLETED | ROLL_BACKED">
-                <constraints nullable="false"/>
-            </column>
-            <column name="row_status" type="VARCHAR(20)" defaultValue="ACTIVE"
-                    remarks="Logical lifecycle: ACTIVE | HIDDEN | ARCHIVED | DELETED">
-                <constraints nullable="false"/>
-            </column>
-            <column name="creation_ts" type="TIMESTAMPTZ" remarks="Record creation timestamp">
-                <constraints nullable="false"/>
-            </column>
-            <column name="modification_ts" type="TIMESTAMPTZ" remarks="Last modification timestamp">
+            <column name="status" type="brand_status_type">
                 <constraints nullable="false"/>
             </column>
         </createTable>
@@ -60,7 +67,7 @@
         </rollback>
     </changeSet>
 
-    <changeSet id="001-2" author="rovshan.aghayev">
+    <changeSet id="001-3" author="rovshan.aghayev">
         <preConditions onFail="MARK_RAN">
             <not>
                 <indexExists indexName="idx_brand_owner_id"/>

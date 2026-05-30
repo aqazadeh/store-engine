@@ -12,34 +12,33 @@
             </not>
         </preConditions>
 
-        <createTable tableName="product_specification"
-                     remarks="ProductSpecificationRoot aggregate — named specification attributes assignable to products">
-            <column name="id" type="UUID" remarks="Primary key">
+        <createTable tableName="product_specification">
+            <column name="id" type="UUID">
                 <constraints primaryKey="true" nullable="false" primaryKeyName="pk_product_specification"/>
             </column>
-            <column name="name" type="VARCHAR(20)" remarks="Specification name (4–20 chars, immutable, unique)">
+            <column name="version" type="BIGINT" defaultValueNumeric="1">
+                <constraints nullable="false"/>
+            </column>
+            <column name="process_status" type="process_status">
+                <constraints nullable="false"/>
+            </column>
+            <column name="row_status" type="row_status_type">
+                <constraints nullable="false"/>
+            </column>
+            <column name="creation_ts" type="TIMESTAMPTZ">
+                <constraints nullable="false"/>
+            </column>
+            <column name="modification_ts" type="TIMESTAMPTZ">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="name" type="VARCHAR(20)">
                 <constraints nullable="false" unique="true" uniqueConstraintName="uq_product_specification_name"/>
             </column>
-            <column name="description" type="VARCHAR(255)" remarks="Specification description (10–255 chars, immutable)">
+            <column name="description" type="VARCHAR(255)">
                 <constraints nullable="false"/>
             </column>
-            <column name="version" type="BIGINT" defaultValueNumeric="1" remarks="Optimistic lock version">
-                <constraints nullable="false"/>
-            </column>
-            <column name="process_status" type="VARCHAR(20)" defaultValue="COMPLETED"
-                    remarks="Outbox process state: IN_PROGRESS | FAILED | COMPLETED | ROLL_BACKED">
-                <constraints nullable="false"/>
-            </column>
-            <column name="row_status" type="VARCHAR(20)" defaultValue="ACTIVE"
-                    remarks="Logical lifecycle: ACTIVE | HIDDEN | ARCHIVED | DELETED">
-                <constraints nullable="false"/>
-            </column>
-            <column name="creation_ts" type="TIMESTAMPTZ" remarks="Record creation timestamp">
-                <constraints nullable="false"/>
-            </column>
-            <column name="modification_ts" type="TIMESTAMPTZ" remarks="Last modification timestamp">
-                <constraints nullable="false"/>
-            </column>
+
         </createTable>
 
         <rollback>

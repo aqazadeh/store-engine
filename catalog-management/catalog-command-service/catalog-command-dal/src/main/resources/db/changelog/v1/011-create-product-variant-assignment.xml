@@ -17,19 +17,18 @@
             </not>
         </preConditions>
 
-        <createTable tableName="product_variant_assignment"
-                     remarks="Join table — ProductVariantAssignment inside ProductVariantRoot">
-            <column name="variant_id" type="UUID" remarks="Owning product variant (FK to product_variant)">
+        <createTable tableName="product_variant_assignment">
+            <column name="variant_id" type="UUID">
                 <constraints nullable="false"
                              foreignKeyName="fk_variant_asgn_variant"
                              references="product_variant(id)"/>
             </column>
-            <column name="variant_key_id" type="UUID" remarks="Variant dimension (FK to variant_key)">
+            <column name="variant_key_id" type="UUID">
                 <constraints nullable="false"
                              foreignKeyName="fk_variant_asgn_key"
                              references="variant_key(id)"/>
             </column>
-            <column name="variant_value_id" type="UUID" remarks="Concrete value for the dimension (FK to variant_value)">
+            <column name="variant_value_id" type="UUID">
                 <constraints nullable="false"
                              foreignKeyName="fk_variant_asgn_value"
                              references="variant_value(id)"/>

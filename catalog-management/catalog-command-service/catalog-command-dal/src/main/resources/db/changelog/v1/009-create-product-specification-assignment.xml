@@ -16,19 +16,18 @@
             </not>
         </preConditions>
 
-        <createTable tableName="product_specification_assignment"
-                     remarks="Join table — ProductSpecificationAssignment inside ProductRoot">
-            <column name="product_id" type="UUID" remarks="Owning product (FK to product)">
+        <createTable tableName="product_specification_assignment">
+            <column name="product_id" type="UUID">
                 <constraints nullable="false"
                              foreignKeyName="fk_prod_spec_asgn_product"
                              references="product(id)"/>
             </column>
-            <column name="specification_id" type="UUID" remarks="Assigned specification (FK to product_specification)">
+            <column name="specification_id" type="UUID">
                 <constraints nullable="false"
                              foreignKeyName="fk_prod_spec_asgn_specification"
                              references="product_specification(id)"/>
             </column>
-            <column name="value" type="VARCHAR(20)" remarks="Specification value for this product (5–20 chars)">
+            <column name="value" type="VARCHAR(20)">
                 <constraints nullable="false"/>
             </column>
         </createTable>

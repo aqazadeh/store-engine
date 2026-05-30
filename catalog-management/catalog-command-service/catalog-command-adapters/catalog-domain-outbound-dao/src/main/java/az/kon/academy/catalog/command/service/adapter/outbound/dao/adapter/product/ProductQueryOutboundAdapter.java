@@ -2,6 +2,8 @@ package az.kon.academy.catalog.command.service.adapter.outbound.dao.adapter.prod
 
 import az.kon.academy.aggragate.valueobject.RowStatus;
 import az.kon.academy.application.core.annotation.QueryAdapter;
+import az.kon.academy.catalog.command.dal.enums.RowStatusType;
+import az.kon.academy.catalog.command.dal.tables.records.ProductVariantRecord;
 import az.kon.academy.catalog.command.service.adapter.outbound.dao.mapper.ProductMapper;
 import az.kon.academy.catalog.command.service.adapter.outbound.dao.mapper.ProductVariantMapper;
 import az.kon.academy.catalog.command.service.domain.core.aggregate.ProductRoot;
@@ -35,7 +37,7 @@ public class ProductQueryOutboundAdapter implements ProductQueryOutboundPort {
     public Optional<ProductRoot> findByIdAndRowStatusActive(ProductId id) {
         return dsl.selectFrom(PRODUCT)
                 .where(PRODUCT.ID.eq(id.value())
-                        .and(PRODUCT.ROW_STATUS.eq(RowStatus.ACTIVE.name())))
+                        .and(PRODUCT.ROW_STATUS.eq(RowStatusType.ACTIVE)))
                 .fetchOptional()
                 .map(productRecord -> {
                     UUID productId = productRecord.getId();
@@ -49,7 +51,7 @@ public class ProductQueryOutboundAdapter implements ProductQueryOutboundPort {
                             .fetch();
 
                     List<UUID> variantIds = variantRecords.stream()
-                            .map(v -> v.getId())
+                            .map(ProductVariantRecord::getId)
                             .toList();
 
                     Map<UUID, List<az.kon.academy.catalog.command.dal.tables.records.ProductVariantAssignmentRecord>> assignmentsByVariant =

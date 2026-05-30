@@ -12,40 +12,36 @@
             </not>
         </preConditions>
 
-        <createTable tableName="product_price"
-                     remarks="ProductPriceRoot aggregate — allowed price range for a product variant">
-            <column name="id" type="UUID" remarks="Primary key">
+        <createTable tableName="product_price">
+            <column name="id" type="UUID">
                 <constraints primaryKey="true" nullable="false" primaryKeyName="pk_product_price"/>
             </column>
-            <column name="variant_id" type="UUID"
-                    remarks="Owning product variant (1-to-1, immutable, FK to product_variant)">
+            <column name="version" type="BIGINT" defaultValueNumeric="1">
+                <constraints nullable="false"/>
+            </column>
+            <column name="process_status" type="process_status">
+                <constraints nullable="false"/>
+            </column>
+            <column name="row_status" type="row_status_type">
+                <constraints nullable="false"/>
+            </column>
+            <column name="creation_ts" type="TIMESTAMPTZ">
+                <constraints nullable="false"/>
+            </column>
+            <column name="modification_ts" type="TIMESTAMPTZ">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="variant_id" type="UUID">
                 <constraints nullable="false" unique="true"
                              uniqueConstraintName="uq_product_price_variant"
                              foreignKeyName="fk_product_price_variant"
                              references="product_variant(id)"/>
             </column>
-            <!-- Money value object is a plain BigDecimal — no currency field in the domain model -->
-            <column name="min_price" type="NUMERIC(19, 4)" remarks="Minimum allowed selling price">
+            <column name="min_price" type="NUMERIC(19, 4)">
                 <constraints nullable="false"/>
             </column>
-            <column name="max_price" type="NUMERIC(19, 4)" remarks="Maximum allowed selling price">
-                <constraints nullable="false"/>
-            </column>
-            <column name="version" type="BIGINT" defaultValueNumeric="1" remarks="Optimistic lock version">
-                <constraints nullable="false"/>
-            </column>
-            <column name="process_status" type="VARCHAR(20)" defaultValue="COMPLETED"
-                    remarks="Outbox process state: IN_PROGRESS | FAILED | COMPLETED | ROLL_BACKED">
-                <constraints nullable="false"/>
-            </column>
-            <column name="row_status" type="VARCHAR(20)" defaultValue="ACTIVE"
-                    remarks="Logical lifecycle: ACTIVE | HIDDEN | ARCHIVED | DELETED">
-                <constraints nullable="false"/>
-            </column>
-            <column name="creation_ts" type="TIMESTAMPTZ" remarks="Record creation timestamp">
-                <constraints nullable="false"/>
-            </column>
-            <column name="modification_ts" type="TIMESTAMPTZ" remarks="Last modification timestamp">
+            <column name="max_price" type="NUMERIC(19, 4)">
                 <constraints nullable="false"/>
             </column>
         </createTable>

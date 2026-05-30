@@ -6,59 +6,67 @@
                             http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
 
     <changeSet id="008-1" author="rovshan.aghayev">
+        <sql>
+            CREATE TYPE product_status_type AS ENUM ('DRAFT', 'SENT_TO_APPROVAL', 'IN_REVIEW', 'APPROVED', 'REJECTED', 'ARCHIVED')
+        </sql>
+        <rollback>
+            DROP TYPE product_status;
+        </rollback>
+    </changeSet>
+
+    <changeSet id="008-2" author="rovshan.aghayev">
         <preConditions onFail="MARK_RAN">
             <not>
                 <tableExists tableName="product"/>
             </not>
         </preConditions>
 
-        <createTable tableName="product" remarks="ProductRoot aggregate — merchant-owned product listing">
-            <column name="id" type="UUID" remarks="Primary key">
+        <createTable tableName="product">
+            <column name="id" type="UUID">
                 <constraints primaryKey="true" nullable="false" primaryKeyName="pk_product"/>
             </column>
-            <column name="merchant_id" type="UUID" remarks="Owning merchant ID (immutable after creation)">
+            <column name="version" type="BIGINT" defaultValueNumeric="1">
                 <constraints nullable="false"/>
             </column>
-            <column name="category_id" type="UUID" remarks="Assigned product category (nullable, FK to product_category)">
+            <column name="process_status" type="process_status">
+                <constraints nullable="false"/>
+            </column>
+            <column name="row_status" type="row_status_type">
+                <constraints nullable="false"/>
+            </column>
+            <column name="creation_ts" type="TIMESTAMPTZ">
+                <constraints nullable="false"/>
+            </column>
+            <column name="modification_ts" type="TIMESTAMPTZ">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="merchant_id" type="UUID">
+                <constraints nullable="false"/>
+            </column>
+            <column name="category_id" type="UUID">
                 <constraints foreignKeyName="fk_product_category"
-                             references="product_category(id)"/>
+                             references="product_category(id)"
+                             nullable="false"/>
             </column>
-            <column name="brand_id" type="UUID" remarks="Assigned brand (nullable, FK to brand)">
+            <column name="brand_id" type="UUID">
                 <constraints foreignKeyName="fk_product_brand"
-                             references="brand(id)"/>
+                             references="brand(id)"
+                             nullable="false"/>
             </column>
-            <column name="name" type="VARCHAR(20)" remarks="Product display name (5–20 chars)">
+            <column name="name" type="VARCHAR(20)">
                 <constraints nullable="false"/>
             </column>
-            <column name="description" type="VARCHAR(150)" remarks="Product description (10–150 chars)">
+            <column name="description" type="VARCHAR(150)">
                 <constraints nullable="false"/>
             </column>
-            <column name="barcode" type="VARCHAR(100)" remarks="Global product barcode (immutable, unique)">
+            <column name="barcode" type="VARCHAR(100)">
                 <constraints nullable="false" unique="true" uniqueConstraintName="uq_product_barcode"/>
             </column>
-            <column name="auto_price_update_enabled" type="BOOLEAN" defaultValueBoolean="false"
-                    remarks="Enables automatic price syncing from the brand's global price list">
+            <column name="auto_price_update_enabled" type="BOOLEAN">
                 <constraints nullable="false"/>
             </column>
-            <column name="status" type="VARCHAR(30)" defaultValue="DRAFT"
-                    remarks="Approval lifecycle: DRAFT | SENT_TO_APPROVAL | APPROVED | REJECTED | ARCHIVED">
-                <constraints nullable="false"/>
-            </column>
-            <column name="version" type="BIGINT" defaultValueNumeric="1" remarks="Optimistic lock version">
-                <constraints nullable="false"/>
-            </column>
-            <column name="process_status" type="VARCHAR(20)" defaultValue="COMPLETED"
-                    remarks="Outbox process state: IN_PROGRESS | FAILED | COMPLETED | ROLL_BACKED">
-                <constraints nullable="false"/>
-            </column>
-            <column name="row_status" type="VARCHAR(20)" defaultValue="ACTIVE"
-                    remarks="Logical lifecycle: ACTIVE | HIDDEN | ARCHIVED | DELETED">
-                <constraints nullable="false"/>
-            </column>
-            <column name="creation_ts" type="TIMESTAMPTZ" remarks="Record creation timestamp">
-                <constraints nullable="false"/>
-            </column>
-            <column name="modification_ts" type="TIMESTAMPTZ" remarks="Last modification timestamp">
+            <column name="status" type="product_status_type">
                 <constraints nullable="false"/>
             </column>
         </createTable>
@@ -68,7 +76,7 @@
         </rollback>
     </changeSet>
 
-    <changeSet id="008-2" author="rovshan.aghayev">
+    <changeSet id="008-3" author="rovshan.aghayev">
         <preConditions onFail="MARK_RAN">
             <not>
                 <indexExists indexName="idx_product_merchant_id"/>

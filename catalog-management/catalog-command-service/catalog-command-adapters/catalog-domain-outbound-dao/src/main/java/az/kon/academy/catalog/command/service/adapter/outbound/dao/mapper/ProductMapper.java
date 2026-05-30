@@ -4,6 +4,9 @@ import az.kon.academy.aggragate.valueobject.ProcessStatus;
 import az.kon.academy.aggragate.valueobject.RowStatus;
 import az.kon.academy.aggragate.valueobject.SeDateTime;
 import az.kon.academy.aggragate.valueobject.Version;
+import az.kon.academy.catalog.command.dal.enums.ProcessStatusType;
+import az.kon.academy.catalog.command.dal.enums.ProductStatusType;
+import az.kon.academy.catalog.command.dal.enums.RowStatusType;
 import az.kon.academy.catalog.command.dal.tables.records.ProductRecord;
 import az.kon.academy.catalog.command.dal.tables.records.ProductSpecificationAssignmentRecord;
 import az.kon.academy.catalog.command.service.domain.core.aggregate.ProductRoot;
@@ -24,6 +27,12 @@ public class ProductMapper {
     public ProductRecord toRecord(ProductRoot root) {
         return new ProductRecord()
                 .setId(root.getRootID().value())
+                .setVersion(root.getVersion().value())
+                .setProcessStatus(ProcessStatusType.valueOf(root.getProcessStatus().name()))
+                .setRowStatus(RowStatusType.valueOf(root.getRowStatus().name()))
+                .setCreationTs(root.getCreationTs().toOffsetDateTime())
+                .setModificationTs(root.getModificationTs().toOffsetDateTime())
+
                 .setMerchantId(root.getMerchantId().value())
                 .setCategoryId(root.getCategoryId() != null ? root.getCategoryId().value() : null)
                 .setBrandId(root.getBrandId() != null ? root.getBrandId().value() : null)
@@ -31,12 +40,7 @@ public class ProductMapper {
                 .setDescription(root.getDescription().value())
                 .setBarcode(root.getBarcode().value())
                 .setAutoPriceUpdateEnabled(root.getAutoPriceUpdateEnabled())
-                .setStatus(root.getStatus().name())
-                .setVersion(root.getVersion().value())
-                .setProcessStatus(root.getProcessStatus().name())
-                .setRowStatus(root.getRowStatus().name())
-                .setCreationTs(root.getCreationTs().toOffsetDateTime())
-                .setModificationTs(root.getModificationTs().toOffsetDateTime());
+                .setStatus(ProductStatusType.valueOf(root.getStatus().name()));
     }
 
     public ProductSpecificationAssignmentRecord toSpecAssignmentRecord(
@@ -61,6 +65,12 @@ public class ProductMapper {
 
         return ProductRoot.builder()
                 .id(ProductId.from(r.getId()))
+                .version(Version.of(r.getVersion()))
+                .processStatus(ProcessStatus.valueOf(r.getProcessStatus().name()))
+                .rowStatus(RowStatus.valueOf(r.getRowStatus().name()))
+                .creationTs(SeDateTime.of(r.getCreationTs()))
+                .modificationTs(SeDateTime.of(r.getModificationTs()))
+
                 .merchantId(MerchantId.from(r.getMerchantId()))
                 .categoryId(r.getCategoryId() != null ? ProductCategoryId.from(r.getCategoryId()) : null)
                 .brandId(r.getBrandId() != null ? BrandId.from(r.getBrandId()) : null)
@@ -68,14 +78,9 @@ public class ProductMapper {
                 .description(ProductDescription.of(r.getDescription()))
                 .barcode(Barcode.of(r.getBarcode()))
                 .autoPriceUpdateEnabled(r.getAutoPriceUpdateEnabled())
-                .status(ProductStatus.valueOf(r.getStatus()))
+                .status(ProductStatus.valueOf(r.getStatus().name()))
                 .specifications(specAssignments)
                 .variants(variants)
-                .version(Version.of(r.getVersion()))
-                .processStatus(ProcessStatus.valueOf(r.getProcessStatus()))
-                .rowStatus(RowStatus.valueOf(r.getRowStatus()))
-                .creationTs(SeDateTime.of(r.getCreationTs()))
-                .modificationTs(SeDateTime.of(r.getModificationTs()))
                 .build();
     }
 }
