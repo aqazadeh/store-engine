@@ -1,0 +1,36 @@
+{
+  "type" : "record",
+  "name" : "ProductCategoryCreatedAvroModel",
+  "namespace" : "az.kon.academy.catalog.avro.model.management.category",
+  "fields" : [ {
+    "name" : "description",
+    "type" : "string"
+  }, {
+    "name" : "image",
+    "type" : "string"
+  }, {
+    "name" : "name",
+    "type" : "string"
+  }, {
+    "name" : "path",
+    "type" : "string"
+  }, {
+    "name" : "aggregateId",
+    "type" : "string"
+  }, {
+    "name" : "eventId",
+    "type" : {
+      "type" : "string",
+      "logicalType" : "uuid"
+    }
+  }, {
+    "name" : "timestamp",
+    "type" : {
+      "type" : "long",
+      "logicalType" : "timestamp-millis"
+    }
+  }, {
+    "name" : "version",
+    "type" : "int"
+  } ]
+}
