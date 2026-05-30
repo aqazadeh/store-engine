@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class MerchantQueryAdapter implements MerchantQueryPort {
     @Override
-    public Boolean isMerchantExists(MerchantId merchantId) {
+    public Boolean isActiveMerchantExists(MerchantId merchantId) {
         return true; // FIXME dummy return
     }
 }

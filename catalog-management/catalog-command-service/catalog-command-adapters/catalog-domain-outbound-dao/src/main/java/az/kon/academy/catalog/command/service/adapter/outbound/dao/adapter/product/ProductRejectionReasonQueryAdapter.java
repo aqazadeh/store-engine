@@ -1,7 +1,7 @@
 package az.kon.academy.catalog.command.service.adapter.outbound.dao.adapter.product;
 
-import org.springframework.stereotype.Component;
+import az.kon.academy.application.core.annotation.QueryAdapter;
 
-@Component
+@QueryAdapter
 public class ProductRejectionReasonQueryAdapter {
 }

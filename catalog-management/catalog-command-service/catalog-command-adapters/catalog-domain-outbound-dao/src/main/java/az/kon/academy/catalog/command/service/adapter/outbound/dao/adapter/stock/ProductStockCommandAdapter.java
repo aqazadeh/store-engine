@@ -1,5 +1,6 @@
 package az.kon.academy.catalog.command.service.adapter.outbound.dao.adapter.stock;
 
+import az.kon.academy.application.core.annotation.CommandAdapter;
 import az.kon.academy.catalog.command.service.adapter.outbound.dao.mapper.ProductStockMapper;
 import az.kon.academy.catalog.command.service.application.service.port.outbound.ProductStockCommandPort;
 import az.kon.academy.catalog.command.service.domain.core.aggregate.ProductStockRoot;
@@ -9,12 +10,16 @@ import org.springframework.stereotype.Component;
 
 import static az.kon.academy.catalog.command.dal.Tables.PRODUCT_STOCK;
 
-@Component
-@RequiredArgsConstructor
+@CommandAdapter
 public class ProductStockCommandAdapter implements ProductStockCommandPort {
 
     private final DSLContext dsl;
     private final ProductStockMapper mapper;
+
+    public ProductStockCommandAdapter(DSLContext dsl, ProductStockMapper mapper) {
+        this.dsl = dsl;
+        this.mapper = mapper;
+    }
 
     @Override
     public ProductStockRoot save(ProductStockRoot aggregate) {

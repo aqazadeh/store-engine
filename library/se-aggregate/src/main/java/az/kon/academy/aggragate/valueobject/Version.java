@@ -1,7 +1,7 @@
 package az.kon.academy.aggragate.valueobject;
 
 public final class Version {
-    public static final Version START = new Version(1L);
+    public static final Version START = new Version(0L);
 
     private final Long value;
 

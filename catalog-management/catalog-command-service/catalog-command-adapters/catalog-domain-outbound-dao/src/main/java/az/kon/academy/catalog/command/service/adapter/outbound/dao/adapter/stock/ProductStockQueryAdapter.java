@@ -1,5 +1,7 @@
 package az.kon.academy.catalog.command.service.adapter.outbound.dao.adapter.stock;
 
+import az.kon.academy.application.core.annotation.CommandAdapter;
+import az.kon.academy.application.core.annotation.QueryAdapter;
 import az.kon.academy.catalog.command.service.adapter.outbound.dao.mapper.ProductStockMapper;
 import az.kon.academy.catalog.command.service.domain.core.aggregate.ProductStockRoot;
 import az.kon.academy.catalog.command.service.domain.core.port.outbound.ProductStockQueryPort;
@@ -12,12 +14,16 @@ import java.util.Optional;
 
 import static az.kon.academy.catalog.command.dal.Tables.PRODUCT_STOCK;
 
-@Component
-@RequiredArgsConstructor
+@QueryAdapter
 public class ProductStockQueryAdapter implements ProductStockQueryPort {
 
     private final DSLContext dsl;
     private final ProductStockMapper mapper;
+
+    public ProductStockQueryAdapter(DSLContext dsl, ProductStockMapper mapper) {
+        this.dsl = dsl;
+        this.mapper = mapper;
+    }
 
     @Override
     public Optional<ProductStockRoot> findById(ProductStockId id) {

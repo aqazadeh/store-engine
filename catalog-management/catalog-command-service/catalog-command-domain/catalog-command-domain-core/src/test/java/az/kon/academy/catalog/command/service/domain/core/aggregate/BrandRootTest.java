@@ -1,10 +1,9 @@
 package az.kon.academy.catalog.command.service.domain.core.aggregate;
 
-import az.kon.academy.catalog.command.service.domain.core.command.brand.BrandCreateForGlobalCommand;
-import az.kon.academy.catalog.command.service.domain.core.command.brand.merchant.BrandChangeImageCommand;
-import az.kon.academy.catalog.command.service.domain.core.command.brand.merchant.BrandChangeInformationCommand;
-import az.kon.academy.catalog.command.service.domain.core.command.brand.management.BrandChangeOwnerCommand;
-import az.kon.academy.catalog.command.service.domain.core.command.brand.merchant.BrandCreateForMerchantCommand;
+import az.kon.academy.catalog.command.service.domain.core.command.brand.BrandChangeImageCommand;
+import az.kon.academy.catalog.command.service.domain.core.command.brand.BrandChangeInformationCommand;
+import az.kon.academy.catalog.command.service.domain.core.command.brand.BrandChangeOwnerCommand;
+import az.kon.academy.catalog.command.service.domain.core.command.brand.BrandCreateCommand;
 import az.kon.academy.catalog.command.service.domain.core.exception.brand.BrandDomainException;
 import az.kon.academy.catalog.command.service.domain.core.vo.brand.*;
 import az.kon.academy.catalog.command.service.domain.core.vo.merchent.MerchantId;
@@ -26,8 +25,7 @@ class BrandRootTest {
     private BrandName name;
     private BrandDescription description;
     private BrandPath path;
-    private BrandCreateForMerchantCommand brandCreateForMerchantCommand;
-    private BrandCreateForGlobalCommand brandCreateForGlobalCommand;
+    private BrandCreateCommand brandCreateCommand;
 
     @BeforeEach
     void setUp() {
@@ -35,7 +33,7 @@ class BrandRootTest {
         name = new BrandName("Nike Brand");
         description = new BrandDescription("A well-known global sports brand");
         path = new BrandPath("nike-brand");
-        brandCreateForMerchantCommand = BrandCreateForMerchantCommand.builder()
+        brandCreateCommand = BrandCreateCommand.builder()
                 .owner(owner)
                 .name(name)
                 .description(description)
@@ -106,7 +104,7 @@ class BrandRootTest {
             @Test
             @DisplayName("Assigns a non-null ID")
             void assignsNonNullId() {
-                var brand = BrandRoot.initializeForMerchant(brandCreateForMerchantCommand);
+                var brand = BrandRoot.initializeForMerchant(brandCreateCommand);
 
                 assertThat(brand.getRootID()).isNotNull();
                 assertThat(brand.getRootID().value()).isNotNull();
@@ -115,8 +113,8 @@ class BrandRootTest {
             @Test
             @DisplayName("Each call generates a unique ID")
             void eachCallGeneratesUniqueId() {
-                var first = BrandRoot.initializeForMerchant(brandCreateForMerchantCommand);
-                var second = BrandRoot.initializeForMerchant(brandCreateForMerchantCommand);
+                var first = BrandRoot.initializeForMerchant(brandCreateCommand);
+                var second = BrandRoot.initializeForMerchant(brandCreateCommand);
 
                 assertThat(first.getRootID().value()).isNotEqualTo(second.getRootID().value());
             }
@@ -124,7 +122,7 @@ class BrandRootTest {
             @Test
             @DisplayName("Sets owner from command")
             void setsOwnerFromCommand() {
-                var brand = BrandRoot.initializeForMerchant(brandCreateForMerchantCommand);
+                var brand = BrandRoot.initializeForMerchant(brandCreateCommand);
 
                 assertThat(brand.getOwner()).isEqualTo(owner);
                 assertThat(brand.getOwner().value()).isEqualTo(owner.value());
@@ -133,7 +131,7 @@ class BrandRootTest {
             @Test
             @DisplayName("Sets name from command")
             void setsNameFromCommand() {
-                var brand = BrandRoot.initializeForMerchant(brandCreateForMerchantCommand);
+                var brand = BrandRoot.initializeForMerchant(brandCreateCommand);
 
                 assertThat(brand.getName()).isEqualTo(name);
             }
@@ -141,7 +139,7 @@ class BrandRootTest {
             @Test
             @DisplayName("Sets description from command")
             void setsDescriptionFromCommand() {
-                var brand = BrandRoot.initializeForMerchant(brandCreateForMerchantCommand);
+                var brand = BrandRoot.initializeForMerchant(brandCreateCommand);
 
                 assertThat(brand.getDescription()).isEqualTo(description);
             }
@@ -149,7 +147,7 @@ class BrandRootTest {
             @Test
             @DisplayName("Sets path from command")
             void setsPathFromCommand() {
-                var brand = BrandRoot.initializeForMerchant(brandCreateForMerchantCommand);
+                var brand = BrandRoot.initializeForMerchant(brandCreateCommand);
 
                 assertThat(brand.getPath()).isEqualTo(path);
             }
@@ -157,7 +155,7 @@ class BrandRootTest {
             @Test
             @DisplayName("isGlobal is false")
             void isGlobalIsFalse() {
-                var brand = BrandRoot.initializeForMerchant(brandCreateForMerchantCommand);
+                var brand = BrandRoot.initializeForMerchant(brandCreateCommand);
 
                 assertThat(brand.getIsGlobal()).isFalse();
             }
@@ -165,7 +163,7 @@ class BrandRootTest {
             @Test
             @DisplayName("Status is DRAFT")
             void statusIsDraft() {
-                var brand = BrandRoot.initializeForMerchant(brandCreateForMerchantCommand);
+                var brand = BrandRoot.initializeForMerchant(brandCreateCommand);
 
                 assertThat(brand.getStatus()).isEqualTo(BrandStatus.DRAFT);
             }
@@ -173,7 +171,7 @@ class BrandRootTest {
             @Test
             @DisplayName("Sets a non-null modificationTs")
             void setsModificationTs() {
-                var brand = BrandRoot.initializeForMerchant(brandCreateForMerchantCommand);
+                var brand = BrandRoot.initializeForMerchant(brandCreateCommand);
 
                 assertThat(brand.getModificationTs()).isNotNull();
             }
@@ -186,7 +184,7 @@ class BrandRootTest {
             @Test
             @DisplayName("Registers exactly one uncommitted event")
             void registersExactlyOneEvent() {
-                var brand = BrandRoot.initializeForMerchant(brandCreateForMerchantCommand);
+                var brand = BrandRoot.initializeForMerchant(brandCreateCommand);
 
                 assertThat(brand.getUncommittedEvents()).hasSize(1);
             }
@@ -194,7 +192,7 @@ class BrandRootTest {
             @Test
             @DisplayName("Registered event is BrandCreatedEvent")
             void registeredEventIsBrandCreatedEvent() {
-                var brand = BrandRoot.initializeForMerchant(brandCreateForMerchantCommand);
+                var brand = BrandRoot.initializeForMerchant(brandCreateCommand);
 
                 assertThat(brand.getUncommittedEvents().getFirst())
                         .isInstanceOf(BrandCreatedEvent.class);
@@ -203,7 +201,7 @@ class BrandRootTest {
             @Test
             @DisplayName("Event aggregateId matches the brand ID")
             void eventAggregateIdMatchesBrandId() {
-                var brand = BrandRoot.initializeForMerchant(brandCreateForMerchantCommand);
+                var brand = BrandRoot.initializeForMerchant(brandCreateCommand);
                 var event = brand.getUncommittedEvents().getFirst();
 
                 assertThat(event.getAggregateId())
@@ -213,7 +211,7 @@ class BrandRootTest {
             @Test
             @DisplayName("Event has a non-null eventId")
             void eventHasNonNullEventId() {
-                var brand = BrandRoot.initializeForMerchant(brandCreateForMerchantCommand);
+                var brand = BrandRoot.initializeForMerchant(brandCreateCommand);
                 var event = brand.getUncommittedEvents().getFirst();
 
                 assertThat(event.getEventId()).isNotNull();
@@ -222,7 +220,7 @@ class BrandRootTest {
             @Test
             @DisplayName("Event timestamp matches aggregate modificationTs")
             void eventTimestampMatchesModificationTs() {
-                var brand = BrandRoot.initializeForMerchant(brandCreateForMerchantCommand);
+                var brand = BrandRoot.initializeForMerchant(brandCreateCommand);
                 var event = brand.getUncommittedEvents().getFirst();
 
                 assertThat(event.getTimestamp())
@@ -1176,7 +1174,7 @@ class BrandRootTest {
         @Test
         @DisplayName("Uncommitted events list is unmodifiable")
         void uncommittedEventsListIsUnmodifiable() {
-            var brand = BrandRoot.initializeForMerchant(brandCreateForMerchantCommand);
+            var brand = BrandRoot.initializeForMerchant(brandCreateCommand);
 
             assertThat(brand.getUncommittedEvents()).isUnmodifiable();
         }
@@ -1185,14 +1183,14 @@ class BrandRootTest {
         @DisplayName("Two different commands produce independent aggregates")
         void differentCommandsProduceIndependentAggregates() {
             var otherOwner = MerchantId.from(UUID.randomUUID());
-            var otherCommand = BrandCreateForMerchantCommand.builder()
+            var otherCommand = BrandCreateCommand.builder()
                     .owner(otherOwner)
                     .name(new BrandName("Puma Brand1"))
                     .description(new BrandDescription("A well-known German sports brand"))
                     .path(new BrandPath("puma-brand"))
                     .build();
 
-            var first = BrandRoot.initializeForMerchant(brandCreateForMerchantCommand);
+            var first = BrandRoot.initializeForMerchant(brandCreateCommand);
             var second = BrandRoot.initializeForMerchant(otherCommand);
 
             assertThat(first.getRootID().value()).isNotEqualTo(second.getRootID().value());

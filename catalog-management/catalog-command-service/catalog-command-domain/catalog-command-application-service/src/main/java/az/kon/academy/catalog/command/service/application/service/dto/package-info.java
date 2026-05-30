@@ -1,1 +1,0 @@
-package az.kon.academy.catalog.command.service.application.service.dto;

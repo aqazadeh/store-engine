@@ -1,5 +1,6 @@
 package az.kon.academy.catalog.command.service.adapter.outbound.dao.adapter.product;
 
+import az.kon.academy.application.core.annotation.CommandAdapter;
 import az.kon.academy.catalog.command.service.adapter.outbound.dao.mapper.ProductRejectionReasonMapper;
 import az.kon.academy.catalog.command.service.application.service.port.outbound.ProductRejectionReasonCommandPort;
 import az.kon.academy.catalog.command.service.domain.core.aggregate.management.rejection.ProductRejectionReasonRoot;
@@ -9,12 +10,16 @@ import org.springframework.stereotype.Component;
 
 import static az.kon.academy.catalog.command.dal.Tables.PRODUCT_REJECTION_REASON;
 
-@Component
-@RequiredArgsConstructor
+@CommandAdapter
 public class ProductRejectionReasonCommandAdapter implements ProductRejectionReasonCommandPort {
 
     private final DSLContext dsl;
     private final ProductRejectionReasonMapper mapper;
+
+    public ProductRejectionReasonCommandAdapter(DSLContext dsl, ProductRejectionReasonMapper mapper) {
+        this.dsl = dsl;
+        this.mapper = mapper;
+    }
 
     @Override
     public ProductRejectionReasonRoot save(ProductRejectionReasonRoot aggregate) {

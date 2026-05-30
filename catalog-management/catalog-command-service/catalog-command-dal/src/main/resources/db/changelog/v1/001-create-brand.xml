@@ -33,7 +33,7 @@
                 <constraints nullable="false"/>
             </column>
             <column name="status" type="VARCHAR(30)" defaultValue="DRAFT"
-                    remarks="Approval lifecycle: DRAFT | SENT_TO_APPROVAL | APPROVED | REJECTED">
+                    remarks="Approval lifecycle: DRAFT | SENT_TO_APPROVAL | APPROVED | REJECTED | IN_REVIEW">
                 <constraints nullable="false"/>
             </column>
             <column name="version" type="BIGINT" defaultValueNumeric="1" remarks="Optimistic lock version">

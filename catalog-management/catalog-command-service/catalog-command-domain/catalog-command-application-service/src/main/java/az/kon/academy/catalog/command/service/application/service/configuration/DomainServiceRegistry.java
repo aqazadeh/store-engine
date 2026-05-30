@@ -1,8 +1,13 @@
 package az.kon.academy.catalog.command.service.application.service.configuration;
 
-import az.kon.academy.catalog.command.service.domain.core.port.inbound.service.brand.BrandDomainServiceImpl;
+import az.kon.academy.catalog.command.service.domain.core.port.inbound.service.brand.BrandManagementDomainServiceImpl;
+import az.kon.academy.catalog.command.service.domain.core.port.inbound.service.brand.BrandModerationDomainService;
 import az.kon.academy.catalog.command.service.domain.core.port.inbound.service.brand.BrandManagementDomainService;
-import az.kon.academy.catalog.command.service.domain.core.port.inbound.service.brand.BrandModificationDomainService;
+import az.kon.academy.catalog.command.service.domain.core.port.inbound.service.brand.BrandModerationDomainServiceImpl;
+import az.kon.academy.catalog.command.service.domain.core.port.inbound.service.brandrejection.BrandRejectionManagementService;
+import az.kon.academy.catalog.command.service.domain.core.port.inbound.service.brandrejection.BrandRejectionManagementServiceImpl;
+import az.kon.academy.catalog.command.service.domain.core.port.inbound.service.brandrejection.BrandRejectionModerationDomainService;
+import az.kon.academy.catalog.command.service.domain.core.port.inbound.service.brandrejection.BrandRejectionModerationDomainServiceImpl;
 import az.kon.academy.catalog.command.service.domain.core.port.inbound.service.category.ProductCategoryDomainService;
 import az.kon.academy.catalog.command.service.domain.core.port.inbound.service.category.ProductCategoryDomainServiceImpl;
 import az.kon.academy.catalog.command.service.domain.core.port.inbound.service.product.ProductDomainService;
@@ -18,13 +23,23 @@ import org.springframework.context.annotation.Configuration;
 public class DomainServiceRegistry {
 
     @Bean
-    public BrandManagementDomainService brandManagementDomainService() {
-        return new BrandDomainServiceImpl();
+    public BrandModerationDomainService brandModerationDomainService() {
+        return new BrandModerationDomainServiceImpl();
     }
 
     @Bean
-    public BrandModificationDomainService brandModificationDomainService() {
-        return new BrandDomainServiceImpl();
+    public BrandManagementDomainService brandManagementDomainService() {
+        return new BrandManagementDomainServiceImpl();
+    }
+
+    @Bean
+    public BrandRejectionModerationDomainService brandRejectionModerationDomainService() {
+        return new BrandRejectionModerationDomainServiceImpl();
+    }
+
+    @Bean
+    public BrandRejectionManagementService brandRejectionManagementService(){
+        return new BrandRejectionManagementServiceImpl();
     }
 
     @Bean

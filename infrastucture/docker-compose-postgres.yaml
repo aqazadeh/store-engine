@@ -1,3 +1,5 @@
+name: store-engine
+
 services:
   se-postgres:
     image: postgres:18
@@ -7,8 +9,11 @@ services:
     environment:
       POSTGRES_USER: ${POSTGRES_USERNAME}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    command: ["postgres", "-c", "max_connections=200", "-c", "max_replication_slots=4", "-c", "wal_level=logical"]
     volumes:
       - postgres_data:/var/lib/postgresql
-      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+      - ./mount/postgres/init.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - store-engine-network
 volumes:
   postgres_data:

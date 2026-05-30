@@ -1,5 +1,6 @@
 package az.kon.academy.catalog.command.service.adapter.outbound.dao.adapter.product;
 
+import az.kon.academy.application.core.annotation.CommandAdapter;
 import az.kon.academy.catalog.command.service.adapter.outbound.dao.mapper.ProductMapper;
 import az.kon.academy.catalog.command.service.adapter.outbound.dao.mapper.ProductVariantMapper;
 import az.kon.academy.catalog.command.service.application.service.port.outbound.ProductCommandPort;
@@ -13,13 +14,18 @@ import java.util.UUID;
 
 import static az.kon.academy.catalog.command.dal.Tables.*;
 
-@Component
-@RequiredArgsConstructor
+@CommandAdapter
 public class ProductCommandAdapter implements ProductCommandPort {
 
     private final DSLContext dsl;
     private final ProductMapper mapper;
     private final ProductVariantMapper variantMapper;
+
+    public ProductCommandAdapter(DSLContext dsl, ProductMapper mapper, ProductVariantMapper variantMapper) {
+        this.dsl = dsl;
+        this.mapper = mapper;
+        this.variantMapper = variantMapper;
+    }
 
     @Override
     public ProductRoot save(ProductRoot aggregate) {

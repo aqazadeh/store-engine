@@ -32,7 +32,7 @@ public final class ProductDomainServiceImpl implements ProductDomainService {
     @Override
     public ProductRoot assignBrand(SeDomainContext context, ProductAssignBrandCommand command) {
         var brandQueryPort = context.getQueryPort(BrandQueryPort.class);
-        brandQueryPort.fetchByIdAndRowStatusActive(command.getBrandId());
+        brandQueryPort.fetchById(command.getBrandId());
         var productQueryPort = context.getQueryPort(ProductQueryPort.class);
         var product = productQueryPort.fetchByIdAndRowStatusActive(command.getProductId());
         return product.assignBrand(command);

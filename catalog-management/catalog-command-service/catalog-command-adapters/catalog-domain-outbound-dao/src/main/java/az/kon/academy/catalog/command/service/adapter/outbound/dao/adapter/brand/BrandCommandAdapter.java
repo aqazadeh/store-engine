@@ -1,5 +1,6 @@
 package az.kon.academy.catalog.command.service.adapter.outbound.dao.adapter.brand;
 
+import az.kon.academy.application.core.annotation.CommandAdapter;
 import az.kon.academy.catalog.command.service.adapter.outbound.dao.mapper.BrandMapper;
 import az.kon.academy.catalog.command.service.application.service.port.outbound.BrandCommandPort;
 import az.kon.academy.catalog.command.service.domain.core.aggregate.BrandRoot;
@@ -9,16 +10,20 @@ import org.springframework.stereotype.Component;
 
 import static az.kon.academy.catalog.command.dal.Tables.BRAND;
 
-@Component
-@RequiredArgsConstructor
+@CommandAdapter
 public class BrandCommandAdapter implements BrandCommandPort {
 
     private final DSLContext dsl;
     private final BrandMapper mapper;
 
+    public BrandCommandAdapter(DSLContext dsl, BrandMapper mapper) {
+        this.dsl = dsl;
+        this.mapper = mapper;
+    }
+
     @Override
     public BrandRoot save(BrandRoot aggregate) {
-        var record = mapper.toRecord(aggregate);
+        var record = mapper.toRecord(aggregate.increaseVersion());
         dsl.insertInto(BRAND)
                 .set(record)
                 .onConflict(BRAND.ID)

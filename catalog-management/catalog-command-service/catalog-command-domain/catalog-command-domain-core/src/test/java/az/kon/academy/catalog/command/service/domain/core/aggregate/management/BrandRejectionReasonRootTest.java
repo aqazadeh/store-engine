@@ -1,10 +1,10 @@
 package az.kon.academy.catalog.command.service.domain.core.aggregate.management;
 
 import az.kon.academy.catalog.command.service.domain.core.aggregate.management.rejection.BrandRejectionReasonRoot;
-import az.kon.academy.catalog.command.service.domain.core.command.brand.management.BrandCreateRejectionReasonCommand;
+import az.kon.academy.catalog.command.service.domain.core.command.brandrejection.BrandRejectionReasonAddCommand;
 import az.kon.academy.catalog.command.service.domain.core.vo.brand.BrandId;
 import az.kon.academy.catalog.command.service.domain.core.vo.moderation.ModeratorId;
-import az.kon.academy.catalog.event.management.rejection.BrandRejectionReasonCreatedEvent;
+import az.kon.academy.catalog.event.brandrejection.BrandRejectionReasonAddedEvent;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -20,14 +20,14 @@ class BrandRejectionReasonRootTest {
     private BrandId brandId;
     private ModeratorId moderatorId;
     private String reason;
-    private BrandCreateRejectionReasonCommand command;
+    private BrandRejectionReasonAddCommand command;
 
     @BeforeEach
     void setUp() {
         brandId = BrandId.from(UUID.randomUUID());
         moderatorId = ModeratorId.from(UUID.randomUUID());
         reason = "Brand logo does not meet quality standards";
-        command = BrandCreateRejectionReasonCommand.builder()
+        command = BrandRejectionReasonAddCommand.builder()
                 .brandId(brandId)
                 .reason(reason)
                 .moderatedBy(moderatorId)
@@ -113,14 +113,14 @@ class BrandRejectionReasonRootTest {
                 var result = BrandRejectionReasonRoot.initialize(command);
 
                 assertThat(result.getUncommittedEvents().getFirst())
-                        .isInstanceOf(BrandRejectionReasonCreatedEvent.class);
+                        .isInstanceOf(BrandRejectionReasonAddedEvent.class);
             }
 
             @Test
             @DisplayName("Event aggregateId matches the rejection reason ID")
             void eventAggregateIdMatchesRejectionReasonId() {
                 var result = BrandRejectionReasonRoot.initialize(command);
-                var event = (BrandRejectionReasonCreatedEvent) result.getUncommittedEvents().getFirst();
+                var event = (BrandRejectionReasonAddedEvent) result.getUncommittedEvents().getFirst();
 
                 assertThat(event.getAggregateId())
                         .isEqualTo(result.getRootID().value().toString());
@@ -130,7 +130,7 @@ class BrandRejectionReasonRootTest {
             @DisplayName("Event carries the brandId from command")
             void eventCarriesBrandId() {
                 var result = BrandRejectionReasonRoot.initialize(command);
-                var event = (BrandRejectionReasonCreatedEvent) result.getUncommittedEvents().getFirst();
+                var event = (BrandRejectionReasonAddedEvent) result.getUncommittedEvents().getFirst();
 
                 assertThat(event.getBrandId()).isEqualTo(brandId.value());
             }
@@ -139,7 +139,7 @@ class BrandRejectionReasonRootTest {
             @DisplayName("Event carries the reason from command")
             void eventCarriesReason() {
                 var result = BrandRejectionReasonRoot.initialize(command);
-                var event = (BrandRejectionReasonCreatedEvent) result.getUncommittedEvents().getFirst();
+                var event = (BrandRejectionReasonAddedEvent) result.getUncommittedEvents().getFirst();
 
                 assertThat(event.getReason()).isEqualTo(reason);
             }
@@ -148,7 +148,7 @@ class BrandRejectionReasonRootTest {
             @DisplayName("Event carries the moderatorId from command")
             void eventCarriesModeratorId() {
                 var result = BrandRejectionReasonRoot.initialize(command);
-                var event = (BrandRejectionReasonCreatedEvent) result.getUncommittedEvents().getFirst();
+                var event = (BrandRejectionReasonAddedEvent) result.getUncommittedEvents().getFirst();
 
                 assertThat(event.getModeratedBy()).isEqualTo(moderatorId.value());
             }
@@ -157,7 +157,7 @@ class BrandRejectionReasonRootTest {
             @DisplayName("Event has a non-null eventId")
             void eventHasNonNullEventId() {
                 var result = BrandRejectionReasonRoot.initialize(command);
-                var event = (BrandRejectionReasonCreatedEvent) result.getUncommittedEvents().getFirst();
+                var event = (BrandRejectionReasonAddedEvent) result.getUncommittedEvents().getFirst();
 
                 assertThat(event.getEventId()).isNotNull();
             }
@@ -166,7 +166,7 @@ class BrandRejectionReasonRootTest {
             @DisplayName("Event timestamp matches aggregate modificationTs")
             void eventTimestampMatchesModificationTs() {
                 var result = BrandRejectionReasonRoot.initialize(command);
-                var event = (BrandRejectionReasonCreatedEvent) result.getUncommittedEvents().getFirst();
+                var event = (BrandRejectionReasonAddedEvent) result.getUncommittedEvents().getFirst();
 
                 assertThat(event.getTimestamp())
                         .isEqualTo(result.getModificationTs().toOffsetDateTime());
@@ -183,7 +183,7 @@ class BrandRejectionReasonRootTest {
         void differentCommandsProduceIndependentAggregates() {
             var otherBrandId = BrandId.from(UUID.randomUUID());
             var otherModeratorId = ModeratorId.from(UUID.randomUUID());
-            var otherCommand = BrandCreateRejectionReasonCommand.builder()
+            var otherCommand = BrandRejectionReasonAddCommand.builder()
                     .brandId(otherBrandId)
                     .reason("Different reason")
                     .moderatedBy(otherModeratorId)

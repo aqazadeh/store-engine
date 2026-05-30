@@ -4,7 +4,7 @@ import az.kon.academy.catalog.command.service.domain.core.aggregate.management.r
 import az.kon.academy.catalog.command.service.domain.core.command.product.ProductCreateRejectionReasonCommand;
 import az.kon.academy.catalog.command.service.domain.core.vo.moderation.ModeratorId;
 import az.kon.academy.catalog.command.service.domain.core.vo.product.ProductId;
-import az.kon.academy.catalog.event.management.rejection.ProductRejectionReasonCreatedEvent;
+import az.kon.academy.catalog.event.productrejection.ProductRejectionReasonCreatedEvent;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;

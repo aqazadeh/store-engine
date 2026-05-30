@@ -1,6 +1,7 @@
 package az.kon.academy.catalog.command.service.adapter.outbound.dao.adapter.specification;
 
 import az.kon.academy.aggragate.valueobject.RowStatus;
+import az.kon.academy.application.core.annotation.QueryAdapter;
 import az.kon.academy.catalog.command.service.adapter.outbound.dao.mapper.ProductSpecificationMapper;
 import az.kon.academy.catalog.command.service.domain.core.aggregate.management.ProductSpecificationRoot;
 import az.kon.academy.catalog.command.service.domain.core.port.outbound.SpecificationQueryPort;
@@ -14,12 +15,16 @@ import java.util.Optional;
 import static az.kon.academy.catalog.command.dal.Tables.PRODUCT_SPECIFICATION;
 import static az.kon.academy.catalog.command.dal.Tables.PRODUCT_SPECIFICATION_CATEGORY_ASSIGNMENT;
 
-@Component
-@RequiredArgsConstructor
+@QueryAdapter
 public class ProductSpecificationQueryAdapter implements SpecificationQueryPort {
 
     private final DSLContext dsl;
     private final ProductSpecificationMapper mapper;
+
+    public ProductSpecificationQueryAdapter(DSLContext dsl, ProductSpecificationMapper mapper) {
+        this.dsl = dsl;
+        this.mapper = mapper;
+    }
 
     @Override
     public Optional<ProductSpecificationRoot> findByIdAndRowStatusActive(ProductSpecificationId id) {

@@ -1,8 +1,8 @@
 package az.kon.academy.catalog.command.service.application.service.handler.command.specification;
 
 import az.kon.academy.application.core.annotation.CommandHandler;
+import az.kon.academy.application.core.handler.AbstractCommandHandler;
 import az.kon.academy.catalog.command.service.application.service.constant.SecurityPermissions;
-import az.kon.academy.catalog.command.service.application.service.handler.AbstractCommandHandler;
 import az.kon.academy.catalog.command.service.application.service.port.outbound.ProductSpecificationCommandPort;
 import az.kon.academy.catalog.command.service.domain.core.command.specification.SpecificationCreateCommand;
 import az.kon.academy.catalog.command.service.domain.core.port.inbound.service.specification.ProductSpecificationDomainService;
@@ -19,8 +19,8 @@ public class SpecificationCreateCommandHandler implements AbstractCommandHandler
     private final ProductSpecificationDomainService productSpecificationDomainService;
 
     public SpecificationCreateCommandHandler(SeDomainContext domainContext,
-                                                        DomainEventPublisher domainEventPublisher,
-                                                        ProductSpecificationDomainService productSpecificationDomainService) {
+                                             DomainEventPublisher domainEventPublisher,
+                                             ProductSpecificationDomainService productSpecificationDomainService) {
         this.domainContext = domainContext;
         this.domainEventPublisher = domainEventPublisher;
         this.productSpecificationDomainService = productSpecificationDomainService;

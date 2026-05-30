@@ -25,6 +25,11 @@
             <column name="reason" type="TEXT" remarks="Moderator-supplied rejection explanation">
                 <constraints nullable="false"/>
             </column>
+
+            <column name="solved" type="bool" remarks="Merchant solved this reason">
+                <constraints nullable="false" />
+            </column>
+
             <column name="moderated_by" type="UUID" remarks="Moderator ID who issued the rejection (immutable)">
                 <constraints nullable="false"/>
             </column>

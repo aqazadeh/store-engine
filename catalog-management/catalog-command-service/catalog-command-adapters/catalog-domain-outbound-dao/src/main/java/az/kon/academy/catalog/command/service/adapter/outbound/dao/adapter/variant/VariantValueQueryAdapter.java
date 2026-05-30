@@ -1,5 +1,6 @@
 package az.kon.academy.catalog.command.service.adapter.outbound.dao.adapter.variant;
 
+import az.kon.academy.application.core.annotation.QueryAdapter;
 import az.kon.academy.catalog.command.service.adapter.outbound.dao.mapper.VariantValueMapper;
 import az.kon.academy.catalog.command.service.domain.core.aggregate.management.VariantValueRoot;
 import az.kon.academy.catalog.command.service.domain.core.port.outbound.VariantValueQueryPort;
@@ -12,12 +13,16 @@ import java.util.Optional;
 
 import static az.kon.academy.catalog.command.dal.Tables.VARIANT_VALUE;
 
-@Component
-@RequiredArgsConstructor
+@QueryAdapter
 public class VariantValueQueryAdapter implements VariantValueQueryPort {
 
     private final DSLContext dsl;
     private final VariantValueMapper mapper;
+
+    public VariantValueQueryAdapter(DSLContext dsl, VariantValueMapper mapper) {
+        this.dsl = dsl;
+        this.mapper = mapper;
+    }
 
     @Override
     public Optional<VariantValueRoot> findById(VariantValueId id) {

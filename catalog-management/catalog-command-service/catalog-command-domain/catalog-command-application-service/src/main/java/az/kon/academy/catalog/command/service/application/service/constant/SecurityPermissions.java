@@ -2,23 +2,31 @@ package az.kon.academy.catalog.command.service.application.service.constant;
 
 public interface SecurityPermissions {
     interface Role {
+        String ROLE_SYSTEM              = "system";
         String ROLE_CUSTOMER            = "customer";
         String ROLE_MERCHANT            = "merchant";
         String ROLE_DOMAIN_MODERATOR    = "moderator";
     }
 
     interface Brand {
-        String BRAND_MERCHANT_CREATE                                = "BRAND_MERCHANT_CREATE_FROM";
-        String BRAND_MERCHANT_CHANGE_INFORMATION                    = "BRAND_MERCHANT_CHANGE_INFORMATION_FROM";
-        String BRAND_MERCHANT_CHANGE_IMAGE                          = "BRAND_MERCHANT_CHANGE_IMAGE";
-        String BRAND_MANAGEMENT_CHANGE_INFORMATION                  = "BRAND_MANAGEMENT_CHANGE_INFORMATION_FROM";
+        String BRAND_MANAGEMENT_CREATE                              = "BRAND_MANAGEMENT_CREATE";
+        String BRAND_MANAGEMENT_CHANGE_INFORMATION                  = "BRAND_MANAGEMENT_CHANGE_INFORMATION";
+        String BRAND_MANAGEMENT_CHANGE_IMAGE                        = "BRAND_MANAGEMENT_CHANGE_IMAGE";
+        String BRAND_MANAGEMENT_MOVE_DRAFT                          = "BRAND_MANAGEMENT_MOVE_DRAFT";
+        String BRAND_MANAGEMENT_SENT_TO_APPROVAL                    = "BRAND_MANAGEMENT_SENT_TO_APPROVAL";
+        String BRAND_MANAGEMENT_SOLVE_REJECT_REASON                 = "BRAND_MANAGEMENT_SOLVE_REJECT_REASON";
 
-        String BRAND_MANAGEMENT_CREATE                              = "BRAND_CREATE_FROM_GLOBAL";
-        String BRAND_MANAGEMENT_APPROVE                             = "BRAND_MANAGEMENT_APPROVE";
-        String BRAND_MANAGEMENT_REJECT                              = "BRAND_MANAGEMENT_REJECT";
-        String BRAND_MANAGEMENT_CHANGE_OWNER                        = "BRAND_MANAGEMENT_CHANGE_OWNER";
-        String BRAND_CHANGE_IMAGE                                   = "BRAND_CHANGE_IMAGE";
-        String BRAND_MERCHANT_MOVE_DRAFT                            = "BRAND_MERCHANT_MOVE_DRAFT";
+        String BRAND_MODERATION_CREATE                              = "BRAND_MODERATION_CREATE";
+        String BRAND_MODERATION_CHANGE_INFORMATION                  = "BRAND_MODERATION_CHANGE_INFORMATION";
+        String BRAND_MODERATION_CHANGE_IMAGE                        = "BRAND_MODERATION_CHANGE_IMAGE";
+        String BRAND_MODERATION_APPROVE                             = "BRAND_MODERATION_APPROVE";
+        String BRAND_MODERATION_REJECT                              = "BRAND_MODERATION_REJECT";
+        String BRAND_MODERATION_CHANGE_OWNER                        = "BRAND_MODERATION_CHANGE_OWNER";
+        String BRAND_MODERATION_CHANGE_GLOBAL                       = "BRAND_MODERATION_CHANGE_GLOBAL";
+        String BRAND_MODERATION_MARK_IN_REVIEW                      = "BRAND_MODERATION_MARK_IN_REVIEW";
+        String BRAND_MODERATION_ADD_REJECTION_REASON                = "BRAND_MODERATION_ADD_REJECTION_REASON";
+        String BRAND_MODERATION_CHANGE_REJECTION_REASON             = "BRAND_MODERATION_CHANGE_REJECTION_REASON";
+        String BRAND_MODERATION_REMOVE_REJECTION_REASON             = "BRAND_MODERATION_REMOVE_REJECTION_REASON";
     }
 
     interface ProductCategory {

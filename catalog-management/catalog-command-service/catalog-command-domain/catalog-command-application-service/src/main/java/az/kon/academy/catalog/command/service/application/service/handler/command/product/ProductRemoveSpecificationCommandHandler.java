@@ -1,8 +1,8 @@
 package az.kon.academy.catalog.command.service.application.service.handler.command.product;
 
 import az.kon.academy.application.core.annotation.CommandHandler;
+import az.kon.academy.application.core.handler.AbstractCommandHandler;
 import az.kon.academy.catalog.command.service.application.service.constant.SecurityPermissions;
-import az.kon.academy.catalog.command.service.application.service.handler.AbstractCommandHandler;
 import az.kon.academy.catalog.command.service.application.service.port.outbound.ProductCommandPort;
 import az.kon.academy.catalog.command.service.domain.core.command.product.ProductRemoveSpecificationCommand;
 import az.kon.academy.catalog.command.service.domain.core.port.inbound.service.product.ProductDomainService;

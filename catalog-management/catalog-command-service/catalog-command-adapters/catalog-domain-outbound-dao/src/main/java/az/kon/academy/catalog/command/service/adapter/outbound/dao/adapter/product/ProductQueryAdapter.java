@@ -1,6 +1,7 @@
 package az.kon.academy.catalog.command.service.adapter.outbound.dao.adapter.product;
 
 import az.kon.academy.aggragate.valueobject.RowStatus;
+import az.kon.academy.application.core.annotation.QueryAdapter;
 import az.kon.academy.catalog.command.service.adapter.outbound.dao.mapper.ProductMapper;
 import az.kon.academy.catalog.command.service.adapter.outbound.dao.mapper.ProductVariantMapper;
 import az.kon.academy.catalog.command.service.domain.core.aggregate.ProductRoot;
@@ -19,13 +20,18 @@ import java.util.stream.Collectors;
 
 import static az.kon.academy.catalog.command.dal.Tables.*;
 
-@Component
-@RequiredArgsConstructor
+@QueryAdapter
 public class ProductQueryAdapter implements ProductQueryPort {
 
     private final DSLContext dsl;
     private final ProductMapper mapper;
     private final ProductVariantMapper variantMapper;
+
+    public ProductQueryAdapter(DSLContext dsl, ProductMapper mapper, ProductVariantMapper variantMapper) {
+        this.dsl = dsl;
+        this.mapper = mapper;
+        this.variantMapper = variantMapper;
+    }
 
     @Override
     public Optional<ProductRoot> findByIdAndRowStatusActive(ProductId id) {

@@ -1,5 +1,6 @@
 package az.kon.academy.catalog.command.service.adapter.outbound.dao.adapter.specification;
 
+import az.kon.academy.application.core.annotation.CommandAdapter;
 import az.kon.academy.catalog.command.service.adapter.outbound.dao.mapper.ProductSpecificationMapper;
 import az.kon.academy.catalog.command.service.application.service.port.outbound.ProductSpecificationCommandPort;
 import az.kon.academy.catalog.command.service.domain.core.aggregate.management.ProductSpecificationRoot;
@@ -12,12 +13,16 @@ import java.util.List;
 import static az.kon.academy.catalog.command.dal.Tables.PRODUCT_SPECIFICATION;
 import static az.kon.academy.catalog.command.dal.Tables.PRODUCT_SPECIFICATION_CATEGORY_ASSIGNMENT;
 
-@Component
-@RequiredArgsConstructor
+@CommandAdapter
 public class ProductSpecificationCommandAdapter implements ProductSpecificationCommandPort {
 
     private final DSLContext dsl;
     private final ProductSpecificationMapper mapper;
+
+    public ProductSpecificationCommandAdapter(DSLContext dsl, ProductSpecificationMapper mapper) {
+        this.dsl = dsl;
+        this.mapper = mapper;
+    }
 
     @Override
     public ProductSpecificationRoot save(ProductSpecificationRoot aggregate) {

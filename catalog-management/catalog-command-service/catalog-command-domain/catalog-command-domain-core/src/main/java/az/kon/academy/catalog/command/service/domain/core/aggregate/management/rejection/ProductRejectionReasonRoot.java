@@ -5,7 +5,7 @@ import az.kon.academy.catalog.command.service.domain.core.command.product.Produc
 import az.kon.academy.catalog.command.service.domain.core.vo.management.ProductRejectionReasonId;
 import az.kon.academy.catalog.command.service.domain.core.vo.moderation.ModeratorId;
 import az.kon.academy.catalog.command.service.domain.core.vo.product.ProductId;
-import az.kon.academy.catalog.event.management.rejection.ProductRejectionReasonCreatedEvent;
+import az.kon.academy.catalog.event.productrejection.ProductRejectionReasonCreatedEvent;
 import lombok.Getter;
 import lombok.experimental.SuperBuilder;
 

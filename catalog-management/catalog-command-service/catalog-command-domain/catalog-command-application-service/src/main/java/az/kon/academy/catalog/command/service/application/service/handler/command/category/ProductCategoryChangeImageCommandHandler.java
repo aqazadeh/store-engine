@@ -1,8 +1,8 @@
 package az.kon.academy.catalog.command.service.application.service.handler.command.category;
 
 import az.kon.academy.application.core.annotation.CommandHandler;
+import az.kon.academy.application.core.handler.AbstractCommandHandler;
 import az.kon.academy.catalog.command.service.application.service.constant.SecurityPermissions;
-import az.kon.academy.catalog.command.service.application.service.handler.AbstractCommandHandler;
 import az.kon.academy.catalog.command.service.application.service.port.outbound.ProductCategoryCommandPort;
 import az.kon.academy.catalog.command.service.domain.core.command.category.ProductCategoryChangeImageCommand;
 import az.kon.academy.catalog.command.service.domain.core.port.inbound.service.category.ProductCategoryDomainService;
