@@ -3,7 +3,7 @@ package az.kon.academy.catalog.command.service.application.service.handler.comma
 import az.kon.academy.application.core.annotation.CommandHandler;
 import az.kon.academy.application.core.handler.AbstractCommandHandler;
 import az.kon.academy.catalog.command.service.application.service.constant.SecurityPermissions;
-import az.kon.academy.catalog.command.service.application.service.port.outbound.ProductSpecificationCommandPort;
+import az.kon.academy.catalog.command.service.application.service.port.outbound.ProductSpecificationCommandOutboundPort;
 import az.kon.academy.catalog.command.service.domain.core.command.specification.SpecificationChangeInformationCommand;
 import az.kon.academy.catalog.command.service.domain.core.port.inbound.service.specification.ProductSpecificationDomainService;
 import az.kon.academy.domain.core.SeDomainContext;
@@ -29,7 +29,7 @@ public class SpecificationChangeInformationCommandHandler implements AbstractCom
     @Override
     public Void handle(SpecificationChangeInformationCommand command) {
         var productSpecification = this.productSpecificationDomainService.changeInformation(domainContext, command);
-        var productSpecificationPort = this.domainContext.getCommandPort(ProductSpecificationCommandPort.class);
+        var productSpecificationPort = this.domainContext.getCommandPort(ProductSpecificationCommandOutboundPort.class);
         var savedProductSpecification = productSpecificationPort.save(productSpecification);
         this.domainEventPublisher.publish(productSpecification.getUncommittedEvents());
         return null;

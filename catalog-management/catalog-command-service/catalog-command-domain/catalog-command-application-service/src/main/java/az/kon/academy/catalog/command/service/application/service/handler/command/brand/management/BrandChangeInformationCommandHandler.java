@@ -3,7 +3,7 @@ package az.kon.academy.catalog.command.service.application.service.handler.comma
 import az.kon.academy.application.core.annotation.CommandHandler;
 import az.kon.academy.application.core.handler.AbstractCommandHandler;
 import az.kon.academy.catalog.command.service.application.service.constant.SecurityPermissions;
-import az.kon.academy.catalog.command.service.application.service.port.outbound.BrandCommandPort;
+import az.kon.academy.catalog.command.service.application.service.port.outbound.BrandCommandOutboundPort;
 import az.kon.academy.catalog.command.service.domain.core.command.brand.BrandChangeInformationCommand;
 import az.kon.academy.catalog.command.service.domain.core.port.inbound.service.brand.BrandManagementDomainService;
 import az.kon.academy.domain.core.SeDomainContext;
@@ -29,7 +29,7 @@ public class BrandChangeInformationCommandHandler implements AbstractCommandHand
     @Override
     public Void handle(BrandChangeInformationCommand command) {
         var brand = this.brandManagementDomainService.changeInformation(domainContext, command);
-        var brandCommandPort = this.domainContext.getCommandPort(BrandCommandPort.class);
+        var brandCommandPort = this.domainContext.getCommandPort(BrandCommandOutboundPort.class);
         var savedBrand = brandCommandPort.save(brand);
         this.domainEventPublisher.publish(brand.getUncommittedEvents());
         return null;

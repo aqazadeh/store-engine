@@ -3,7 +3,7 @@ package az.kon.academy.catalog.command.service.application.service.handler.comma
 import az.kon.academy.application.core.annotation.CommandHandler;
 import az.kon.academy.application.core.handler.AbstractCommandHandler;
 import az.kon.academy.catalog.command.service.application.service.constant.SecurityPermissions;
-import az.kon.academy.catalog.command.service.application.service.port.outbound.ProductCommandPort;
+import az.kon.academy.catalog.command.service.application.service.port.outbound.ProductCommandOutboundPort;
 import az.kon.academy.catalog.command.service.domain.core.command.product.ProductCreateCommand;
 import az.kon.academy.catalog.command.service.domain.core.port.inbound.service.product.ProductDomainService;
 import az.kon.academy.domain.core.SeDomainContext;
@@ -29,7 +29,7 @@ public class ProductCreateCommandHandler implements AbstractCommandHandler<Produ
     @Override
     public Void handle(ProductCreateCommand command) {
         var aggregate = this.productDomainService.createProduct(domainContext, command);
-        var port = this.domainContext.getCommandPort(ProductCommandPort.class);
+        var port = this.domainContext.getCommandPort(ProductCommandOutboundPort.class);
         port.save(aggregate);
         this.domainEventPublisher.publish(aggregate.getUncommittedEvents());
         return null;

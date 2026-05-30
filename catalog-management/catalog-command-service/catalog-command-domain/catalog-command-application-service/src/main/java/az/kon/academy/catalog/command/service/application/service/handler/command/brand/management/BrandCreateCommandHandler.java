@@ -4,7 +4,7 @@ import az.kon.academy.application.core.annotation.CommandHandler;
 import az.kon.academy.application.core.handler.AbstractCommandHandler;
 import az.kon.academy.catalog.command.service.application.service.constant.SecurityPermissions;
 import az.kon.academy.catalog.command.service.application.service.dto.result.BrandCreateCommandResult;
-import az.kon.academy.catalog.command.service.application.service.port.outbound.BrandCommandPort;
+import az.kon.academy.catalog.command.service.application.service.port.outbound.BrandCommandOutboundPort;
 import az.kon.academy.catalog.command.service.domain.core.command.brand.BrandCreateCommand;
 import az.kon.academy.catalog.command.service.domain.core.port.inbound.service.brand.BrandManagementDomainService;
 import az.kon.academy.domain.core.SeDomainContext;
@@ -28,7 +28,7 @@ public class BrandCreateCommandHandler implements AbstractCommandHandler<BrandCr
 
     @Override
     public BrandCreateCommandResult handle(BrandCreateCommand command) {
-        var brandCommandPort = this.domainContext.getCommandPort(BrandCommandPort.class);
+        var brandCommandPort = this.domainContext.getCommandPort(BrandCommandOutboundPort.class);
         var brand = this.brandManagementDomainService.create(domainContext, command);
         var savedBrand = brandCommandPort.save(brand);
         this.domainEventPublisher.publish(brand.getUncommittedEvents());

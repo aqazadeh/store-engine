@@ -4,7 +4,7 @@ import az.kon.academy.catalog.command.service.adapter.inbound.rest.spec.brand.Br
 import az.kon.academy.catalog.command.service.application.service.dto.request.brand.*;
 import az.kon.academy.catalog.command.service.application.service.dto.request.brandrejection.BrandRejectionReasonSolveRequest;
 import az.kon.academy.catalog.command.service.application.service.dto.result.BrandCreateCommandResult;
-import az.kon.academy.catalog.command.service.application.service.port.inbound.rest.brand.BrandManagementPort;
+import az.kon.academy.catalog.command.service.application.service.port.inbound.rest.brand.BrandManagementInboundPort;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -18,10 +18,10 @@ import org.springframework.web.bind.annotation.*;
         produces = MediaType.APPLICATION_JSON_VALUE
 )
 public class BrandManagementCommandController implements BrandManagementCommandApiSpecification {
-    private final BrandManagementPort brandManagementPort;
+    private final BrandManagementInboundPort brandManagementInboundPort;
 
-    public BrandManagementCommandController(BrandManagementPort brandManagementPort) {
-        this.brandManagementPort = brandManagementPort;
+    public BrandManagementCommandController(BrandManagementInboundPort brandManagementInboundPort) {
+        this.brandManagementInboundPort = brandManagementInboundPort;
     }
 
     @Override
@@ -29,13 +29,13 @@ public class BrandManagementCommandController implements BrandManagementCommandA
     public ResponseEntity<BrandCreateCommandResult> create(@Valid @RequestBody BrandCreateRequest request) {
         return ResponseEntity
                 .status(HttpStatus.CREATED)
-                .body(this.brandManagementPort.create(request));
+                .body(this.brandManagementInboundPort.create(request));
     }
 
     @Override
     @PutMapping(path = "/change/image", version = "1.0")
     public ResponseEntity<Void> changeImage(@Valid @RequestBody BrandChangeImageRequest request) {
-        this.brandManagementPort.changeImage(request);
+        this.brandManagementInboundPort.changeImage(request);
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .build();
@@ -44,7 +44,7 @@ public class BrandManagementCommandController implements BrandManagementCommandA
     @Override
     @PutMapping(path = "/change/information", version = "1.0")
     public ResponseEntity<Void> changeInformation(@Valid @RequestBody BrandChangeInformationRequest request) {
-        this.brandManagementPort.changeInformation(request);
+        this.brandManagementInboundPort.changeInformation(request);
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .build();
@@ -53,7 +53,7 @@ public class BrandManagementCommandController implements BrandManagementCommandA
     @Override
     @PutMapping(path = "/change/draft", version = "1.0")
     public ResponseEntity<Void> moveToDraft(@Valid @RequestBody BrandMoveToDraftRequest request) {
-        this.brandManagementPort.moveToDraft(request);
+        this.brandManagementInboundPort.moveToDraft(request);
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .build();
@@ -62,7 +62,7 @@ public class BrandManagementCommandController implements BrandManagementCommandA
     @Override
     @PutMapping(path = "/change/sent-to-approval", version = "1.0")
     public ResponseEntity<Void> sentToApproval(@Valid @RequestBody BrandSentToApprovalRequest request) {
-        this.brandManagementPort.sentToApproval(request);
+        this.brandManagementInboundPort.sentToApproval(request);
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .build();
@@ -71,7 +71,7 @@ public class BrandManagementCommandController implements BrandManagementCommandA
     @Override
     @PutMapping(path = "/reject/solve", version = "1.0")
     public ResponseEntity<Void> solveRejectionReason(@Valid @RequestBody BrandRejectionReasonSolveRequest request) {
-        this.brandManagementPort.solveRejectionReason(request);
+        this.brandManagementInboundPort.solveRejectionReason(request);
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .build();

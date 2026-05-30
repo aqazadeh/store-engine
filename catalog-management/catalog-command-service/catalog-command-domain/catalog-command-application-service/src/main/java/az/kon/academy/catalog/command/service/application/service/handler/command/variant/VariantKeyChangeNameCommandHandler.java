@@ -3,7 +3,7 @@ package az.kon.academy.catalog.command.service.application.service.handler.comma
 import az.kon.academy.application.core.annotation.CommandHandler;
 import az.kon.academy.application.core.handler.AbstractCommandHandler;
 import az.kon.academy.catalog.command.service.application.service.constant.SecurityPermissions;
-import az.kon.academy.catalog.command.service.application.service.port.outbound.VariantKeyCommandPort;
+import az.kon.academy.catalog.command.service.application.service.port.outbound.VariantKeyCommandOutboundPort;
 import az.kon.academy.catalog.command.service.domain.core.command.variant.VariantKeyChangeNameCommand;
 import az.kon.academy.catalog.command.service.domain.core.port.inbound.service.variant.VariantDomainService;
 import az.kon.academy.domain.core.SeDomainContext;
@@ -29,7 +29,7 @@ public class VariantKeyChangeNameCommandHandler implements AbstractCommandHandle
     @Override
     public Void handle(VariantKeyChangeNameCommand command) {
         var aggregate = this.variantDomainService.changeKeyName(domainContext, command);
-        var port = this.domainContext.getCommandPort(VariantKeyCommandPort.class);
+        var port = this.domainContext.getCommandPort(VariantKeyCommandOutboundPort.class);
         port.save(aggregate);
         this.domainEventPublisher.publish(aggregate.getUncommittedEvents());
         return null;

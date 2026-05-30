@@ -3,7 +3,7 @@ package az.kon.academy.catalog.command.service.application.service.handler.comma
 import az.kon.academy.application.core.annotation.CommandHandler;
 import az.kon.academy.application.core.handler.AbstractCommandHandler;
 import az.kon.academy.catalog.command.service.application.service.constant.SecurityPermissions;
-import az.kon.academy.catalog.command.service.application.service.port.outbound.ProductCategoryCommandPort;
+import az.kon.academy.catalog.command.service.application.service.port.outbound.ProductCategoryCommandOutboundPort;
 import az.kon.academy.catalog.command.service.domain.core.command.category.ProductCategoryChangeParentCommand;
 import az.kon.academy.catalog.command.service.domain.core.port.inbound.service.category.ProductCategoryDomainService;
 import az.kon.academy.domain.core.SeDomainContext;
@@ -29,7 +29,7 @@ public class ProductCategoryChangeParentCommandHandler implements AbstractComman
     @Override
     public Void handle(ProductCategoryChangeParentCommand command) {
         var productCategory = this.productCategoryDomainService.changeParent(domainContext, command);
-        var productCategoryPort = this.domainContext.getCommandPort(ProductCategoryCommandPort.class);
+        var productCategoryPort = this.domainContext.getCommandPort(ProductCategoryCommandOutboundPort.class);
         var savedProductCategory = productCategoryPort.save(productCategory);
         this.domainEventPublisher.publish(productCategory.getUncommittedEvents());
         return null;
