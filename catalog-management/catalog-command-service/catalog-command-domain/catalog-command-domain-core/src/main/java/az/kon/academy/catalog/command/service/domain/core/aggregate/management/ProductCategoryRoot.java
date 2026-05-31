@@ -91,6 +91,7 @@ public class ProductCategoryRoot extends AggregateRoot<ProductCategoryRoot, Prod
                 productCategory.getModificationTs().toOffsetDateTime(),
                 productCategory.getParent().value()
         );
+
         productCategory.addEvent(event);
         return productCategory;
     }
@@ -102,6 +103,41 @@ public class ProductCategoryRoot extends AggregateRoot<ProductCategoryRoot, Prod
                 .build();
 
         var event = ProductCategoryParentRemovedEvent.of(
+                productCategory.getRootID().value().toString(),
+                productCategory.getModificationTs().toOffsetDateTime()
+        );
+
+        productCategory.addEvent(event);
+        return productCategory;
+    }
+
+    public ProductCategoryRoot archive() {
+        var productCategory = this.markAsArchived();
+
+        var event = ProductCategoryArchivedEvent.of(
+                productCategory.getRootID().value().toString(),
+                productCategory.getModificationTs().toOffsetDateTime()
+        );
+
+        productCategory.addEvent(event);
+        return productCategory;
+    }
+
+    public ProductCategoryRoot activate() {
+        var productCategory = this.markAsActive();
+
+        var event = ProductCategoryActivatedEvent.of(
+                productCategory.getRootID().value().toString(),
+                productCategory.getModificationTs().toOffsetDateTime()
+        );
+
+        productCategory.addEvent(event);
+        return productCategory;
+    }
+
+    public ProductCategoryRoot delete() {
+        var productCategory = this.markAsArchived();
+        var event = ProductCategoryDeletedEvent.of(
                 productCategory.getRootID().value().toString(),
                 productCategory.getModificationTs().toOffsetDateTime()
         );

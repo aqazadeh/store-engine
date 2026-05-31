@@ -59,7 +59,7 @@ public class AggregateRoot<T extends BaseRoot<T, ID>, ID extends AggregateId<?>>
                 .self();
     }
 
-    public final T markAsActive() {
+    protected final T markAsActive() {
         return this.toBuilder()
                 .rowStatus(RowStatus.ACTIVE)
                 .modificationTs(SeDateTime.now())
@@ -67,7 +67,7 @@ public class AggregateRoot<T extends BaseRoot<T, ID>, ID extends AggregateId<?>>
                 .self();
     }
 
-    public final T markAsHidden() {
+    protected final T markAsHidden() {
         return this.toBuilder()
                 .rowStatus(RowStatus.HIDDEN)
                 .modificationTs(SeDateTime.now())
@@ -75,7 +75,7 @@ public class AggregateRoot<T extends BaseRoot<T, ID>, ID extends AggregateId<?>>
                 .self();
     }
 
-    public final T markAsArchived() {
+    protected final T markAsArchived() {
         return this.toBuilder()
                 .rowStatus(RowStatus.ARCHIVED)
                 .modificationTs(SeDateTime.now())
@@ -83,7 +83,7 @@ public class AggregateRoot<T extends BaseRoot<T, ID>, ID extends AggregateId<?>>
                 .self();
     }
 
-    public final T markAsDeleted() {
+    protected final T markAsDeleted() {
         return this.toBuilder()
                 .rowStatus(RowStatus.DELETED)
                 .modificationTs(SeDateTime.now())

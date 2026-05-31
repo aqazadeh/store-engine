@@ -5,6 +5,6 @@ import lombok.Builder;
 import lombok.Getter;
 
 @Builder
-public final class ProductCategoryArchiveCommand {
+public final class ProductCategoryDeleteCommand {
     @Getter private final ProductCategoryId productCategoryId;
 }

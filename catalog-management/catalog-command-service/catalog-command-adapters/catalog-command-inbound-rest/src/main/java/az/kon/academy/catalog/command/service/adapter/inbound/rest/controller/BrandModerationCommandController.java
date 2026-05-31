@@ -8,7 +8,7 @@ import az.kon.academy.catalog.command.service.application.service.dto.request.br
 import az.kon.academy.catalog.command.service.application.service.dto.request.brandrejection.BrandRejectionReasonChangeReasonRequest;
 import az.kon.academy.catalog.command.service.application.service.dto.request.brandrejection.BrandRejectionReasonDeleteRequest;
 import az.kon.academy.catalog.command.service.application.service.dto.result.BrandCreateCommandResult;
-import az.kon.academy.catalog.command.service.application.service.port.inbound.rest.brand.BrandModerationInboundPort;
+import az.kon.academy.catalog.command.service.application.service.port.inbound.brand.BrandModerationInboundPort;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;

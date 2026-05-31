@@ -4,7 +4,7 @@ import az.kon.academy.catalog.command.service.adapter.inbound.rest.spec.brand.Br
 import az.kon.academy.catalog.command.service.application.service.dto.request.brand.*;
 import az.kon.academy.catalog.command.service.application.service.dto.request.brandrejection.BrandRejectionReasonSolveRequest;
 import az.kon.academy.catalog.command.service.application.service.dto.result.BrandCreateCommandResult;
-import az.kon.academy.catalog.command.service.application.service.port.inbound.rest.brand.BrandManagementInboundPort;
+import az.kon.academy.catalog.command.service.application.service.port.inbound.brand.BrandManagementInboundPort;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;

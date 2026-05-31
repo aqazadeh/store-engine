@@ -100,4 +100,8 @@ public class ProductSpecificationRoot extends AggregateRoot<ProductSpecification
         specification.addEvent(event);
         return specification;
     }
+
+    public ProductSpecificationRoot delete() {
+        return this.markAsDeleted();// FIXME
+    }
 }

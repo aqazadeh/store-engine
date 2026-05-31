@@ -41,7 +41,7 @@ public final class ProductDomainServiceImpl implements ProductDomainService {
     @Override
     public ProductRoot assignCategory(SeDomainContext context, ProductAssignCategoryCommand command) {
         var categoryQueryPort = context.getQueryPort(ProductCategoryQueryOutboundPort.class);
-        categoryQueryPort.fetchByIdAndRowStatusActive(command.getCategoryId());
+        categoryQueryPort.fetchById(command.getCategoryId());
         var productQueryPort = context.getQueryPort(ProductQueryOutboundPort.class);
         var product = productQueryPort.fetchByIdAndRowStatusActive(command.getProductId());
         return product.assignCategory(command);

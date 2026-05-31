@@ -24,7 +24,7 @@ public class ProductSpecificationDomainServiceImpl implements ProductSpecificati
     @Override
     public ProductSpecificationRoot assignCategory(SeDomainContext context, SpecificationAssignCategoryCommand command) {
         var productCategoryQueryPort = context.getQueryPort(ProductCategoryQueryOutboundPort.class);
-        var category = productCategoryQueryPort.fetchByIdAndRowStatusActive(command.getCategoryId());
+        var category = productCategoryQueryPort.fetchById(command.getCategoryId());
         var assignment = SpecificationCategoryAssignment.initialize(category.getRootID(), command.isRequired());
         var specificationQueryPort = context.getQueryPort(ProductSpecificationQueryOutboundPort.class);
         var specification = specificationQueryPort.fetchByIdAndRowStatusActive(command.getProductSpecificationId());
@@ -34,7 +34,7 @@ public class ProductSpecificationDomainServiceImpl implements ProductSpecificati
     @Override
     public ProductSpecificationRoot removeCategoryAssignment(SeDomainContext context, SpecificationRemoveCategoryAssignmentCommand command) {
         var productCategoryQueryPort = context.getQueryPort(ProductCategoryQueryOutboundPort.class);
-        var category = productCategoryQueryPort.fetchByIdAndRowStatusActive(command.getCategoryId());
+        var category = productCategoryQueryPort.fetchById(command.getCategoryId());
         var assignment = SpecificationCategoryAssignment.initialize(category.getRootID(), command.isRequired());
         var specificationQueryPort = context.getQueryPort(ProductSpecificationQueryOutboundPort.class);
         var specification = specificationQueryPort.fetchByIdAndRowStatusActive(command.getProductSpecificationId());
@@ -45,6 +45,6 @@ public class ProductSpecificationDomainServiceImpl implements ProductSpecificati
     public ProductSpecificationRoot delete(SeDomainContext context, SpecificationDeleteCommand command) {
         var specificationQueryPort = context.getQueryPort(ProductSpecificationQueryOutboundPort.class);
         var specification = specificationQueryPort.fetchByIdAndRowStatusActive(command.getSpecificationId());
-        return specification.markAsDeleted();
+        return specification.delete();
     }
 }

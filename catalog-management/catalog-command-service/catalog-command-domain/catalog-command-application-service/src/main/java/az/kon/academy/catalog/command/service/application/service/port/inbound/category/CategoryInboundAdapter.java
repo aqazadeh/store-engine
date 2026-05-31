@@ -1,24 +1,9 @@
-package az.kon.academy.catalog.command.service.application.service.port.inbound.rest;
+package az.kon.academy.catalog.command.service.application.service.port.inbound.category;
 
 import az.kon.academy.application.core.annotation.InputAdapter;
-import az.kon.academy.catalog.command.service.application.service.dto.request.category.ProductCategoryActivateRequest;
-import az.kon.academy.catalog.command.service.application.service.dto.request.category.ProductCategoryArchiveRequest;
-import az.kon.academy.catalog.command.service.application.service.dto.request.category.ProductCategoryChangeImageRequest;
-import az.kon.academy.catalog.command.service.application.service.dto.request.category.ProductCategoryChangeInformationRequest;
-import az.kon.academy.catalog.command.service.application.service.dto.request.category.ProductCategoryChangeParentRequest;
-import az.kon.academy.catalog.command.service.application.service.dto.request.category.ProductCategoryCreateRequest;
-import az.kon.academy.catalog.command.service.application.service.handler.command.category.ProductCategoryActivateCommandHandler;
-import az.kon.academy.catalog.command.service.application.service.handler.command.category.ProductCategoryArchiveCommandHandler;
-import az.kon.academy.catalog.command.service.application.service.handler.command.category.ProductCategoryChangeImageCommandHandler;
-import az.kon.academy.catalog.command.service.application.service.handler.command.category.ProductCategoryChangeInformationCommandHandler;
-import az.kon.academy.catalog.command.service.application.service.handler.command.category.ProductCategoryChangeParentCommandHandler;
-import az.kon.academy.catalog.command.service.application.service.handler.command.category.ProductCategoryCreateCommandHandler;
-import az.kon.academy.catalog.command.service.domain.core.command.category.ProductCategoryActivateCommand;
-import az.kon.academy.catalog.command.service.domain.core.command.category.ProductCategoryArchiveCommand;
-import az.kon.academy.catalog.command.service.domain.core.command.category.ProductCategoryChangeImageCommand;
-import az.kon.academy.catalog.command.service.domain.core.command.category.ProductCategoryChangeInformationCommand;
-import az.kon.academy.catalog.command.service.domain.core.command.category.ProductCategoryChangeParentCommand;
-import az.kon.academy.catalog.command.service.domain.core.command.category.ProductCategoryCreateCommand;
+import az.kon.academy.catalog.command.service.application.service.dto.request.category.*;
+import az.kon.academy.catalog.command.service.application.service.handler.command.category.*;
+import az.kon.academy.catalog.command.service.domain.core.command.category.*;
 import az.kon.academy.catalog.command.service.domain.core.vo.management.category.ProductCategoryDescription;
 import az.kon.academy.catalog.command.service.domain.core.vo.management.category.ProductCategoryId;
 import az.kon.academy.catalog.command.service.domain.core.vo.management.category.ProductCategoryName;
@@ -30,6 +15,7 @@ class CategoryInboundAdapter implements CategoryInboundPort {
     private final ProductCategoryCreateCommandHandler productCategoryCreateCommandHandler;
     private final ProductCategoryActivateCommandHandler productCategoryActivateCommandHandler;
     private final ProductCategoryArchiveCommandHandler productCategoryArchiveCommandHandler;
+    private final ProductCategoryDeleteCommandHandler productCategoryDeleteCommandHandler;
     private final ProductCategoryChangeImageCommandHandler productCategoryChangeImageCommandHandler;
     private final ProductCategoryChangeInformationCommandHandler productCategoryChangeInformationCommandHandler;
     private final ProductCategoryChangeParentCommandHandler productCategoryChangeParentCommandHandler;
@@ -37,12 +23,14 @@ class CategoryInboundAdapter implements CategoryInboundPort {
     public CategoryInboundAdapter(ProductCategoryCreateCommandHandler productCategoryCreateCommandHandler,
                                   ProductCategoryActivateCommandHandler productCategoryActivateCommandHandler,
                                   ProductCategoryArchiveCommandHandler productCategoryArchiveCommandHandler,
+                                  ProductCategoryDeleteCommandHandler productCategoryDeleteCommandHandler,
                                   ProductCategoryChangeImageCommandHandler productCategoryChangeImageCommandHandler,
                                   ProductCategoryChangeInformationCommandHandler productCategoryChangeInformationCommandHandler,
                                   ProductCategoryChangeParentCommandHandler productCategoryChangeParentCommandHandler) {
         this.productCategoryCreateCommandHandler = productCategoryCreateCommandHandler;
         this.productCategoryActivateCommandHandler = productCategoryActivateCommandHandler;
         this.productCategoryArchiveCommandHandler = productCategoryArchiveCommandHandler;
+        this.productCategoryDeleteCommandHandler = productCategoryDeleteCommandHandler;
         this.productCategoryChangeImageCommandHandler = productCategoryChangeImageCommandHandler;
         this.productCategoryChangeInformationCommandHandler = productCategoryChangeInformationCommandHandler;
         this.productCategoryChangeParentCommandHandler = productCategoryChangeParentCommandHandler;
@@ -72,6 +60,14 @@ class CategoryInboundAdapter implements CategoryInboundPort {
                 .productCategoryId(ProductCategoryId.from(request.getCategoryId()))
                 .build();
         this.productCategoryArchiveCommandHandler.handle(command);
+    }
+
+    @Override
+    public void delete(ProductCategoryDeleteRequest request) {
+        var command = ProductCategoryDeleteCommand.builder()
+                .productCategoryId(ProductCategoryId.from(request.getCategoryId()))
+                .build();
+        this.productCategoryDeleteCommandHandler.handle(command);
     }
 
     @Override

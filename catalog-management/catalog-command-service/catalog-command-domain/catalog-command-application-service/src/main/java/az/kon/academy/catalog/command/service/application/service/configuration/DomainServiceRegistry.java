@@ -8,8 +8,8 @@ import az.kon.academy.catalog.command.service.domain.core.port.inbound.service.b
 import az.kon.academy.catalog.command.service.domain.core.port.inbound.service.brandrejection.BrandRejectionManagementServiceImpl;
 import az.kon.academy.catalog.command.service.domain.core.port.inbound.service.brandrejection.BrandRejectionModerationDomainService;
 import az.kon.academy.catalog.command.service.domain.core.port.inbound.service.brandrejection.BrandRejectionModerationDomainServiceImpl;
-import az.kon.academy.catalog.command.service.domain.core.port.inbound.service.category.ProductCategoryDomainService;
-import az.kon.academy.catalog.command.service.domain.core.port.inbound.service.category.ProductCategoryDomainServiceImpl;
+import az.kon.academy.catalog.command.service.domain.core.port.inbound.service.category.ProductCategoryModerationDomainService;
+import az.kon.academy.catalog.command.service.domain.core.port.inbound.service.category.ProductCategoryModerationDomainServiceImpl;
 import az.kon.academy.catalog.command.service.domain.core.port.inbound.service.product.ProductDomainService;
 import az.kon.academy.catalog.command.service.domain.core.port.inbound.service.product.ProductDomainServiceImpl;
 import az.kon.academy.catalog.command.service.domain.core.port.inbound.service.specification.ProductSpecificationDomainService;
@@ -43,8 +43,8 @@ public class DomainServiceRegistry {
     }
 
     @Bean
-    public ProductCategoryDomainService productCategoryDomainService() {
-        return new ProductCategoryDomainServiceImpl();
+    public ProductCategoryModerationDomainService productCategoryDomainService() {
+        return new ProductCategoryModerationDomainServiceImpl();
     }
 
     @Bean
