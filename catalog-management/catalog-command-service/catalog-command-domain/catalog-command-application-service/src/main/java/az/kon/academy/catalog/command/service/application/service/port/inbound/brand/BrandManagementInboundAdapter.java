@@ -1,4 +1,4 @@
-package az.kon.academy.catalog.command.service.application.service.port.inbound.rest.brand;
+package az.kon.academy.catalog.command.service.application.service.port.inbound.brand;
 
 import az.kon.academy.application.core.annotation.InputAdapter;
 import az.kon.academy.catalog.command.service.application.service.dto.request.brand.*;
