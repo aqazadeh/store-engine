@@ -5,6 +5,6 @@ import lombok.Builder;
 import lombok.Getter;
 
 @Builder
-public class BrandMoveToInReviewCommand {
+public final class BrandMoveToInReviewCommand {
     @Getter private final BrandId brandId;
 }

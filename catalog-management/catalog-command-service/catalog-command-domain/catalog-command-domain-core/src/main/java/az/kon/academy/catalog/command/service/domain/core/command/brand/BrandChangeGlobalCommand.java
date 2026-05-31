@@ -5,6 +5,6 @@ import lombok.Builder;
 import lombok.Getter;
 
 @Builder
-public class BrandChangeGlobalCommand {
+public final class BrandChangeGlobalCommand {
     @Getter private final BrandId brandId;
 }

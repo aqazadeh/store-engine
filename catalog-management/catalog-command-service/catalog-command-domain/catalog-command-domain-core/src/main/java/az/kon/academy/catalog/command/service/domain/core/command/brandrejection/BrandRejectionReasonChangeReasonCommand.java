@@ -6,7 +6,7 @@ import lombok.Builder;
 import lombok.Getter;
 
 @Builder
-public class BrandRejectionReasonChangeReasonCommand {
+public final class BrandRejectionReasonChangeReasonCommand {
     @Getter private final BrandRejectionReasonId brandRejectionReasonId;
     @Getter private final ModeratorId moderatorId;
     @Getter private final String reason;
