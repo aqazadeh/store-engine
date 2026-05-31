@@ -14,26 +14,26 @@ import java.util.Objects;
 public final class ProductCategoryModerationDomainServiceImpl implements ProductCategoryModerationDomainService {
 
     @Override
-    public ProductCategoryRoot createCategory(SeDomainContext context, ProductCategoryCreateCommand command) {
+    public ProductCategoryRoot createCategory(final SeDomainContext context, final ProductCategoryCreateCommand command) {
         return ProductCategoryRoot.initialize(command);
     }
 
     @Override
-    public ProductCategoryRoot changeInformation(SeDomainContext context, ProductCategoryChangeInformationCommand command) {
+    public ProductCategoryRoot changeInformation(final SeDomainContext context, final ProductCategoryChangeInformationCommand command) {
         final var productCategoryQueryPort = context.getQueryPort(ProductCategoryQueryOutboundPort.class);
         final var category = productCategoryQueryPort.fetchById(command.getProductCategoryId());
         return category.changeInformation(command);
     }
 
     @Override
-    public ProductCategoryRoot changeImage(SeDomainContext context, ProductCategoryChangeImageCommand command) {
+    public ProductCategoryRoot changeImage(final SeDomainContext context, final ProductCategoryChangeImageCommand command) {
         final var productCategoryQueryPort = context.getQueryPort(ProductCategoryQueryOutboundPort.class);
         final var category = productCategoryQueryPort.fetchById(command.getProductCategoryId());
         return category.changeImage(command);
     }
 
     @Override
-    public ProductCategoryRoot changeParent(SeDomainContext context, ProductCategoryChangeParentCommand command) {
+    public ProductCategoryRoot changeParent(final SeDomainContext context, final ProductCategoryChangeParentCommand command) {
         final var productCategoryQueryPort = context.getQueryPort(ProductCategoryQueryOutboundPort.class);
         final var category = productCategoryQueryPort.fetchById(command.getProductCategoryId());
         if (Objects.isNull(command.getParentId()))
@@ -45,24 +45,24 @@ public final class ProductCategoryModerationDomainServiceImpl implements Product
     }
 
     @Override
-    public ProductCategoryRoot archive(SeDomainContext context, ProductCategoryArchiveCommand command) {
+    public ProductCategoryRoot archive(final SeDomainContext context, final ProductCategoryArchiveCommand command) {
         final var productCategoryQueryPort = context.getQueryPort(ProductCategoryQueryOutboundPort.class);
         final var category = productCategoryQueryPort.fetchById(command.getProductCategoryId());
         return category.archive();
     }
 
     @Override
-    public ProductCategoryRoot activate(SeDomainContext context, ProductCategoryActivateCommand command) {
+    public ProductCategoryRoot activate(final SeDomainContext context, final ProductCategoryActivateCommand command) {
         final var productCategoryQueryPort = context.getQueryPort(ProductCategoryQueryOutboundPort.class);
         final var category = productCategoryQueryPort.fetchById(command.getProductCategoryId());
         return category.activate();
     }
 
     @Override
-    public ProductCategoryRoot delete(SeDomainContext context, ProductCategoryDeleteCommand command) {
+    public ProductCategoryRoot delete(final SeDomainContext context, final ProductCategoryDeleteCommand command) {
         final var productQueryPort = context.getQueryPort(ProductQueryOutboundPort.class);
         final var existsProduct = productQueryPort.exitsByCategoryId(command.getProductCategoryId());
-        if(existsProduct) {
+        if (existsProduct) {
             throw new ProductCategoryDomainException(
                     ProductCategoryDomainErrorCodes.HAS_ACTIVE_PRODUCT,
                     List.of(command.getProductCategoryId().toString())

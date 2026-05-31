@@ -6,18 +6,18 @@ import az.kon.academy.domain.core.SeDomainContext;
 
 public sealed interface ProductCategoryModerationDomainService extends ProductCategoryDomainService permits ProductCategoryModerationDomainServiceImpl {
 
-    ProductCategoryRoot createCategory(SeDomainContext context, ProductCategoryCreateCommand command);
+    ProductCategoryRoot createCategory(final SeDomainContext context, final ProductCategoryCreateCommand command);
 
-    ProductCategoryRoot changeInformation(SeDomainContext context, ProductCategoryChangeInformationCommand command);
+    ProductCategoryRoot changeInformation(final SeDomainContext context, final ProductCategoryChangeInformationCommand command);
 
-    ProductCategoryRoot changeImage(SeDomainContext context, ProductCategoryChangeImageCommand command);
+    ProductCategoryRoot changeImage(final SeDomainContext context, final ProductCategoryChangeImageCommand command);
 
-    ProductCategoryRoot changeParent(SeDomainContext context, ProductCategoryChangeParentCommand command);
+    ProductCategoryRoot changeParent(final SeDomainContext context, final ProductCategoryChangeParentCommand command);
 
-    ProductCategoryRoot archive(SeDomainContext context, ProductCategoryArchiveCommand command);
+    ProductCategoryRoot archive(final SeDomainContext context, final ProductCategoryArchiveCommand command);
 
-    ProductCategoryRoot activate(SeDomainContext context, ProductCategoryActivateCommand command);
+    ProductCategoryRoot activate(final SeDomainContext context, final ProductCategoryActivateCommand command);
 
-    ProductCategoryRoot delete(SeDomainContext context, ProductCategoryDeleteCommand command);
+    ProductCategoryRoot delete(final SeDomainContext context, final ProductCategoryDeleteCommand command);
 
 }
