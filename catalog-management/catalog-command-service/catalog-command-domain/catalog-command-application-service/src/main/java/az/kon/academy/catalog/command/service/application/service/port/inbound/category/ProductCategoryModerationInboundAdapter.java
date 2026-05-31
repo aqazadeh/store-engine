@@ -10,7 +10,7 @@ import az.kon.academy.catalog.command.service.domain.core.vo.management.category
 import az.kon.academy.catalog.command.service.domain.core.vo.management.category.ProductCategoryPath;
 
 @InputAdapter
-class CategoryInboundAdapter implements CategoryInboundPort {
+class ProductCategoryModerationInboundAdapter implements ProductCategoryModerationInboundPort {
 
     private final ProductCategoryCreateCommandHandler productCategoryCreateCommandHandler;
     private final ProductCategoryActivateCommandHandler productCategoryActivateCommandHandler;
@@ -20,13 +20,13 @@ class CategoryInboundAdapter implements CategoryInboundPort {
     private final ProductCategoryChangeInformationCommandHandler productCategoryChangeInformationCommandHandler;
     private final ProductCategoryChangeParentCommandHandler productCategoryChangeParentCommandHandler;
 
-    public CategoryInboundAdapter(ProductCategoryCreateCommandHandler productCategoryCreateCommandHandler,
-                                  ProductCategoryActivateCommandHandler productCategoryActivateCommandHandler,
-                                  ProductCategoryArchiveCommandHandler productCategoryArchiveCommandHandler,
-                                  ProductCategoryDeleteCommandHandler productCategoryDeleteCommandHandler,
-                                  ProductCategoryChangeImageCommandHandler productCategoryChangeImageCommandHandler,
-                                  ProductCategoryChangeInformationCommandHandler productCategoryChangeInformationCommandHandler,
-                                  ProductCategoryChangeParentCommandHandler productCategoryChangeParentCommandHandler) {
+    public ProductCategoryModerationInboundAdapter(ProductCategoryCreateCommandHandler productCategoryCreateCommandHandler,
+                                                   ProductCategoryActivateCommandHandler productCategoryActivateCommandHandler,
+                                                   ProductCategoryArchiveCommandHandler productCategoryArchiveCommandHandler,
+                                                   ProductCategoryDeleteCommandHandler productCategoryDeleteCommandHandler,
+                                                   ProductCategoryChangeImageCommandHandler productCategoryChangeImageCommandHandler,
+                                                   ProductCategoryChangeInformationCommandHandler productCategoryChangeInformationCommandHandler,
+                                                   ProductCategoryChangeParentCommandHandler productCategoryChangeParentCommandHandler) {
         this.productCategoryCreateCommandHandler = productCategoryCreateCommandHandler;
         this.productCategoryActivateCommandHandler = productCategoryActivateCommandHandler;
         this.productCategoryArchiveCommandHandler = productCategoryArchiveCommandHandler;

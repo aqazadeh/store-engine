@@ -2,7 +2,7 @@ package az.kon.academy.catalog.command.service.application.service.port.inbound.
 
 import az.kon.academy.catalog.command.service.application.service.dto.request.category.*;
 
-public interface CategoryInboundPort {
+public interface ProductCategoryModerationInboundPort {
 
     void create(ProductCategoryCreateRequest request);
 
