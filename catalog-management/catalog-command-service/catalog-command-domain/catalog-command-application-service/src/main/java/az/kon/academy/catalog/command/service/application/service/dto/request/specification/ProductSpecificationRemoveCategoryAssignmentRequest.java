@@ -9,8 +9,7 @@ import java.util.UUID;
 @Getter
 @Setter
 @NoArgsConstructor
-public class SpecificationChangeInformationRequest {
+public class ProductSpecificationRemoveCategoryAssignmentRequest {
     private UUID specificationId;
-    private String name;
-    private String description;
+    private UUID categoryId;
 }

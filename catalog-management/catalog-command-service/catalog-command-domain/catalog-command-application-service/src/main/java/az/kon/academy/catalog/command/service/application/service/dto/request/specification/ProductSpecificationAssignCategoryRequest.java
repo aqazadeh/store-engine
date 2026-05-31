@@ -9,7 +9,7 @@ import java.util.UUID;
 @Getter
 @Setter
 @NoArgsConstructor
-public class SpecificationRemoveCategoryAssignmentRequest {
+public class ProductSpecificationAssignCategoryRequest {
     private UUID specificationId;
     private UUID categoryId;
     private boolean required;

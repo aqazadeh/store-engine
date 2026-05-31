@@ -9,8 +9,8 @@ import java.util.UUID;
 @Getter
 @Setter
 @NoArgsConstructor
-public class SpecificationAssignCategoryRequest {
+public class ProductSpecificationChangeInformationRequest {
     private UUID specificationId;
-    private UUID categoryId;
-    private boolean required;
+    private String name;
+    private String description;
 }

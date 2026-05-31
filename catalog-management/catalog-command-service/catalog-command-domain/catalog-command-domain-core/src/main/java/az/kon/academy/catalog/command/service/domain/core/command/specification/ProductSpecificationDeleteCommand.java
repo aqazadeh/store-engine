@@ -5,6 +5,6 @@ import lombok.Builder;
 import lombok.Getter;
 
 @Builder
-public final class SpecificationDeleteCommand {
+public final class ProductSpecificationDeleteCommand {
     @Getter private final ProductSpecificationId specificationId;
 }

@@ -4,5 +4,6 @@ public sealed interface ProductSpecificationEvent permits
         ProductSpecificationCreatedEvent,
         ProductSpecificationInformationChangedEvent,
         ProductSpecificationCategoryAssignedEvent,
-        ProductSpecificationCategoryRemovedEvent {
+        ProductSpecificationCategoryRemovedEvent,
+        ProductSpecificationDeletedEvent {
 }

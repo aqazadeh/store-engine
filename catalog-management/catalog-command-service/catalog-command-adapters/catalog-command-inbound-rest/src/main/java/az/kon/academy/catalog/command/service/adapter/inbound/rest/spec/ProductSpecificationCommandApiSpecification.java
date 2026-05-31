@@ -24,7 +24,7 @@ public interface ProductSpecificationCommandApiSpecification {
     )
     @ApiResponse(responseCode = "201", description = "Product specification created successfully", useReturnTypeSchema = true)
     @PostMapping(path = "/create", version = "1.0")
-    ResponseEntity<Void> create(@Valid @RequestBody SpecificationCreateRequest request);
+    ResponseEntity<Void> create(@Valid @RequestBody ProductSpecificationCreateRequest request);
 
     @Operation(
             summary = "Change product specification information",
@@ -37,7 +37,7 @@ public interface ProductSpecificationCommandApiSpecification {
     )
     @ApiResponse(responseCode = "200", description = "Product specification information updated successfully", useReturnTypeSchema = true)
     @PutMapping(path = "/change/information", version = "1.0")
-    ResponseEntity<Void> changeInformation(@Valid @RequestBody SpecificationChangeInformationRequest request);
+    ResponseEntity<Void> changeInformation(@Valid @RequestBody ProductSpecificationChangeInformationRequest request);
 
     @Operation(
             summary = "Delete a product specification",
@@ -50,7 +50,7 @@ public interface ProductSpecificationCommandApiSpecification {
     )
     @ApiResponse(responseCode = "200", description = "Product specification deleted successfully", useReturnTypeSchema = true)
     @DeleteMapping(path = "/remove", version = "1.0")
-    ResponseEntity<Void> delete(@Valid @RequestBody SpecificationDeleteRequest request);
+    ResponseEntity<Void> delete(@Valid @RequestBody ProductSpecificationDeleteRequest request);
 
     @Operation(
             summary = "Assign specification to a category",
@@ -63,7 +63,7 @@ public interface ProductSpecificationCommandApiSpecification {
     )
     @ApiResponse(responseCode = "200", description = "Specification assigned to category successfully", useReturnTypeSchema = true)
     @PutMapping(path = "/assign/category", version = "1.0")
-    ResponseEntity<Void> assignCategory(@Valid @RequestBody SpecificationAssignCategoryRequest request);
+    ResponseEntity<Void> assignCategory(@Valid @RequestBody ProductSpecificationAssignCategoryRequest request);
 
     @Operation(
             summary = "Remove specification from a category",
@@ -76,5 +76,5 @@ public interface ProductSpecificationCommandApiSpecification {
     )
     @ApiResponse(responseCode = "200", description = "Specification removed from category successfully", useReturnTypeSchema = true)
     @PutMapping(path = "/remove/category-assignment", version = "1.0")
-    ResponseEntity<Void> removeCategoryAssignment(@Valid @RequestBody SpecificationRemoveCategoryAssignmentRequest request);
+    ResponseEntity<Void> removeCategoryAssignment(@Valid @RequestBody ProductSpecificationRemoveCategoryAssignmentRequest request);
 }

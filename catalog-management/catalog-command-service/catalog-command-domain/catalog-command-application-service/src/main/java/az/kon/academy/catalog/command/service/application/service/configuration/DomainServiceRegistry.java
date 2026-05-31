@@ -1,8 +1,8 @@
 package az.kon.academy.catalog.command.service.application.service.configuration;
 
+import az.kon.academy.catalog.command.service.domain.core.port.inbound.service.brand.BrandManagementDomainService;
 import az.kon.academy.catalog.command.service.domain.core.port.inbound.service.brand.BrandManagementDomainServiceImpl;
 import az.kon.academy.catalog.command.service.domain.core.port.inbound.service.brand.BrandModerationDomainService;
-import az.kon.academy.catalog.command.service.domain.core.port.inbound.service.brand.BrandManagementDomainService;
 import az.kon.academy.catalog.command.service.domain.core.port.inbound.service.brand.BrandModerationDomainServiceImpl;
 import az.kon.academy.catalog.command.service.domain.core.port.inbound.service.brandrejection.BrandRejectionManagementService;
 import az.kon.academy.catalog.command.service.domain.core.port.inbound.service.brandrejection.BrandRejectionManagementServiceImpl;
@@ -12,8 +12,8 @@ import az.kon.academy.catalog.command.service.domain.core.port.inbound.service.c
 import az.kon.academy.catalog.command.service.domain.core.port.inbound.service.category.ProductCategoryModerationDomainServiceImpl;
 import az.kon.academy.catalog.command.service.domain.core.port.inbound.service.product.ProductDomainService;
 import az.kon.academy.catalog.command.service.domain.core.port.inbound.service.product.ProductDomainServiceImpl;
-import az.kon.academy.catalog.command.service.domain.core.port.inbound.service.specification.ProductSpecificationDomainService;
-import az.kon.academy.catalog.command.service.domain.core.port.inbound.service.specification.ProductSpecificationDomainServiceImpl;
+import az.kon.academy.catalog.command.service.domain.core.port.inbound.service.specification.ProductSpecificationModerationDomainService;
+import az.kon.academy.catalog.command.service.domain.core.port.inbound.service.specification.ProductSpecificationModerationDomainServiceImpl;
 import az.kon.academy.catalog.command.service.domain.core.port.inbound.service.variant.VariantDomainService;
 import az.kon.academy.catalog.command.service.domain.core.port.inbound.service.variant.VariantDomainServiceImpl;
 import org.springframework.context.annotation.Bean;
@@ -48,8 +48,8 @@ public class DomainServiceRegistry {
     }
 
     @Bean
-    public ProductSpecificationDomainService productSpecificationDomainService() {
-        return new ProductSpecificationDomainServiceImpl();
+    public ProductSpecificationModerationDomainService productSpecificationDomainService() {
+        return new ProductSpecificationModerationDomainServiceImpl();
     }
 
     @Bean

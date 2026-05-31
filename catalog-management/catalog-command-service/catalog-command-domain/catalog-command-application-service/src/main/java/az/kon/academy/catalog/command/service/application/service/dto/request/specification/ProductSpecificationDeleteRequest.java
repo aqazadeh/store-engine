@@ -4,10 +4,11 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.UUID;
+
 @Getter
 @Setter
 @NoArgsConstructor
-public class SpecificationCreateRequest {
-    private String name;
-    private String description;
+public class ProductSpecificationDeleteRequest {
+    private UUID specificationId;
 }

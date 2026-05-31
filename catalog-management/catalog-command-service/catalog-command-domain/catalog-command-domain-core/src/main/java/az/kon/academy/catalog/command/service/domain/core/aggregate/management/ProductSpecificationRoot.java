@@ -2,8 +2,9 @@ package az.kon.academy.catalog.command.service.domain.core.aggregate.management;
 
 import az.kon.academy.aggragate.AggregateRoot;
 import az.kon.academy.aggragate.valueobject.SeDateTime;
-import az.kon.academy.catalog.command.service.domain.core.command.specification.SpecificationChangeInformationCommand;
-import az.kon.academy.catalog.command.service.domain.core.command.specification.SpecificationCreateCommand;
+import az.kon.academy.catalog.command.service.domain.core.command.specification.ProductSpecificationChangeInformationCommand;
+import az.kon.academy.catalog.command.service.domain.core.command.specification.ProductSpecificationCreateCommand;
+import az.kon.academy.catalog.command.service.domain.core.command.specification.ProductSpecificationRemoveCategoryAssignmentCommand;
 import az.kon.academy.catalog.command.service.domain.core.vo.management.specification.ProductSpecificationId;
 import az.kon.academy.catalog.command.service.domain.core.vo.management.specification.SpecificationCategoryAssignment;
 import az.kon.academy.catalog.command.service.domain.core.vo.management.specification.SpecificationDescription;
@@ -22,7 +23,7 @@ public class ProductSpecificationRoot extends AggregateRoot<ProductSpecification
     @Getter private final SpecificationDescription description;
     @Getter private final Set<SpecificationCategoryAssignment> categories;
 
-    public static ProductSpecificationRoot initialize(SpecificationCreateCommand command) {
+    public static ProductSpecificationRoot initialize(ProductSpecificationCreateCommand command) {
         var specification = ProductSpecificationRoot.builder()
                 .id(ProductSpecificationId.random())
                 .name(command.getName())
@@ -42,7 +43,7 @@ public class ProductSpecificationRoot extends AggregateRoot<ProductSpecification
         specification.addEvent(event);
         return specification;
     }
-
+    //FIXME
     public ProductSpecificationRoot assignCategory(SpecificationCategoryAssignment assignment) {
         Set<SpecificationCategoryAssignment> changed = new HashSet<>(this.categories);
         changed.removeIf(a -> assignment.getCategoryId().equals(a.getCategoryId()));
@@ -63,10 +64,10 @@ public class ProductSpecificationRoot extends AggregateRoot<ProductSpecification
         specification.addEvent(event);
         return specification;
     }
-
-    public ProductSpecificationRoot removeCategoryAssignment(SpecificationCategoryAssignment assignment) {
+    //FIXME
+    public ProductSpecificationRoot removeCategoryAssignment(ProductSpecificationRemoveCategoryAssignmentCommand command) {
         Set<SpecificationCategoryAssignment> changed = new HashSet<>(this.categories);
-        changed.removeIf(a -> assignment.getCategoryId().equals(a.getCategoryId()));
+        changed.removeIf(a -> command.getCategoryId().equals(a.getCategoryId()));
 
         var specification = this.toBuilder()
                 .categories(Collections.unmodifiableSet(changed))
@@ -76,14 +77,14 @@ public class ProductSpecificationRoot extends AggregateRoot<ProductSpecification
         var event = ProductSpecificationCategoryRemovedEvent.of(
                 specification.getRootID().value().toString(),
                 specification.getModificationTs().toOffsetDateTime(),
-                assignment.getCategoryId().value()
+                command.getCategoryId().value()
         );
 
         specification.addEvent(event);
         return specification;
     }
 
-    public ProductSpecificationRoot changeInformation(SpecificationChangeInformationCommand command) {
+    public ProductSpecificationRoot changeInformation(ProductSpecificationChangeInformationCommand command) {
         var specification = this.toBuilder()
                 .name(command.getName())
                 .description(command.getDescription())
@@ -102,6 +103,14 @@ public class ProductSpecificationRoot extends AggregateRoot<ProductSpecification
     }
 
     public ProductSpecificationRoot delete() {
-        return this.markAsDeleted();// FIXME
+        var specification = this.markAsDeleted();
+
+        var event = ProductSpecificationDeletedEvent.of(
+                specification.getRootID().value().toString(),
+                specification.getModificationTs().toOffsetDateTime()
+        );
+
+        specification.addEvent(event);
+        return specification;
     }
 }
