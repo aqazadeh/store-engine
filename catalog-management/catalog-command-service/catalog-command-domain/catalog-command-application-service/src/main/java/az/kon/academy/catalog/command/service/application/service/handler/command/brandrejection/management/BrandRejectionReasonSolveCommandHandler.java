@@ -2,16 +2,16 @@ package az.kon.academy.catalog.command.service.application.service.handler.comma
 
 import az.kon.academy.application.core.annotation.CommandHandler;
 import az.kon.academy.application.core.handler.AbstractCommandHandler;
-import az.kon.academy.catalog.command.service.application.service.constant.SecurityPermissions;
 import az.kon.academy.catalog.command.service.application.service.port.outbound.BrandRejectionReasonCommandOutboundPort;
 import az.kon.academy.catalog.command.service.domain.core.command.brandrejection.BrandRejectionReasonSolveCommand;
 import az.kon.academy.catalog.command.service.domain.core.port.inbound.service.brandrejection.BrandRejectionManagementService;
 import az.kon.academy.domain.core.SeDomainContext;
 import az.kon.academy.event.handler.DomainEventPublisher;
 
-@CommandHandler(
-        roles = SecurityPermissions.Role.ROLE_MERCHANT,
-        permissions = SecurityPermissions.Brand.BRAND_MANAGEMENT_SOLVE_REJECT_REASON)
+import static az.kon.academy.catalog.command.service.application.service.constant.SecurityPermissions.Brand;
+import static az.kon.academy.catalog.command.service.application.service.constant.SecurityPermissions.Role.ROLE_MERCHANT;
+
+@CommandHandler(roles = ROLE_MERCHANT, permissions = Brand.BRAND_MANAGEMENT_SOLVE_REJECT_REASON)
 public class BrandRejectionReasonSolveCommandHandler implements AbstractCommandHandler<BrandRejectionReasonSolveCommand, Void> {
 
     private final SeDomainContext domainContext;

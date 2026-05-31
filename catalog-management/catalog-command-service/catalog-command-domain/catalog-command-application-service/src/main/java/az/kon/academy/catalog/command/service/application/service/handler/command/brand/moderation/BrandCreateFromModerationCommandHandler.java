@@ -2,7 +2,6 @@ package az.kon.academy.catalog.command.service.application.service.handler.comma
 
 import az.kon.academy.application.core.annotation.CommandHandler;
 import az.kon.academy.application.core.handler.AbstractCommandHandler;
-import az.kon.academy.catalog.command.service.application.service.constant.SecurityPermissions;
 import az.kon.academy.catalog.command.service.application.service.dto.result.BrandCreateCommandResult;
 import az.kon.academy.catalog.command.service.application.service.port.outbound.BrandCommandOutboundPort;
 import az.kon.academy.catalog.command.service.domain.core.command.brand.BrandCreateCommand;
@@ -10,9 +9,10 @@ import az.kon.academy.catalog.command.service.domain.core.port.inbound.service.b
 import az.kon.academy.domain.core.SeDomainContext;
 import az.kon.academy.event.handler.DomainEventPublisher;
 
-@CommandHandler(
-        roles = SecurityPermissions.Role.ROLE_DOMAIN_MODERATOR,
-        permissions = SecurityPermissions.Brand.BRAND_MODERATION_CREATE)
+import static az.kon.academy.catalog.command.service.application.service.constant.SecurityPermissions.Brand.BRAND_MODERATION_CREATE;
+import static az.kon.academy.catalog.command.service.application.service.constant.SecurityPermissions.Role.ROLE_DOMAIN_MODERATOR;
+
+@CommandHandler(roles = ROLE_DOMAIN_MODERATOR, permissions = BRAND_MODERATION_CREATE)
 public class BrandCreateFromModerationCommandHandler implements AbstractCommandHandler<BrandCreateCommand, BrandCreateCommandResult> {
 
     private final SeDomainContext domainContext;
