@@ -2,9 +2,13 @@ package az.kon.academy.catalog.command.service.domain.core.port.inbound.service.
 
 import az.kon.academy.catalog.command.service.domain.core.aggregate.management.ProductCategoryRoot;
 import az.kon.academy.catalog.command.service.domain.core.command.category.*;
+import az.kon.academy.catalog.command.service.domain.core.exception.category.ProductCategoryDomainErrorCodes;
+import az.kon.academy.catalog.command.service.domain.core.exception.category.ProductCategoryDomainException;
 import az.kon.academy.catalog.command.service.domain.core.port.outbound.ProductCategoryQueryOutboundPort;
+import az.kon.academy.catalog.command.service.domain.core.port.outbound.ProductQueryOutboundPort;
 import az.kon.academy.domain.core.SeDomainContext;
 
+import java.util.List;
 import java.util.Objects;
 
 public final class ProductCategoryModerationDomainServiceImpl implements ProductCategoryModerationDomainService {
@@ -56,6 +60,14 @@ public final class ProductCategoryModerationDomainServiceImpl implements Product
 
     @Override
     public ProductCategoryRoot delete(SeDomainContext context, ProductCategoryDeleteCommand command) {
+        var productQueryPort = context.getQueryPort(ProductQueryOutboundPort.class);
+        var existsProduct = productQueryPort.exitsByCategoryId(command.getProductCategoryId());
+        if(existsProduct) {
+            throw new ProductCategoryDomainException(
+                    ProductCategoryDomainErrorCodes.HAS_ACTIVE_PRODUCT,
+                    List.of(command.getProductCategoryId().toString())
+            );
+        }
         var productCategoryQueryPort = context.getQueryPort(ProductCategoryQueryOutboundPort.class);
         var category = productCategoryQueryPort.fetchById(command.getProductCategoryId());
         return category.delete();

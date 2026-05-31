@@ -23,4 +23,5 @@ public final class ProductCategoryDomainErrorCodes {
     public static final String SPECIFICATION_VALUE_REQUIRED     = "000012";
     public static final String SPECIFICATION_VALUE_TOO_SHORT    = "000013";
     public static final String SPECIFICATION_VALUE_TOO_LONG     = "000014";
+    public static final String HAS_ACTIVE_PRODUCT               = "000015";
 }

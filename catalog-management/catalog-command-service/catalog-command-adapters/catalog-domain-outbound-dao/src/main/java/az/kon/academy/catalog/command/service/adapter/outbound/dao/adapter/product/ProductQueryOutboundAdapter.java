@@ -9,6 +9,7 @@ import az.kon.academy.catalog.command.service.adapter.outbound.dao.mapper.Produc
 import az.kon.academy.catalog.command.service.domain.core.aggregate.ProductRoot;
 import az.kon.academy.catalog.command.service.domain.core.aggregate.ProductVariantRoot;
 import az.kon.academy.catalog.command.service.domain.core.port.outbound.ProductQueryOutboundPort;
+import az.kon.academy.catalog.command.service.domain.core.vo.management.category.ProductCategoryId;
 import az.kon.academy.catalog.command.service.domain.core.vo.product.ProductId;
 import org.jooq.DSLContext;
 
@@ -74,5 +75,10 @@ public class ProductQueryOutboundAdapter implements ProductQueryOutboundPort {
 
                     return mapper.toDomain(productRecord, specAssignments, variants);
                 });
+    }
+
+    @Override
+    public Boolean exitsByCategoryId(ProductCategoryId productCategoryId) {
+        return null;
     }
 }
