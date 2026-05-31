@@ -4,10 +4,13 @@ import az.kon.academy.application.core.annotation.CommandAdapter;
 import az.kon.academy.catalog.command.service.adapter.outbound.dao.mapper.BrandRejectionReasonMapper;
 import az.kon.academy.catalog.command.service.application.service.port.outbound.BrandRejectionReasonCommandOutboundPort;
 import az.kon.academy.catalog.command.service.domain.core.aggregate.management.rejection.BrandRejectionReasonRoot;
+import lombok.extern.slf4j.Slf4j;
 import org.jooq.DSLContext;
+import org.springframework.dao.OptimisticLockingFailureException;
 
 import static az.kon.academy.catalog.command.dal.Tables.BRAND_REJECTION_REASON;
 
+@Slf4j
 @CommandAdapter
 public class BrandRejectionReasonCommandOutboundAdapter implements BrandRejectionReasonCommandOutboundPort {
 
@@ -22,16 +25,18 @@ public class BrandRejectionReasonCommandOutboundAdapter implements BrandRejectio
     @Override
     public BrandRejectionReasonRoot save(BrandRejectionReasonRoot aggregate) {
         var record = mapper.toRecord(aggregate);
-        var effectedRows =  dsl.insertInto(BRAND_REJECTION_REASON)
+        var result =  dsl.insertInto(BRAND_REJECTION_REASON)
                 .set(record)
                 .onConflict(BRAND_REJECTION_REASON.ID)
                 .doUpdate()
                 .set(record)
+                .where(BRAND_REJECTION_REASON.VERSION.eq(aggregate.getVersion().value()))
                 .execute();
 
-        if(effectedRows == 0) {
-            throw new RuntimeException("insert or update not worked"); //FIXME
+        if(result == 0){
+            log.error("Concurrent update detected for BrandRejectionReason id={}", aggregate.getRootID());
+            throw new OptimisticLockingFailureException("Concurrent update detected for BrandRejectionReason id=" + aggregate.getRootID());
         }
-        return aggregate;
+        return this.mapper.toDomain(record);
     }
 }
