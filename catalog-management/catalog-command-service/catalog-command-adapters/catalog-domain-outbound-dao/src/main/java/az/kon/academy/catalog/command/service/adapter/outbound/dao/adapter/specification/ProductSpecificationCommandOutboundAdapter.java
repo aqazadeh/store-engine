@@ -30,7 +30,7 @@ public class ProductSpecificationCommandOutboundAdapter implements ProductSpecif
                 .set(record)
                 .execute();
 
-        var specId = aggregate.getRootID().value();
+        var specId = aggregate.getRootID().value();// FIXME optimize add assignment new field deleted new and unchanged and filter it delete or update
 
         dsl.deleteFrom(PRODUCT_SPECIFICATION_CATEGORY_ASSIGNMENT)
                 .where(PRODUCT_SPECIFICATION_CATEGORY_ASSIGNMENT.SPECIFICATION_ID.eq(specId))

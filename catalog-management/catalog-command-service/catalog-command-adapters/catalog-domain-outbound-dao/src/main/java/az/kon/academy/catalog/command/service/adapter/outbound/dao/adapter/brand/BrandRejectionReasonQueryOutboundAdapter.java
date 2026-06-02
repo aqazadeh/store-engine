@@ -43,10 +43,10 @@ public class BrandRejectionReasonQueryOutboundAdapter implements BrandRejectionR
     @Override
     public boolean existsByBrandIdAndNotSolved(BrandId brandId) {
         return dsl.fetchExists(
-                dsl.selectFrom(BRAND_REJECTION_REASON)
-                        .where(BRAND_REJECTION_REASON.BRAND_ID.eq(brandId.value())
-                                .and(BRAND_REJECTION_REASON.SOLVED.eq(Boolean.FALSE))
-                                .and(BRAND_REJECTION_REASON.ROW_STATUS.eq(RowStatusType.ACTIVE)))
+                BRAND_REJECTION_REASON,
+                BRAND_REJECTION_REASON.BRAND_ID.eq(brandId.value())
+                        .and(BRAND_REJECTION_REASON.SOLVED.eq(Boolean.FALSE))
+                        .and(BRAND_REJECTION_REASON.ROW_STATUS.eq(RowStatusType.ACTIVE))
         );
     }
 }

@@ -50,7 +50,7 @@ public final class ProductDomainServiceImpl implements ProductDomainService {
     @Override
     public ProductRoot assignSpecification(SeDomainContext context, ProductAssignSpecificationCommand command) {
         var specificationQueryPort = context.getQueryPort(ProductSpecificationQueryOutboundPort.class);
-        specificationQueryPort.fetchByIdAndRowStatusActive(command.getSpecificationId());
+        specificationQueryPort.fetchById(command.getSpecificationId());
         var productQueryPort = context.getQueryPort(ProductQueryOutboundPort.class);
         var product = productQueryPort.fetchByIdAndRowStatusActive(command.getProductId());
         return product.assignSpecification(command);

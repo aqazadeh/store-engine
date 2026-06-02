@@ -27,19 +27,28 @@ public class ProductCategoryQueryOutboundAdapter implements ProductCategoryQuery
     }
 
     @Override
-    public Optional<ProductCategoryRoot> findById(ProductCategoryId id) {
+    public Optional<ProductCategoryRoot> findById(ProductCategoryId productCategoryId) {
         return dsl.selectFrom(PRODUCT_CATEGORY)
-                .where(PRODUCT_CATEGORY.ID.eq(id.value())
+                .where(PRODUCT_CATEGORY.ID.eq(productCategoryId.value())
                         .and(PRODUCT_CATEGORY.ROW_STATUS.eq(RowStatusType.ACTIVE)))
                 .fetchOptional()
                 .map(mapper::toDomain);
     }
 
     @Override
-    public ProductCategoryRoot fetchById(ProductCategoryId id) {
-        return this.findById(id)
+    public ProductCategoryRoot fetchById(ProductCategoryId productCategoryId) {
+        return this.findById(productCategoryId)
                 .orElseThrow(() -> new ProductCategoryEntityNotFoundException(
-                        ProductCategoryDomainErrorCodes.ENTITY_NOT_FOUND, List.of(id.value().toString()))
+                        ProductCategoryDomainErrorCodes.ENTITY_NOT_FOUND, List.of(productCategoryId.value().toString()))
+                );
+    }
+
+    @Override
+    public Boolean exitsByCategoryId(ProductCategoryId productCategoryId) {
+        return dsl.fetchExists(
+                PRODUCT_CATEGORY,
+                PRODUCT_CATEGORY.ID.eq(productCategoryId.value())
+                        .and(PRODUCT_CATEGORY.ROW_STATUS.eq(RowStatusType.ACTIVE))
         );
     }
 }

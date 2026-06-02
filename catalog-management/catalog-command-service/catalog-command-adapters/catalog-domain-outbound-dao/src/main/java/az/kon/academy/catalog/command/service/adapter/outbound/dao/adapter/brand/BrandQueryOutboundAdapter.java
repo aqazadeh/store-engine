@@ -87,9 +87,9 @@ public class BrandQueryOutboundAdapter implements BrandQueryOutboundPort {
     @Override
     public Boolean existsByName(final BrandName name) {
         return dsl.fetchExists(
-                dsl.selectFrom(BRAND)
-                        .where(BRAND.NAME.eq(name.value())
-                                .and(BRAND.ROW_STATUS.eq(RowStatusType.ACTIVE)))
+                BRAND,
+                BRAND.NAME.eq(name.value())
+                        .and(BRAND.ROW_STATUS.eq(RowStatusType.ACTIVE))
         );
     }
 }

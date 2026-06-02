@@ -11,7 +11,7 @@ import az.kon.academy.catalog.command.dal.tables.records.ProductSpecificationRec
 import az.kon.academy.catalog.command.service.domain.core.aggregate.management.ProductSpecificationRoot;
 import az.kon.academy.catalog.command.service.domain.core.vo.management.category.ProductCategoryId;
 import az.kon.academy.catalog.command.service.domain.core.vo.management.specification.ProductSpecificationId;
-import az.kon.academy.catalog.command.service.domain.core.vo.management.specification.SpecificationCategoryAssignment;
+import az.kon.academy.catalog.command.service.domain.core.vo.management.specification.ProductSpecificationCategoryAssignment;
 import az.kon.academy.catalog.command.service.domain.core.vo.management.specification.SpecificationDescription;
 import az.kon.academy.catalog.command.service.domain.core.vo.management.specification.SpecificationName;
 import org.springframework.stereotype.Component;
@@ -38,15 +38,15 @@ public class ProductSpecificationMapper {
     }
 
     public ProductSpecificationCategoryAssignmentRecord toCategoryAssignmentRecord(
-            UUID specificationId, SpecificationCategoryAssignment assignment) {
+            UUID specificationId, ProductSpecificationCategoryAssignment assignment) {
         return new ProductSpecificationCategoryAssignmentRecord()
                 .setSpecificationId(specificationId)
                 .setCategoryId(assignment.getCategoryId().value())
                 .setIsRequired(assignment.isRequired());
     }
 
-    public SpecificationCategoryAssignment toAssignment(ProductSpecificationCategoryAssignmentRecord r) {
-        return SpecificationCategoryAssignment.initialize(
+    public ProductSpecificationCategoryAssignment toAssignment(ProductSpecificationCategoryAssignmentRecord r) {
+        return ProductSpecificationCategoryAssignment.initialize(
                 ProductCategoryId.from(r.getCategoryId()),
                 r.getIsRequired()
         );
@@ -55,7 +55,7 @@ public class ProductSpecificationMapper {
     public ProductSpecificationRoot toDomain(
             ProductSpecificationRecord r,
             List<ProductSpecificationCategoryAssignmentRecord> categories) {
-        Set<SpecificationCategoryAssignment> assignments = categories.stream()
+        Set<ProductSpecificationCategoryAssignment> assignments = categories.stream()
                 .map(this::toAssignment)
                 .collect(Collectors.toSet());
 

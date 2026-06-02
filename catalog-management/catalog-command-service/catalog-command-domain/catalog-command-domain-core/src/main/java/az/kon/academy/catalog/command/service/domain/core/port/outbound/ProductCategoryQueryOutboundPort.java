@@ -8,7 +8,9 @@ import java.util.Optional;
 
 public interface ProductCategoryQueryOutboundPort extends BaseQueryPort {
 
-    Optional<ProductCategoryRoot> findById(ProductCategoryId id);
+    Optional<ProductCategoryRoot> findById(ProductCategoryId productCategoryId);
 
-    ProductCategoryRoot fetchById(ProductCategoryId id);
+    ProductCategoryRoot fetchById(ProductCategoryId productCategoryId);
+
+    Boolean exitsByCategoryId(ProductCategoryId productCategoryId);
 }

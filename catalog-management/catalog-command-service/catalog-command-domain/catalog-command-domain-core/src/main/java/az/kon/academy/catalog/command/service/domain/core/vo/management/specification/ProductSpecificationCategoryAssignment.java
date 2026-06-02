@@ -4,16 +4,16 @@ import az.kon.academy.catalog.command.service.domain.core.vo.management.category
 import lombok.Getter;
 
 @Getter
-public final class SpecificationCategoryAssignment {
+public final class ProductSpecificationCategoryAssignment {
     private final ProductCategoryId categoryId;
     private final boolean isRequired;
 
-    private SpecificationCategoryAssignment(ProductCategoryId categoryId, boolean isRequired) {
+    private ProductSpecificationCategoryAssignment(ProductCategoryId categoryId, boolean isRequired) {
         this.categoryId = categoryId;
         this.isRequired = isRequired;
     }
 
-    public static SpecificationCategoryAssignment initialize(ProductCategoryId categoryId, boolean isRequired) {
-        return new SpecificationCategoryAssignment(categoryId, isRequired);
+    public static ProductSpecificationCategoryAssignment initialize(ProductCategoryId categoryId, boolean isRequired) {
+        return new ProductSpecificationCategoryAssignment(categoryId, isRequired);
     }
 }

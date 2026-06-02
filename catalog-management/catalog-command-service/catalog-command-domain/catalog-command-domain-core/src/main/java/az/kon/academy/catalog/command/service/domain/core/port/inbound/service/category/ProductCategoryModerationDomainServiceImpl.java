@@ -6,6 +6,7 @@ import az.kon.academy.catalog.command.service.domain.core.exception.category.Pro
 import az.kon.academy.catalog.command.service.domain.core.exception.category.ProductCategoryDomainException;
 import az.kon.academy.catalog.command.service.domain.core.port.outbound.ProductCategoryQueryOutboundPort;
 import az.kon.academy.catalog.command.service.domain.core.port.outbound.ProductQueryOutboundPort;
+import az.kon.academy.catalog.command.service.domain.core.port.outbound.ProductSpecificationQueryOutboundPort;
 import az.kon.academy.domain.core.SeDomainContext;
 
 import java.util.List;
@@ -65,6 +66,15 @@ public final class ProductCategoryModerationDomainServiceImpl implements Product
         if (existsProduct) {
             throw new ProductCategoryDomainException(
                     ProductCategoryDomainErrorCodes.HAS_ACTIVE_PRODUCT,
+                    List.of(command.getProductCategoryId().toString())
+            );
+        }
+
+        final var productSpecificationQueryPort = context.getQueryPort(ProductSpecificationQueryOutboundPort.class);
+        final var existsSpecificationAssignment = productSpecificationQueryPort.existsAssignmentByCategoryId(command.getProductCategoryId());
+        if(existsSpecificationAssignment) {
+            throw  new ProductCategoryDomainException(
+                    ProductCategoryDomainErrorCodes.HAS_ACTIVE_SPECIFICATION_ASSIGNMENT,
                     List.of(command.getProductCategoryId().toString())
             );
         }

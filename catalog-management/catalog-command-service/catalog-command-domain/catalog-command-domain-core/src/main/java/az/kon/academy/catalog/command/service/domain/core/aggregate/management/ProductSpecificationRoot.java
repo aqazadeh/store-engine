@@ -2,11 +2,13 @@ package az.kon.academy.catalog.command.service.domain.core.aggregate.management;
 
 import az.kon.academy.aggragate.AggregateRoot;
 import az.kon.academy.aggragate.valueobject.SeDateTime;
+import az.kon.academy.catalog.command.service.domain.core.command.specification.ProductSpecificationAssignCategoryCommand;
 import az.kon.academy.catalog.command.service.domain.core.command.specification.ProductSpecificationChangeInformationCommand;
 import az.kon.academy.catalog.command.service.domain.core.command.specification.ProductSpecificationCreateCommand;
 import az.kon.academy.catalog.command.service.domain.core.command.specification.ProductSpecificationRemoveCategoryAssignmentCommand;
+import az.kon.academy.catalog.command.service.domain.core.vo.management.category.ProductCategoryId;
 import az.kon.academy.catalog.command.service.domain.core.vo.management.specification.ProductSpecificationId;
-import az.kon.academy.catalog.command.service.domain.core.vo.management.specification.SpecificationCategoryAssignment;
+import az.kon.academy.catalog.command.service.domain.core.vo.management.specification.ProductSpecificationCategoryAssignment;
 import az.kon.academy.catalog.command.service.domain.core.vo.management.specification.SpecificationDescription;
 import az.kon.academy.catalog.command.service.domain.core.vo.management.specification.SpecificationName;
 import az.kon.academy.catalog.event.management.specification.*;
@@ -15,13 +17,14 @@ import lombok.experimental.SuperBuilder;
 
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 
 @SuperBuilder(toBuilder = true)
 public class ProductSpecificationRoot extends AggregateRoot<ProductSpecificationRoot, ProductSpecificationId> {
     @Getter private final SpecificationName name;
     @Getter private final SpecificationDescription description;
-    @Getter private final Set<SpecificationCategoryAssignment> categories;
+    @Getter private final Set<ProductSpecificationCategoryAssignment> categories;
 
     public static ProductSpecificationRoot initialize(ProductSpecificationCreateCommand command) {
         var specification = ProductSpecificationRoot.builder()
@@ -43,10 +46,16 @@ public class ProductSpecificationRoot extends AggregateRoot<ProductSpecification
         specification.addEvent(event);
         return specification;
     }
-    //FIXME
-    public ProductSpecificationRoot assignCategory(SpecificationCategoryAssignment assignment) {
-        Set<SpecificationCategoryAssignment> changed = new HashSet<>(this.categories);
-        changed.removeIf(a -> assignment.getCategoryId().equals(a.getCategoryId()));
+
+    public ProductSpecificationRoot assignCategory(ProductSpecificationAssignCategoryCommand command) {
+
+        if(this.findAssignment(command.getCategoryId()).isEmpty()) return this;
+
+        var changed = new HashSet<>(this.categories);
+        var assignment = ProductSpecificationCategoryAssignment.initialize(
+                command.getCategoryId(),
+                command.isRequired()
+        );
         changed.add(assignment);
 
         var specification = this.toBuilder()
@@ -64,10 +73,13 @@ public class ProductSpecificationRoot extends AggregateRoot<ProductSpecification
         specification.addEvent(event);
         return specification;
     }
-    //FIXME
+
     public ProductSpecificationRoot removeCategoryAssignment(ProductSpecificationRemoveCategoryAssignmentCommand command) {
-        Set<SpecificationCategoryAssignment> changed = new HashSet<>(this.categories);
-        changed.removeIf(a -> command.getCategoryId().equals(a.getCategoryId()));
+        var assignment = this.findAssignment(command.getCategoryId());
+        if(assignment.isEmpty()) return this;
+
+        var changed = new HashSet<>(this.categories);
+        changed.remove(assignment.get());
 
         var specification = this.toBuilder()
                 .categories(Collections.unmodifiableSet(changed))
@@ -112,5 +124,11 @@ public class ProductSpecificationRoot extends AggregateRoot<ProductSpecification
 
         specification.addEvent(event);
         return specification;
+    }
+
+    private Optional<ProductSpecificationCategoryAssignment> findAssignment(ProductCategoryId productCategoryId) {
+        return this.categories.stream()
+                .filter(assignment -> assignment.getCategoryId().equals(productCategoryId))
+                .findFirst();
     }
 }
