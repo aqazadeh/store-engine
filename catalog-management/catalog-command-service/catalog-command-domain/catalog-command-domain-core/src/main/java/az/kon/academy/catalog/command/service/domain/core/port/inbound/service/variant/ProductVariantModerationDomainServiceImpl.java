@@ -7,7 +7,7 @@ import az.kon.academy.catalog.command.service.domain.core.port.outbound.ProductV
 import az.kon.academy.catalog.command.service.domain.core.port.outbound.ProductVariantValueQueryOutboundPort;
 import az.kon.academy.domain.core.SeDomainContext;
 
-public final class VariantDomainServiceImpl implements VariantDomainService {
+public final class ProductVariantModerationDomainServiceImpl implements ProductVariantModerationDomainService {
 
     @Override
     public VariantKeyRoot createKey(SeDomainContext context, VariantKeyCreateCommand command) {
@@ -17,15 +17,15 @@ public final class VariantDomainServiceImpl implements VariantDomainService {
     @Override
     public VariantKeyRoot changeKeyName(SeDomainContext context, VariantKeyChangeNameCommand command) {
         var variantKeyQueryPort = context.getQueryPort(ProductVariantKeyQueryOutboundPort.class);
-        var key = variantKeyQueryPort.fetchById(command.getVariantKeyId());
-        return key.changeName(command);
+        var variantKey = variantKeyQueryPort.fetchById(command.getVariantKeyId());
+        return variantKey.changeName(command);
     }
 
     @Override
     public VariantKeyRoot changeKeyDescription(SeDomainContext context, VariantKeyChangeDescriptionCommand command) {
         var variantKeyQueryPort = context.getQueryPort(ProductVariantKeyQueryOutboundPort.class);
-        var key = variantKeyQueryPort.fetchById(command.getVariantKeyId());
-        return key.changeDescription(command);
+        var variantKey = variantKeyQueryPort.fetchById(command.getVariantKeyId());
+        return variantKey.changeDescription(command);
     }
 
     @Override
@@ -38,7 +38,7 @@ public final class VariantDomainServiceImpl implements VariantDomainService {
     @Override
     public VariantValueRoot changeValueName(SeDomainContext context, VariantValueChangeNameCommand command) {
         var variantValueQueryPort = context.getQueryPort(ProductVariantValueQueryOutboundPort.class);
-        var value = variantValueQueryPort.fetchById(command.getVariantValueId());
-        return value.changeName(command);
+        var variantValue = variantValueQueryPort.fetchById(command.getVariantValueId());
+        return variantValue.changeName(command);
     }
 }

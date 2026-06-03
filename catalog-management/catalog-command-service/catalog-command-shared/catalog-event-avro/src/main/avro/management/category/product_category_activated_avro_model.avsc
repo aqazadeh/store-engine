@@ -1,0 +1,24 @@
+{
+  "type" : "record",
+  "name" : "ProductCategoryActivatedAvroModel",
+  "namespace" : "az.kon.academy.catalog.avro.model.management.category",
+  "fields" : [ {
+    "name" : "aggregateId",
+    "type" : "string"
+  }, {
+    "name" : "eventId",
+    "type" : {
+      "type" : "string",
+      "logicalType" : "uuid"
+    }
+  }, {
+    "name" : "timestamp",
+    "type" : {
+      "type" : "long",
+      "logicalType" : "timestamp-millis"
+    }
+  }, {
+    "name" : "version",
+    "type" : "int"
+  } ]
+}

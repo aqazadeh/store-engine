@@ -5,7 +5,7 @@ import az.kon.academy.application.core.handler.AbstractCommandHandler;
 import az.kon.academy.catalog.command.service.application.service.constant.SecurityPermissions;
 import az.kon.academy.catalog.command.service.application.service.port.outbound.ProductPriceCommandOutboundPort;
 import az.kon.academy.catalog.command.service.domain.core.command.product.ProductPriceUpdateCommand;
-import az.kon.academy.catalog.command.service.domain.core.port.inbound.service.product.ProductDomainService;
+import az.kon.academy.catalog.command.service.domain.core.port.inbound.service.product.price.ProductPriceManagementDomainService;
 import az.kon.academy.domain.core.SeDomainContext;
 import az.kon.academy.event.handler.DomainEventPublisher;
 
@@ -16,19 +16,19 @@ public class ProductPriceUpdateCommandHandler implements AbstractCommandHandler<
 
     private final SeDomainContext domainContext;
     private final DomainEventPublisher domainEventPublisher;
-    private final ProductDomainService productDomainService;
+    private final ProductPriceManagementDomainService productPriceManagementDomainService;
 
     public ProductPriceUpdateCommandHandler(SeDomainContext domainContext,
                                             DomainEventPublisher domainEventPublisher,
-                                            ProductDomainService productDomainService) {
+                                            ProductPriceManagementDomainService productPriceManagementDomainService) {
         this.domainContext = domainContext;
         this.domainEventPublisher = domainEventPublisher;
-        this.productDomainService = productDomainService;
+        this.productPriceManagementDomainService = productPriceManagementDomainService;
     }
 
     @Override
     public Void handle(ProductPriceUpdateCommand command) {
-        var aggregate = this.productDomainService.updatePrice(domainContext, command);
+        var aggregate = this.productPriceManagementDomainService.updatePrice(domainContext, command);
         var port = this.domainContext.getCommandPort(ProductPriceCommandOutboundPort.class);
         port.save(aggregate);
         this.domainEventPublisher.publish(aggregate.getUncommittedEvents());

@@ -1,4 +1,4 @@
-package az.kon.academy.catalog.command.service.domain.core.port.inbound.service.product;
+package az.kon.academy.catalog.command.service.domain.core.port.inbound.service.product.general;
 
 import az.kon.academy.catalog.command.service.domain.core.aggregate.ProductPriceRoot;
 import az.kon.academy.catalog.command.service.domain.core.aggregate.ProductRoot;
@@ -8,7 +8,7 @@ import az.kon.academy.catalog.command.service.domain.core.command.product.*;
 import az.kon.academy.catalog.command.service.domain.core.port.outbound.*;
 import az.kon.academy.domain.core.SeDomainContext;
 
-public final class ProductDomainServiceImpl implements ProductDomainService {
+public final class ProductManagementDomainServiceImpl implements ProductManagementDomainService {
 
     @Override
     public ProductRoot createProduct(SeDomainContext context, ProductCreateCommand command) {
@@ -78,38 +78,16 @@ public final class ProductDomainServiceImpl implements ProductDomainService {
     }
 
     @Override
-    public ProductRejectionReasonRoot createRejectionReason(SeDomainContext context, ProductCreateRejectionReasonCommand command) {
-        return ProductRejectionReasonRoot.initialize(command);
+    public ProductRoot sentToApproval(SeDomainContext context, ProductSentToApprovalCommand command) {
+        var productQueryPort = context.getQueryPort(ProductQueryOutboundPort.class);
+        var product = productQueryPort.fetchByIdAndRowStatusActive(command.getProductId());
+        return product.sentToApproval();
     }
 
     @Override
-    public ProductPriceRoot createPrice(SeDomainContext context, ProductPriceCreateCommand command) {
-        return ProductPriceRoot.initialize(command);
-    }
-
-    @Override
-    public ProductPriceRoot updatePrice(SeDomainContext context, ProductPriceUpdateCommand command) {
-        var productPriceQueryPort = context.getQueryPort(ProductPriceQueryOutboundPort.class);
-        var price = productPriceQueryPort.fetchById(command.getPriceId());
-        return price.update(command);
-    }
-
-    @Override
-    public ProductStockRoot createStock(SeDomainContext context, ProductStockCreateCommand command) {
-        return ProductStockRoot.initialize(command);
-    }
-
-    @Override
-    public ProductStockRoot increaseStock(SeDomainContext context, ProductStockIncreaseCommand command) {
-        var productStockQueryPort = context.getQueryPort(ProductStockQueryOutboundPort.class);
-        var stock = productStockQueryPort.fetchById(command.getStockId());
-        return stock.increase(command);
-    }
-
-    @Override
-    public ProductStockRoot decreaseStock(SeDomainContext context, ProductStockDecreaseCommand command) {
-        var productStockQueryPort = context.getQueryPort(ProductStockQueryOutboundPort.class);
-        var stock = productStockQueryPort.fetchById(command.getStockId());
-        return stock.decrease(command);
+    public ProductRoot moveToDraft(SeDomainContext context, ProductMoveToDraftCommand command) {
+        var productQueryPort = context.getQueryPort(ProductQueryOutboundPort.class);
+        var product = productQueryPort.fetchByIdAndRowStatusActive(command.getProductId());
+        return product.moveToDraft();
     }
 }

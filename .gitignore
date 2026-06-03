@@ -45,3 +45,6 @@ build/
 docs
 avro-generator/*
 !.gitkeep
+.claude
+.agents
+skills-lock.json

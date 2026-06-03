@@ -5,7 +5,8 @@ import az.kon.academy.application.core.handler.AbstractCommandHandler;
 import az.kon.academy.catalog.command.service.application.service.constant.SecurityPermissions;
 import az.kon.academy.catalog.command.service.application.service.port.outbound.ProductStockCommandOutboundPort;
 import az.kon.academy.catalog.command.service.domain.core.command.product.ProductStockIncreaseCommand;
-import az.kon.academy.catalog.command.service.domain.core.port.inbound.service.product.ProductDomainService;
+import az.kon.academy.catalog.command.service.domain.core.port.inbound.service.product.general.ProductManagementDomainService;
+import az.kon.academy.catalog.command.service.domain.core.port.inbound.service.product.stock.ProductStockModerationDomainService;
 import az.kon.academy.domain.core.SeDomainContext;
 import az.kon.academy.event.handler.DomainEventPublisher;
 
@@ -16,19 +17,19 @@ public class ProductStockIncreaseCommandHandler implements AbstractCommandHandle
 
     private final SeDomainContext domainContext;
     private final DomainEventPublisher domainEventPublisher;
-    private final ProductDomainService productDomainService;
+    private final ProductStockModerationDomainService productStockModerationDomainService;
 
     public ProductStockIncreaseCommandHandler(SeDomainContext domainContext,
                                               DomainEventPublisher domainEventPublisher,
-                                              ProductDomainService productDomainService) {
+                                              ProductStockModerationDomainService productStockModerationDomainService) {
         this.domainContext = domainContext;
         this.domainEventPublisher = domainEventPublisher;
-        this.productDomainService = productDomainService;
+        this.productStockModerationDomainService = productStockModerationDomainService;
     }
 
     @Override
     public Void handle(ProductStockIncreaseCommand command) {
-        var aggregate = this.productDomainService.increaseStock(domainContext, command);
+        var aggregate = this.productStockModerationDomainService.increaseStock(domainContext, command);
         var port = this.domainContext.getCommandPort(ProductStockCommandOutboundPort.class);
         port.save(aggregate);
         this.domainEventPublisher.publish(aggregate.getUncommittedEvents());

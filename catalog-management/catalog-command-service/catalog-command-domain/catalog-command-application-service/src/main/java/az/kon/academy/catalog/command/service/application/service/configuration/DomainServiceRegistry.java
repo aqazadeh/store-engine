@@ -10,12 +10,24 @@ import az.kon.academy.catalog.command.service.domain.core.port.inbound.service.b
 import az.kon.academy.catalog.command.service.domain.core.port.inbound.service.brandrejection.BrandRejectionModerationDomainServiceImpl;
 import az.kon.academy.catalog.command.service.domain.core.port.inbound.service.category.ProductCategoryModerationDomainService;
 import az.kon.academy.catalog.command.service.domain.core.port.inbound.service.category.ProductCategoryModerationDomainServiceImpl;
-import az.kon.academy.catalog.command.service.domain.core.port.inbound.service.product.ProductDomainService;
-import az.kon.academy.catalog.command.service.domain.core.port.inbound.service.product.ProductDomainServiceImpl;
+import az.kon.academy.catalog.command.service.domain.core.port.inbound.service.product.general.ProductManagementDomainService;
+import az.kon.academy.catalog.command.service.domain.core.port.inbound.service.product.general.ProductManagementDomainServiceImpl;
+import az.kon.academy.catalog.command.service.domain.core.port.inbound.service.product.price.ProductPriceManagementDomainService;
+import az.kon.academy.catalog.command.service.domain.core.port.inbound.service.product.price.ProductPriceManagementDomainServiceImpl;
+import az.kon.academy.catalog.command.service.domain.core.port.inbound.service.product.price.ProductPriceModerationDomainService;
+import az.kon.academy.catalog.command.service.domain.core.port.inbound.service.product.price.ProductPriceModerationDomainServiceImpl;
+import az.kon.academy.catalog.command.service.domain.core.port.inbound.service.product.rejection.ProductRejectionManagementDomainService;
+import az.kon.academy.catalog.command.service.domain.core.port.inbound.service.product.rejection.ProductRejectionManagementDomainServiceImpl;
+import az.kon.academy.catalog.command.service.domain.core.port.inbound.service.product.rejection.ProductRejectionModerationDomainService;
+import az.kon.academy.catalog.command.service.domain.core.port.inbound.service.product.rejection.ProductRejectionModerationDomainServiceImpl;
+import az.kon.academy.catalog.command.service.domain.core.port.inbound.service.product.stock.ProductStockManagementDomainService;
+import az.kon.academy.catalog.command.service.domain.core.port.inbound.service.product.stock.ProductStockManagementDomainServiceImpl;
+import az.kon.academy.catalog.command.service.domain.core.port.inbound.service.product.stock.ProductStockModerationDomainService;
+import az.kon.academy.catalog.command.service.domain.core.port.inbound.service.product.stock.ProductStockModerationDomainServiceImpl;
 import az.kon.academy.catalog.command.service.domain.core.port.inbound.service.specification.ProductSpecificationModerationDomainService;
 import az.kon.academy.catalog.command.service.domain.core.port.inbound.service.specification.ProductSpecificationModerationDomainServiceImpl;
-import az.kon.academy.catalog.command.service.domain.core.port.inbound.service.variant.VariantDomainService;
-import az.kon.academy.catalog.command.service.domain.core.port.inbound.service.variant.VariantDomainServiceImpl;
+import az.kon.academy.catalog.command.service.domain.core.port.inbound.service.variant.ProductVariantModerationDomainService;
+import az.kon.academy.catalog.command.service.domain.core.port.inbound.service.variant.ProductVariantModerationDomainServiceImpl;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -53,13 +65,43 @@ public class DomainServiceRegistry {
     }
 
     @Bean
-    public ProductDomainService productDomainService() {
-        return new ProductDomainServiceImpl();
+    public ProductManagementDomainService productDomainService() {
+        return new ProductManagementDomainServiceImpl();
     }
 
     @Bean
-    public VariantDomainService variantDomainService() {
-        return new VariantDomainServiceImpl();
+    public ProductVariantModerationDomainService variantDomainService() {
+        return new ProductVariantModerationDomainServiceImpl();
+    }
+
+    @Bean
+    public ProductStockModerationDomainService productStockModerationDomainService() {
+        return new ProductStockModerationDomainServiceImpl();
+    }
+
+    @Bean
+    public ProductStockManagementDomainService productStockManagementDomainService() {
+        return new ProductStockManagementDomainServiceImpl();
+    }
+
+    @Bean
+    public ProductPriceModerationDomainService productPriceModerationDomainService() {
+        return new ProductPriceModerationDomainServiceImpl();
+    }
+
+    @Bean
+    public ProductPriceManagementDomainService productPriceManagementDomainService() {
+        return new ProductPriceManagementDomainServiceImpl();
+    }
+
+    @Bean
+    public ProductRejectionModerationDomainService productRejectionModerationDomainService() {
+        return new ProductRejectionModerationDomainServiceImpl();
+    }
+
+    @Bean
+    public ProductRejectionManagementDomainService productRejectionManagementDomainService() {
+        return new ProductRejectionManagementDomainServiceImpl();
     }
 
 }

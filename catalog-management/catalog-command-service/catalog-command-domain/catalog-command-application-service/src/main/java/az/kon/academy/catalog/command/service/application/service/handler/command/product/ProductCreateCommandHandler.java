@@ -5,7 +5,7 @@ import az.kon.academy.application.core.handler.AbstractCommandHandler;
 import az.kon.academy.catalog.command.service.application.service.constant.SecurityPermissions;
 import az.kon.academy.catalog.command.service.application.service.port.outbound.ProductCommandOutboundPort;
 import az.kon.academy.catalog.command.service.domain.core.command.product.ProductCreateCommand;
-import az.kon.academy.catalog.command.service.domain.core.port.inbound.service.product.ProductDomainService;
+import az.kon.academy.catalog.command.service.domain.core.port.inbound.service.product.general.ProductManagementDomainService;
 import az.kon.academy.domain.core.SeDomainContext;
 import az.kon.academy.event.handler.DomainEventPublisher;
 
@@ -16,19 +16,19 @@ public class ProductCreateCommandHandler implements AbstractCommandHandler<Produ
 
     private final SeDomainContext domainContext;
     private final DomainEventPublisher domainEventPublisher;
-    private final ProductDomainService productDomainService;
+    private final ProductManagementDomainService productManagementDomainService;
 
     public ProductCreateCommandHandler(SeDomainContext domainContext,
                                        DomainEventPublisher domainEventPublisher,
-                                       ProductDomainService productDomainService) {
+                                       ProductManagementDomainService productManagementDomainService) {
         this.domainContext = domainContext;
         this.domainEventPublisher = domainEventPublisher;
-        this.productDomainService = productDomainService;
+        this.productManagementDomainService = productManagementDomainService;
     }
 
     @Override
     public Void handle(ProductCreateCommand command) {
-        var aggregate = this.productDomainService.createProduct(domainContext, command);
+        var aggregate = this.productManagementDomainService.createProduct(domainContext, command);
         var port = this.domainContext.getCommandPort(ProductCommandOutboundPort.class);
         port.save(aggregate);
         this.domainEventPublisher.publish(aggregate.getUncommittedEvents());

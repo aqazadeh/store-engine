@@ -5,10 +5,16 @@ import az.kon.academy.catalog.command.service.domain.core.aggregate.management.V
 import az.kon.academy.catalog.command.service.domain.core.command.variant.*;
 import az.kon.academy.domain.core.SeDomainContext;
 
-public interface VariantDomainService {
+public sealed interface ProductVariantModerationDomainService extends ProductVariantDomainService permits
+        ProductVariantModerationDomainServiceImpl {
+
     VariantKeyRoot createKey(SeDomainContext context, VariantKeyCreateCommand command);
+
     VariantKeyRoot changeKeyName(SeDomainContext context, VariantKeyChangeNameCommand command);
+
     VariantKeyRoot changeKeyDescription(SeDomainContext context, VariantKeyChangeDescriptionCommand command);
+
     VariantValueRoot createValue(SeDomainContext context, VariantValueCreateCommand command);
+
     VariantValueRoot changeValueName(SeDomainContext context, VariantValueChangeNameCommand command);
 }

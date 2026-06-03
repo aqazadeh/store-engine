@@ -20,7 +20,7 @@
             <column name="version" type="BIGINT" defaultValueNumeric="1">
                 <constraints nullable="false"/>
             </column>
-            <column name="process_status" type="process_status">
+            <column name="process_status" type="process_status_type">
                 <constraints nullable="false"/>
             </column>
             <column name="row_status" type="row_status_type">
