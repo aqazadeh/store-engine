@@ -1,11 +1,11 @@
 package az.kon.academy.catalog.command.service.domain.core.port.inbound.service.product.general;
 
-import az.kon.academy.catalog.command.service.domain.core.aggregate.ProductPriceRoot;
 import az.kon.academy.catalog.command.service.domain.core.aggregate.ProductRoot;
-import az.kon.academy.catalog.command.service.domain.core.aggregate.ProductStockRoot;
-import az.kon.academy.catalog.command.service.domain.core.aggregate.management.rejection.ProductRejectionReasonRoot;
 import az.kon.academy.catalog.command.service.domain.core.command.product.*;
-import az.kon.academy.catalog.command.service.domain.core.port.outbound.*;
+import az.kon.academy.catalog.command.service.domain.core.port.outbound.BrandQueryOutboundPort;
+import az.kon.academy.catalog.command.service.domain.core.port.outbound.ProductCategoryQueryOutboundPort;
+import az.kon.academy.catalog.command.service.domain.core.port.outbound.ProductQueryOutboundPort;
+import az.kon.academy.catalog.command.service.domain.core.port.outbound.ProductSpecificationQueryOutboundPort;
 import az.kon.academy.domain.core.SeDomainContext;
 
 public final class ProductManagementDomainServiceImpl implements ProductManagementDomainService {

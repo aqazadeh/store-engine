@@ -131,6 +131,27 @@ public class ProductRoot extends AggregateRoot<ProductRoot, ProductId> {
         return product;
     }
 
+    public ProductRoot moveToInReview() {
+        if (!this.status.isSentToApproval()) {
+            throw new ProductDomainException(
+                    ProductDomainErrorCodes.STATUS_INVALID_FOR_MOVE_TO_IN_REVIEW,
+                    List.of(this.getRootID().toString())
+            );
+        }
+
+        var product = this.toBuilder()
+                .status(ProductStatus.IN_REVIEW)
+                .modificationTs(SeDateTime.now())
+                .build();
+
+        product.addEvent(ProductMovedToInReviewEvent.of(
+                product.getRootID().value().toString(),
+                product.getModificationTs().toOffsetDateTime(),
+                product.getStatus().name()
+        ));
+        return product;
+    }
+
     public ProductRoot archive() {
         if (!this.status.isApproved()) {
             throw new ProductDomainException(
