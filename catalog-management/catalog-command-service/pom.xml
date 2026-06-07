@@ -16,9 +16,9 @@
         <module>catalog-command-domain/catalog-command-domain-core</module>
         <module>catalog-command-domain/catalog-command-application-service</module>
         <module>catalog-command-adapters/catalog-command-inbound-rest</module>
-        <module>catalog-command-adapters/catalog-domain-outbound-dao</module>
+        <module>catalog-command-adapters/catalog-command-outbound-dao</module>
         <module>catalog-command-dal</module>
-        <module>catalog-command-adapters/catalog-command-outbound-rpc</module>
+        <module>catalog-command-adapters/catalog-command-outbound-grpc</module>
     </modules>
 
     <dependencyManagement>
@@ -46,12 +46,12 @@
             </dependency>
             <dependency>
                 <groupId>az.kon.academy.catalog</groupId>
-                <artifactId>catalog-domain-outbound-dao</artifactId>
+                <artifactId>catalog-command-outbound-dao</artifactId>
                 <version>1.0.0-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>az.kon.academy.catalog</groupId>
-                <artifactId>catalog-command-outbound-rpc</artifactId>
+                <artifactId>catalog-command-outbound-grpc</artifactId>
                 <version>1.0.0-SNAPSHOT</version>
             </dependency>
 

@@ -32,11 +32,11 @@
         </dependency>
         <dependency>
             <groupId>az.kon.academy.catalog</groupId>
-            <artifactId>catalog-domain-outbound-dao</artifactId>
+            <artifactId>catalog-command-outbound-dao</artifactId>
         </dependency>
         <dependency>
             <groupId>az.kon.academy.catalog</groupId>
-            <artifactId>catalog-command-outbound-rpc</artifactId>
+            <artifactId>catalog-command-outbound-grpc</artifactId>
         </dependency>
 
         <dependency>

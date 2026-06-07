@@ -5,8 +5,10 @@
     <file url="file://$PROJECT_DIR$/avro-generator/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/catalog-management/catalog-command-service/catalog-command-adapters/catalog-command-inbound-rest/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/catalog-management/catalog-command-service/catalog-command-adapters/catalog-command-inbound-rest/src/main/resources" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/catalog-management/catalog-command-service/catalog-command-adapters/catalog-command-outbound-rpc/src/main/java" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/catalog-management/catalog-command-service/catalog-command-adapters/catalog-command-outbound-rpc/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/catalog-management/catalog-command-service/catalog-command-adapters/catalog-command-outbound-dao/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/catalog-management/catalog-command-service/catalog-command-adapters/catalog-command-outbound-dao/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/catalog-management/catalog-command-service/catalog-command-adapters/catalog-command-outbound-grpc/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/catalog-management/catalog-command-service/catalog-command-adapters/catalog-command-outbound-grpc/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/catalog-management/catalog-command-service/catalog-command-adapters/catalog-domain-outbound-dao/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/catalog-management/catalog-command-service/catalog-command-adapters/catalog-domain-outbound-dao/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/catalog-management/catalog-command-service/catalog-command-bootstrap/src/main/java" charset="UTF-8" />
@@ -18,14 +20,26 @@
     <file url="file://$PROJECT_DIR$/catalog-management/catalog-command-service/catalog-command-domain/catalog-command-application/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/catalog-management/catalog-command-service/catalog-command-domain/catalog-command-domain-core/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/catalog-management/catalog-command-service/catalog-command-domain/catalog-command-domain-core/src/main/resources" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/catalog-management/catalog-command-service/catalog-command-shared/catalog-command-domain-vo/src/main/java" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/catalog-management/catalog-command-service/catalog-command-shared/catalog-command-domain-vo/src/main/resources" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/catalog-management/catalog-command-service/catalog-command-shared/catalog-event-avro/src/main/java" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/catalog-management/catalog-command-service/catalog-command-shared/catalog-event-avro/src/main/resources" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/catalog-management/catalog-command-service/catalog-command-shared/catalog-event/src/main/java" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/catalog-management/catalog-command-service/catalog-command-shared/catalog-event/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/catalog-management/catalog-command-service/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/catalog-management/catalog-command-service/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/catalog-management/catalog-query-service/catagory-query-adapters/catalog-query-inbound-grpc/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/catalog-management/catalog-query-service/catagory-query-adapters/catalog-query-inbound-grpc/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/catalog-management/catalog-query-service/catagory-query-adapters/catalog-query-inbound-rest/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/catalog-management/catalog-query-service/catagory-query-adapters/catalog-query-inbound-rest/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/catalog-management/catalog-query-service/catagory-query-adapters/catalog-query-outbound-dao/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/catalog-management/catalog-query-service/catagory-query-adapters/catalog-query-outbound-dao/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/catalog-management/catalog-query-service/catagory-query-adapters/catalog-query-outbound-grpc/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/catalog-management/catalog-query-service/catagory-query-adapters/catalog-query-outbound-grpc/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/catalog-management/catalog-query-service/catalog-query-bootstrap/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/catalog-management/catalog-query-service/catalog-query-bootstrap/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/catalog-management/catalog-query-service/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/catalog-management/catalog-query-service/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/catalog-management/catalog-shared/catalog-command-domain-vo/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/catalog-management/catalog-shared/catalog-command-domain-vo/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/catalog-management/catalog-shared/catalog-event-avro/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/catalog-management/catalog-shared/catalog-event-avro/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/catalog-management/catalog-shared/catalog-event/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/catalog-management/catalog-shared/catalog-event/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/catalog-management/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/catalog-management/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/example/src/main/java" charset="UTF-8" />

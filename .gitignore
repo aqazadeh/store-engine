@@ -42,9 +42,8 @@ build/
 */logs/*.log
 .idea/*
 **/.flattened-pom.xml
-docs
 avro-generator/*
 !.gitkeep
-.claude
-.agents
-skills-lock.json
+
+.opencode
+graphify-out
