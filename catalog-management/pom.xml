@@ -15,15 +15,11 @@
     <packaging>pom</packaging>
 
     <modules>
-<!--        <module>catalog-command-service</module>-->
-<!--        <module>catalog-query-service</module>-->
+        <module>catalog-command-service</module>
+        <module>catalog-query-service</module>
         <module>catalog-shared/catalog-event</module>
         <module>catalog-shared/catalog-event-avro</module>
     </modules>
-
-    <properties>
-        <library-revision>1.0.0</library-revision>
-    </properties>
 
     <dependencyManagement>
         <dependencies>
