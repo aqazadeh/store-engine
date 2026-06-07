@@ -2,21 +2,45 @@ package az.kon.academy.exception;
 
 import java.util.List;
 
-public class SeDaoException extends SeDomainException{
+public class SeDaoException extends RuntimeException{
+    private final String module;
+    private final String domain;
+    private final String code;
+    private final List<String> args;
 
     public SeDaoException(String module, String domain, String code) {
-        super(module, domain, code);
+        this(module, domain, code, List.of(), null);
     }
 
     public SeDaoException(String module, String domain, String code, Throwable cause) {
-        super(module, domain, code, cause);
+        this(module, domain, code, List.of(), cause);
     }
 
     public SeDaoException(String module, String domain, String code, List<String> args) {
-        super(module, domain, code, args);
+        this(module, domain, code, args, null);
     }
 
     public SeDaoException(String module, String domain, String code, List<String> args, Throwable cause) {
-        super(module, domain, code, args, cause);
+        super(String.format("%s.%s.%s", module, domain, code), cause);
+        this.module = module;
+        this.domain = domain;
+        this.code = code;
+        this.args = args;
+    }
+
+    public String getModule() {
+        return module;
+    }
+
+    public String getDomain() {
+        return domain;
+    }
+
+    public String getCode() {
+        return code;
+    }
+
+    public List<String> getArgs() {
+        return args;
     }
 }
