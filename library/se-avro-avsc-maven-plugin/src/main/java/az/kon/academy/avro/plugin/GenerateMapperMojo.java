@@ -10,6 +10,7 @@ import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
+import org.apache.maven.project.MavenProject;
 
 import java.io.File;
 import java.nio.file.Path;
@@ -22,11 +23,11 @@ import java.util.List;
 public class GenerateMapperMojo extends AbstractMojo {
 
     /** Directory containing the generated .avsc files to read. */
-    @Parameter(defaultValue = "${project.basedir}/src/main/avro", property = "avro.mapper.avroDirectory")
+    @Parameter(defaultValue = "${project.build.directory}/generated-sources/avsc", property = "avro.mapper.avroDirectory")
     private File avroDirectory;
 
     /** Directory where generated mapper interfaces will be written. */
-    @Parameter(defaultValue = "${project.basedir}/src/main/java", property = "avro.mapper.outputDirectory")
+    @Parameter(defaultValue = "${project.build.directory}/generated-sources/mapper", property = "avro.mapper.outputDirectory")
     private File outputDirectory;
 
     /** MapStruct component model: default, spring, cdi, jakarta. */
@@ -48,6 +49,9 @@ public class GenerateMapperMojo extends AbstractMojo {
     /** Fail the build if mapper generation encounters an error. */
     @Parameter(defaultValue = "true", property = "avro.mapper.failOnError")
     private boolean failOnError;
+
+    @Parameter(defaultValue = "${project}", readonly = true, required = true)
+    private MavenProject project;
 
     @Override
     public void execute() throws MojoExecutionException {
@@ -84,5 +88,6 @@ public class GenerateMapperMojo extends AbstractMojo {
             getLog().info("  -> " + writer.write(spec));
         }
         getLog().info("Generated " + avscFiles.size() + " mapper interface(s) into " + outputDirectory);
+        project.addCompileSourceRoot(outputDirectory.getAbsolutePath());
     }
 }

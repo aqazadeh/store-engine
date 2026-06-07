@@ -202,26 +202,6 @@
                     <artifactId>maven-surefire-report-plugin</artifactId>
                     <version>3.5.5</version>
                 </plugin>
-                <plugin>
-                    <groupId>org.apache.avro</groupId>
-                    <artifactId>avro-maven-plugin</artifactId>
-                    <executions>
-                        <execution>
-                            <phase>generate-sources</phase>
-                            <goals>
-                                <goal>schema</goal>
-                            </goals>
-                            <configuration>
-                                <createOptionalGetters>true</createOptionalGetters>
-                                <enableDecimalLogicalType>false</enableDecimalLogicalType>
-                                <fieldVisibility>PRIVATE</fieldVisibility>
-                                <optionalGettersForNullableFieldsOnly>true</optionalGettersForNullableFieldsOnly>
-                                <outputDirectory>${project.build.directory}/generated-sources/avro</outputDirectory>
-                                <sourceDirectory>${project.basedir}/src/main/avro</sourceDirectory>
-                            </configuration>
-                        </execution>
-                    </executions>
-                </plugin>
             </plugins>
         </pluginManagement>
     </build>
