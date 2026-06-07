@@ -41,7 +41,7 @@ import az.kon.academy.catalog.command.service.domain.core.command.product.Produc
 import az.kon.academy.catalog.command.service.domain.core.command.product.ProductCreateCommand;
 import az.kon.academy.catalog.command.service.domain.core.command.product.ProductCreateRejectionReasonCommand;
 import az.kon.academy.catalog.command.service.domain.core.command.product.ProductPriceCreateCommand;
-import az.kon.academy.catalog.command.service.domain.core.command.product.ProductPriceUpdateCommand;
+import az.kon.academy.catalog.command.service.domain.core.command.product.ProductPriceChangedCommand;
 import az.kon.academy.catalog.command.service.domain.core.command.product.ProductRemoveSpecificationCommand;
 import az.kon.academy.catalog.command.service.domain.core.command.product.ProductRemoveVariantCommand;
 import az.kon.academy.catalog.command.service.domain.core.command.product.ProductStockCreateCommand;
@@ -233,7 +233,7 @@ class ProductInboundAdapter implements ProductInboundPort {
 
     @Override
     public void updatePrice(ProductPriceUpdateRequest request) {
-        var command = ProductPriceUpdateCommand.builder()
+        var command = ProductPriceChangedCommand.builder()
                 .priceId(ProductPriceId.from(request.getPriceId()))
                 .minPrice(Money.of(request.getMinPrice()))
                 .maxPrice(Money.of(request.getMaxPrice()))

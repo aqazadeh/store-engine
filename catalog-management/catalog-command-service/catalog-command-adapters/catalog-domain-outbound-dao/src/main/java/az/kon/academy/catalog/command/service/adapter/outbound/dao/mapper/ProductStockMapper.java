@@ -7,7 +7,7 @@ import az.kon.academy.aggragate.valueobject.Version;
 import az.kon.academy.catalog.command.dal.enums.ProcessStatusType;
 import az.kon.academy.catalog.command.dal.enums.RowStatusType;
 import az.kon.academy.catalog.command.dal.tables.records.ProductStockRecord;
-import az.kon.academy.catalog.command.service.domain.core.aggregate.ProductStockRoot;
+import az.kon.academy.catalog.command.service.domain.core.aggregate.ProductStockAggregateRoot;
 import az.kon.academy.catalog.command.service.domain.core.vo.product.ProductStockId;
 import az.kon.academy.catalog.command.service.domain.core.vo.product.ProductVariantId;
 import org.springframework.stereotype.Component;
@@ -15,7 +15,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class ProductStockMapper {
 
-    public ProductStockRecord toRecord(ProductStockRoot root) {
+    public ProductStockRecord toRecord(ProductStockAggregateRoot root) {
         return new ProductStockRecord()
                 .setId(root.getRootID().value())
                 .setVersion(root.getVersion().value())
@@ -28,8 +28,8 @@ public class ProductStockMapper {
                 .setQuantity(root.getQuantity());
     }
 
-    public ProductStockRoot toDomain(ProductStockRecord r) {
-        return ProductStockRoot.builder()
+    public ProductStockAggregateRoot toDomain(ProductStockRecord r) {
+        return ProductStockAggregateRoot.builder()
                 .id(ProductStockId.from(r.getId()))
                 .version(Version.of(r.getVersion()))
                 .processStatus(ProcessStatus.valueOf(r.getProcessStatus().name()))

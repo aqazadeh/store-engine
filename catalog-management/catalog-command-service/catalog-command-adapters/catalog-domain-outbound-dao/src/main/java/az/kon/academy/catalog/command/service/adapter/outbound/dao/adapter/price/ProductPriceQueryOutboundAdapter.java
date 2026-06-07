@@ -2,7 +2,7 @@ package az.kon.academy.catalog.command.service.adapter.outbound.dao.adapter.pric
 
 import az.kon.academy.application.core.annotation.QueryAdapter;
 import az.kon.academy.catalog.command.service.adapter.outbound.dao.mapper.ProductPriceMapper;
-import az.kon.academy.catalog.command.service.domain.core.aggregate.ProductPriceRoot;
+import az.kon.academy.catalog.command.service.domain.core.aggregate.ProductPriceAggregateRoot;
 import az.kon.academy.catalog.command.service.domain.core.port.outbound.ProductPriceQueryOutboundPort;
 import az.kon.academy.catalog.command.service.domain.core.vo.product.ProductPriceId;
 import org.jooq.DSLContext;
@@ -23,7 +23,7 @@ public class ProductPriceQueryOutboundAdapter implements ProductPriceQueryOutbou
     }
 
     @Override
-    public Optional<ProductPriceRoot> findById(ProductPriceId id) {
+    public Optional<ProductPriceAggregateRoot> findById(ProductPriceId id) {
         return dsl.selectFrom(PRODUCT_PRICE)
                 .where(PRODUCT_PRICE.ID.eq(id.value()))
                 .fetchOptional()

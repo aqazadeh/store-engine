@@ -6,7 +6,7 @@ import lombok.Builder;
 import lombok.Getter;
 
 @Builder
-public final class ProductPriceUpdateCommand {
+public final class ProductPriceChangedCommand {
     @Getter private final ProductPriceId priceId;
     @Getter private final Money minPrice;
     @Getter private final Money maxPrice;

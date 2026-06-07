@@ -2,7 +2,7 @@ package az.kon.academy.catalog.command.service.adapter.outbound.dao.adapter.stoc
 
 import az.kon.academy.application.core.annotation.QueryAdapter;
 import az.kon.academy.catalog.command.service.adapter.outbound.dao.mapper.ProductStockMapper;
-import az.kon.academy.catalog.command.service.domain.core.aggregate.ProductStockRoot;
+import az.kon.academy.catalog.command.service.domain.core.aggregate.ProductStockAggregateRoot;
 import az.kon.academy.catalog.command.service.domain.core.port.outbound.ProductStockQueryOutboundPort;
 import az.kon.academy.catalog.command.service.domain.core.vo.product.ProductStockId;
 import org.jooq.DSLContext;
@@ -23,7 +23,7 @@ public class ProductStockQueryOutboundAdapter implements ProductStockQueryOutbou
     }
 
     @Override
-    public Optional<ProductStockRoot> findById(ProductStockId id) {
+    public Optional<ProductStockAggregateRoot> findById(ProductStockId id) {
         return dsl.selectFrom(PRODUCT_STOCK)
                 .where(PRODUCT_STOCK.ID.eq(id.value()))
                 .fetchOptional()

@@ -10,4 +10,6 @@ public final class ProductPriceCreateCommand {
     @Getter private final ProductVariantId variantId;
     @Getter private final Money minPrice;
     @Getter private final Money maxPrice;
+    @Getter private final Money defaultPrice;
+    @Getter private final Boolean autoPriceUpdateEnabled;
 }

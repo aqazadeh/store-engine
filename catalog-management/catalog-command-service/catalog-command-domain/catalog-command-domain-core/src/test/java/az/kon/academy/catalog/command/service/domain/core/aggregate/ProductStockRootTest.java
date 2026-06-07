@@ -33,8 +33,8 @@ class ProductStockRootTest {
                 .build();
     }
 
-    private ProductStockRoot freshStock() {
-        return ProductStockRoot.initialize(createCommand);
+    private ProductStockAggregateRoot freshStock() {
+        return ProductStockAggregateRoot.initialize(createCommand);
     }
 
     @Nested

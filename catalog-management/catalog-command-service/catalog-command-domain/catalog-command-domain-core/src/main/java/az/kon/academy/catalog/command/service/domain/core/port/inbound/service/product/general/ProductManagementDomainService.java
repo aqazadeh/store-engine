@@ -1,7 +1,6 @@
 package az.kon.academy.catalog.command.service.domain.core.port.inbound.service.product.general;
 
 import az.kon.academy.catalog.command.service.domain.core.aggregate.ProductRoot;
-import az.kon.academy.catalog.command.service.domain.core.aggregate.ProductStockRoot;
 import az.kon.academy.catalog.command.service.domain.core.command.product.*;
 import az.kon.academy.domain.core.SeDomainContext;
 

@@ -3,7 +3,7 @@ package az.kon.academy.catalog.command.service.adapter.outbound.dao.adapter.stoc
 import az.kon.academy.application.core.annotation.CommandAdapter;
 import az.kon.academy.catalog.command.service.adapter.outbound.dao.mapper.ProductStockMapper;
 import az.kon.academy.catalog.command.service.application.service.port.outbound.ProductStockCommandOutboundPort;
-import az.kon.academy.catalog.command.service.domain.core.aggregate.ProductStockRoot;
+import az.kon.academy.catalog.command.service.domain.core.aggregate.ProductStockAggregateRoot;
 import org.jooq.DSLContext;
 
 import static az.kon.academy.catalog.command.dal.Tables.PRODUCT_STOCK;
@@ -20,7 +20,7 @@ public class ProductStockCommandOutboundAdapter implements ProductStockCommandOu
     }
 
     @Override
-    public ProductStockRoot save(ProductStockRoot aggregate) {
+    public ProductStockAggregateRoot save(ProductStockAggregateRoot aggregate) {
         var record = mapper.toRecord(aggregate);
         dsl.insertInto(PRODUCT_STOCK)
                 .set(record)

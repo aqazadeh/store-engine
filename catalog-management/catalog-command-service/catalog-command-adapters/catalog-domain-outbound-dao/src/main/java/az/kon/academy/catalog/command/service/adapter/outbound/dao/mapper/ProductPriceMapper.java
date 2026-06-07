@@ -8,7 +8,7 @@ import az.kon.academy.aggragate.valueobject.Version;
 import az.kon.academy.catalog.command.dal.enums.ProcessStatusType;
 import az.kon.academy.catalog.command.dal.enums.RowStatusType;
 import az.kon.academy.catalog.command.dal.tables.records.ProductPriceRecord;
-import az.kon.academy.catalog.command.service.domain.core.aggregate.ProductPriceRoot;
+import az.kon.academy.catalog.command.service.domain.core.aggregate.ProductPriceAggregateRoot;
 import az.kon.academy.catalog.command.service.domain.core.vo.product.ProductPriceId;
 import az.kon.academy.catalog.command.service.domain.core.vo.product.ProductVariantId;
 import org.springframework.stereotype.Component;
@@ -16,7 +16,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class ProductPriceMapper {
 
-    public ProductPriceRecord toRecord(ProductPriceRoot root) {
+    public ProductPriceRecord toRecord(ProductPriceAggregateRoot root) {
         return new ProductPriceRecord()
                 .setId(root.getRootID().value())
                 .setVersion(root.getVersion().value())
@@ -30,8 +30,8 @@ public class ProductPriceMapper {
                 .setMaxPrice(root.getMaxPrice().value());
     }
 
-    public ProductPriceRoot toDomain(ProductPriceRecord r) {
-        return ProductPriceRoot.builder()
+    public ProductPriceAggregateRoot toDomain(ProductPriceRecord r) {
+        return ProductPriceAggregateRoot.builder()
                 .id(ProductPriceId.from(r.getId()))
                 .version(Version.of(r.getVersion()))
                 .processStatus(ProcessStatus.valueOf(r.getProcessStatus().name()))

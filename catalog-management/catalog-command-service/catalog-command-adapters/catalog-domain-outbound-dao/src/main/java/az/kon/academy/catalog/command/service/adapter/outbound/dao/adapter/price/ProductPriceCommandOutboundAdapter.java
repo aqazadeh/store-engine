@@ -3,7 +3,7 @@ package az.kon.academy.catalog.command.service.adapter.outbound.dao.adapter.pric
 import az.kon.academy.application.core.annotation.CommandAdapter;
 import az.kon.academy.catalog.command.service.adapter.outbound.dao.mapper.ProductPriceMapper;
 import az.kon.academy.catalog.command.service.application.service.port.outbound.ProductPriceCommandOutboundPort;
-import az.kon.academy.catalog.command.service.domain.core.aggregate.ProductPriceRoot;
+import az.kon.academy.catalog.command.service.domain.core.aggregate.ProductPriceAggregateRoot;
 import org.jooq.DSLContext;
 
 import static az.kon.academy.catalog.command.dal.Tables.PRODUCT_PRICE;
@@ -20,7 +20,7 @@ public class ProductPriceCommandOutboundAdapter implements ProductPriceCommandOu
     }
 
     @Override
-    public ProductPriceRoot save(ProductPriceRoot aggregate) {
+    public ProductPriceAggregateRoot save(ProductPriceAggregateRoot aggregate) {
         var record = mapper.toRecord(aggregate);
         dsl.insertInto(PRODUCT_PRICE)
                 .set(record)

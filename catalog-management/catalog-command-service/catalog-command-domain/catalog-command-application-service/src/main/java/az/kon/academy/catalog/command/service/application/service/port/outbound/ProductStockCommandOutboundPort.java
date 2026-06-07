@@ -1,6 +1,6 @@
 package az.kon.academy.catalog.command.service.application.service.port.outbound;
 
-import az.kon.academy.catalog.command.service.domain.core.aggregate.ProductStockRoot;
+import az.kon.academy.catalog.command.service.domain.core.aggregate.ProductStockAggregateRoot;
 
-public interface ProductStockCommandOutboundPort extends BaseCommandDaoPort<ProductStockRoot> {
+public interface ProductStockCommandOutboundPort extends BaseCommandDaoPort<ProductStockAggregateRoot> {
 }

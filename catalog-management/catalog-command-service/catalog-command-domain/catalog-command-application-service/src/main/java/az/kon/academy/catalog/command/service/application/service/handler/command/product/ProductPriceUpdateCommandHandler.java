@@ -4,7 +4,7 @@ import az.kon.academy.application.core.annotation.CommandHandler;
 import az.kon.academy.application.core.handler.AbstractCommandHandler;
 import az.kon.academy.catalog.command.service.application.service.constant.SecurityPermissions;
 import az.kon.academy.catalog.command.service.application.service.port.outbound.ProductPriceCommandOutboundPort;
-import az.kon.academy.catalog.command.service.domain.core.command.product.ProductPriceUpdateCommand;
+import az.kon.academy.catalog.command.service.domain.core.command.product.ProductPriceChangedCommand;
 import az.kon.academy.catalog.command.service.domain.core.port.inbound.service.product.price.ProductPriceManagementDomainService;
 import az.kon.academy.domain.core.SeDomainContext;
 import az.kon.academy.event.handler.DomainEventPublisher;
@@ -12,7 +12,7 @@ import az.kon.academy.event.handler.DomainEventPublisher;
 @CommandHandler(
         roles = SecurityPermissions.Role.ROLE_MERCHANT,
         permissions = SecurityPermissions.Product.PRODUCT_PRICE_UPDATE)
-public class ProductPriceUpdateCommandHandler implements AbstractCommandHandler<ProductPriceUpdateCommand, Void> {
+public class ProductPriceUpdateCommandHandler implements AbstractCommandHandler<ProductPriceChangedCommand, Void> {
 
     private final SeDomainContext domainContext;
     private final DomainEventPublisher domainEventPublisher;
@@ -27,7 +27,7 @@ public class ProductPriceUpdateCommandHandler implements AbstractCommandHandler<
     }
 
     @Override
-    public Void handle(ProductPriceUpdateCommand command) {
+    public Void handle(ProductPriceChangedCommand command) {
         var aggregate = this.productPriceManagementDomainService.updatePrice(domainContext, command);
         var port = this.domainContext.getCommandPort(ProductPriceCommandOutboundPort.class);
         port.save(aggregate);

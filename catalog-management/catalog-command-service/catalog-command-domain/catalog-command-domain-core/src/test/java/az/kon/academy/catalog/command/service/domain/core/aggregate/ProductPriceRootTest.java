@@ -2,7 +2,7 @@ package az.kon.academy.catalog.command.service.domain.core.aggregate;
 
 import az.kon.academy.aggragate.valueobject.Money;
 import az.kon.academy.catalog.command.service.domain.core.command.product.ProductPriceCreateCommand;
-import az.kon.academy.catalog.command.service.domain.core.command.product.ProductPriceUpdateCommand;
+import az.kon.academy.catalog.command.service.domain.core.command.product.ProductPriceChangedCommand;
 import az.kon.academy.catalog.command.service.domain.core.vo.product.ProductPriceId;
 import az.kon.academy.catalog.command.service.domain.core.vo.product.ProductVariantId;
 import az.kon.academy.catalog.event.product.price.ProductPriceCreatedEvent;
@@ -36,8 +36,8 @@ class ProductPriceRootTest {
                 .build();
     }
 
-    private ProductPriceRoot freshPrice() {
-        return ProductPriceRoot.initialize(createCommand);
+    private ProductPriceAggregateRoot freshPrice() {
+        return ProductPriceAggregateRoot.initialize(createCommand);
     }
 
     @Nested
@@ -158,13 +158,13 @@ class ProductPriceRootTest {
 
         private Money newMinPrice;
         private Money newMaxPrice;
-        private ProductPriceUpdateCommand updateCommand;
+        private ProductPriceChangedCommand updateCommand;
 
         @BeforeEach
         void setUpCommand() {
             newMinPrice = Money.of(new BigDecimal("20.00"));
             newMaxPrice = Money.of(new BigDecimal("199.99"));
-            updateCommand = ProductPriceUpdateCommand.builder()
+            updateCommand = ProductPriceChangedCommand.builder()
                     .priceId(ProductPriceId.random())
                     .minPrice(newMinPrice)
                     .maxPrice(newMaxPrice)
@@ -231,7 +231,7 @@ class ProductPriceRootTest {
             @Test
             @DisplayName("Multiple updates keep only the latest prices")
             void multipleUpdatesKeepLatest() {
-                var secondUpdate = ProductPriceUpdateCommand.builder()
+                var secondUpdate = ProductPriceChangedCommand.builder()
                         .priceId(ProductPriceId.random())
                         .minPrice(Money.of(new BigDecimal("5.00")))
                         .maxPrice(Money.of(new BigDecimal("50.00")))
