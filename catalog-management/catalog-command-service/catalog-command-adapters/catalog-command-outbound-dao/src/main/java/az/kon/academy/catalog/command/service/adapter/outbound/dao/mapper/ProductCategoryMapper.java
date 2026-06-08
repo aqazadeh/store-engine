@@ -7,7 +7,7 @@ import az.kon.academy.aggragate.valueobject.Version;
 import az.kon.academy.catalog.sql.dal.enums.ProcessStatusType;
 import az.kon.academy.catalog.sql.dal.enums.RowStatusType;
 import az.kon.academy.catalog.sql.dal.tables.records.ProductCategoryRecord;
-import az.kon.academy.catalog.command.service.domain.core.aggregate.management.ProductCategoryRoot;
+import az.kon.academy.catalog.command.service.domain.core.aggregate.ProductCategoryRoot;
 import az.kon.academy.catalog.command.service.domain.core.vo.management.category.ProductCategoryDescription;
 import az.kon.academy.catalog.command.service.domain.core.vo.management.category.ProductCategoryId;
 import az.kon.academy.catalog.command.service.domain.core.vo.management.category.ProductCategoryName;

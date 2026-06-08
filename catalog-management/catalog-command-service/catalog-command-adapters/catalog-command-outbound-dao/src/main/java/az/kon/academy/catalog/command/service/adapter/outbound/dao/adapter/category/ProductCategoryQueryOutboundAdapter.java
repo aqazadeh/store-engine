@@ -2,7 +2,7 @@ package az.kon.academy.catalog.command.service.adapter.outbound.dao.adapter.cate
 
 import az.kon.academy.application.core.annotation.QueryAdapter;
 import az.kon.academy.catalog.command.service.adapter.outbound.dao.mapper.ProductCategoryMapper;
-import az.kon.academy.catalog.command.service.domain.core.aggregate.management.ProductCategoryRoot;
+import az.kon.academy.catalog.command.service.domain.core.aggregate.ProductCategoryRoot;
 import az.kon.academy.catalog.command.service.domain.core.exception.category.ProductCategoryDomainErrorCodes;
 import az.kon.academy.catalog.command.service.domain.core.exception.category.ProductCategoryEntityNotFoundException;
 import az.kon.academy.catalog.command.service.domain.core.port.outbound.ProductCategoryQueryOutboundPort;

@@ -7,7 +7,7 @@ import az.kon.academy.aggragate.valueobject.Version;
 import az.kon.academy.catalog.sql.dal.enums.ProcessStatusType;
 import az.kon.academy.catalog.sql.dal.enums.RowStatusType;
 import az.kon.academy.catalog.sql.dal.tables.records.BrandRejectionReasonRecord;
-import az.kon.academy.catalog.command.service.domain.core.aggregate.management.rejection.BrandRejectionReasonRoot;
+import az.kon.academy.catalog.command.service.domain.core.aggregate.BrandRejectionReasonRoot;
 import az.kon.academy.catalog.command.service.domain.core.vo.brand.BrandId;
 import az.kon.academy.catalog.command.service.domain.core.vo.brand.BrandRejectionReasonId;
 import az.kon.academy.catalog.command.service.domain.core.vo.moderation.ModeratorId;

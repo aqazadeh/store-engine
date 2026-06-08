@@ -1,6 +1,6 @@
 package az.kon.academy.catalog.command.service.domain.core.port.inbound.service.specification;
 
-import az.kon.academy.catalog.command.service.domain.core.aggregate.management.ProductSpecificationRoot;
+import az.kon.academy.catalog.command.service.domain.core.aggregate.ProductSpecificationRoot;
 import az.kon.academy.catalog.command.service.domain.core.command.specification.*;
 import az.kon.academy.domain.core.SeDomainContext;
 

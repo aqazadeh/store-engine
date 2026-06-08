@@ -3,7 +3,7 @@ package az.kon.academy.catalog.command.service.adapter.outbound.dao.adapter.cate
 import az.kon.academy.application.core.annotation.CommandAdapter;
 import az.kon.academy.catalog.command.service.adapter.outbound.dao.mapper.ProductCategoryMapper;
 import az.kon.academy.catalog.command.service.application.service.port.outbound.ProductCategoryCommandOutboundPort;
-import az.kon.academy.catalog.command.service.domain.core.aggregate.management.ProductCategoryRoot;
+import az.kon.academy.catalog.command.service.domain.core.aggregate.ProductCategoryRoot;
 import lombok.extern.slf4j.Slf4j;
 import org.jooq.DSLContext;
 import org.springframework.dao.OptimisticLockingFailureException;

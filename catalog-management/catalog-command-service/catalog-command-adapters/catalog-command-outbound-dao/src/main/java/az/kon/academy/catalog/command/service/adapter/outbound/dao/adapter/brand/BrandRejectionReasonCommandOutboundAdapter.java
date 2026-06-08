@@ -3,7 +3,7 @@ package az.kon.academy.catalog.command.service.adapter.outbound.dao.adapter.bran
 import az.kon.academy.application.core.annotation.CommandAdapter;
 import az.kon.academy.catalog.command.service.adapter.outbound.dao.mapper.BrandRejectionReasonMapper;
 import az.kon.academy.catalog.command.service.application.service.port.outbound.BrandRejectionReasonCommandOutboundPort;
-import az.kon.academy.catalog.command.service.domain.core.aggregate.management.rejection.BrandRejectionReasonRoot;
+import az.kon.academy.catalog.command.service.domain.core.aggregate.BrandRejectionReasonRoot;
 import lombok.extern.slf4j.Slf4j;
 import org.jooq.DSLContext;
 import org.springframework.dao.OptimisticLockingFailureException;

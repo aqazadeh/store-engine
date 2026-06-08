@@ -1,4 +1,4 @@
-package az.kon.academy.catalog.command.service.domain.core.aggregate.management;
+package az.kon.academy.catalog.command.service.domain.core.aggregate;
 
 import az.kon.academy.catalog.command.service.domain.core.command.category.ProductCategoryChangeImageCommand;
 import az.kon.academy.catalog.command.service.domain.core.command.category.ProductCategoryChangeInformationCommand;

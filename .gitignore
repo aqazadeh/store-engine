@@ -45,5 +45,8 @@ build/
 avro-generator/*
 !.gitkeep
 
+.agents
+AGENTS.md
+skills-lock.json
 .opencode
 graphify-out

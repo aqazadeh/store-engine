@@ -1,6 +1,6 @@
 package az.kon.academy.catalog.command.service.domain.core.port.inbound.service.brandrejection;
 
-import az.kon.academy.catalog.command.service.domain.core.aggregate.management.rejection.BrandRejectionReasonRoot;
+import az.kon.academy.catalog.command.service.domain.core.aggregate.BrandRejectionReasonRoot;
 import az.kon.academy.catalog.command.service.domain.core.command.brandrejection.BrandRejectionReasonAddCommand;
 import az.kon.academy.catalog.command.service.domain.core.command.brandrejection.BrandRejectionReasonChangeReasonCommand;
 import az.kon.academy.catalog.command.service.domain.core.command.brandrejection.BrandRejectionReasonRemoveCommand;

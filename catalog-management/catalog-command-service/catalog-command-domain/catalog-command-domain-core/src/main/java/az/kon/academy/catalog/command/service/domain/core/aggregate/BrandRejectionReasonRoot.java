@@ -1,12 +1,10 @@
-package az.kon.academy.catalog.command.service.domain.core.aggregate.management.rejection;
+package az.kon.academy.catalog.command.service.domain.core.aggregate;
 
 import az.kon.academy.aggragate.AggregateRoot;
-import az.kon.academy.aggragate.valueobject.RowStatus;
 import az.kon.academy.aggragate.valueobject.SeDateTime;
 import az.kon.academy.catalog.command.service.domain.core.command.brandrejection.BrandRejectionReasonAddCommand;
 import az.kon.academy.catalog.command.service.domain.core.command.brandrejection.BrandRejectionReasonChangeReasonCommand;
 import az.kon.academy.catalog.command.service.domain.core.command.brandrejection.BrandRejectionReasonRemoveCommand;
-import az.kon.academy.catalog.command.service.domain.core.command.brandrejection.BrandRejectionReasonSolveCommand;
 import az.kon.academy.catalog.command.service.domain.core.vo.brand.BrandId;
 import az.kon.academy.catalog.command.service.domain.core.vo.brand.BrandRejectionReasonId;
 import az.kon.academy.catalog.command.service.domain.core.vo.moderation.ModeratorId;

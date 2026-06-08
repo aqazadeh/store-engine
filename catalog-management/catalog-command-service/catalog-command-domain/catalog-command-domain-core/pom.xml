@@ -26,6 +26,12 @@
             <artifactId>se-domain-core</artifactId>
             <version>1.0.0</version>
         </dependency>
+        <dependency>
+            <groupId>az.kon.academy</groupId>
+            <artifactId>se-application-core</artifactId>
+            <version>1.0.0</version>
+            <scope>compile</scope>
+        </dependency>
 
         <dependency>
             <groupId>az.kon.academy.catalog.event</groupId>
@@ -44,10 +50,9 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>az.kon.academy</groupId>
-            <artifactId>se-application-core</artifactId>
-            <version>1.0.0</version>
-            <scope>compile</scope>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-junit-jupiter</artifactId>
+            <scope>test</scope>
         </dependency>
     </dependencies>
 </project>

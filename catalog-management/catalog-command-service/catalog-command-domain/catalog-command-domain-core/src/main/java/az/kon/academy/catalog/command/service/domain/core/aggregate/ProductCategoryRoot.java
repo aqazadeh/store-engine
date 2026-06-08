@@ -1,10 +1,9 @@
-package az.kon.academy.catalog.command.service.domain.core.aggregate.management;
+package az.kon.academy.catalog.command.service.domain.core.aggregate;
 
 import az.kon.academy.aggragate.AggregateRoot;
 import az.kon.academy.aggragate.valueobject.SeDateTime;
 import az.kon.academy.catalog.command.service.domain.core.command.category.ProductCategoryChangeImageCommand;
 import az.kon.academy.catalog.command.service.domain.core.command.category.ProductCategoryChangeInformationCommand;
-import az.kon.academy.catalog.command.service.domain.core.command.category.ProductCategoryChangeParentCommand;
 import az.kon.academy.catalog.command.service.domain.core.command.category.ProductCategoryCreateCommand;
 import az.kon.academy.catalog.command.service.domain.core.vo.management.category.ProductCategoryDescription;
 import az.kon.academy.catalog.command.service.domain.core.vo.management.category.ProductCategoryId;

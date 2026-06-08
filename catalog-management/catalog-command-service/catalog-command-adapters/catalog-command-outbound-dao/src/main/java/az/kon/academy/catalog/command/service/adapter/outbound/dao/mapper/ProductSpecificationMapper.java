@@ -8,7 +8,7 @@ import az.kon.academy.catalog.sql.dal.enums.ProcessStatusType;
 import az.kon.academy.catalog.sql.dal.enums.RowStatusType;
 import az.kon.academy.catalog.sql.dal.tables.records.ProductSpecificationCategoryAssignmentRecord;
 import az.kon.academy.catalog.sql.dal.tables.records.ProductSpecificationRecord;
-import az.kon.academy.catalog.command.service.domain.core.aggregate.management.ProductSpecificationRoot;
+import az.kon.academy.catalog.command.service.domain.core.aggregate.ProductSpecificationRoot;
 import az.kon.academy.catalog.command.service.domain.core.vo.management.category.ProductCategoryId;
 import az.kon.academy.catalog.command.service.domain.core.vo.management.specification.ProductSpecificationId;
 import az.kon.academy.catalog.command.service.domain.core.vo.management.specification.ProductSpecificationCategoryAssignment;

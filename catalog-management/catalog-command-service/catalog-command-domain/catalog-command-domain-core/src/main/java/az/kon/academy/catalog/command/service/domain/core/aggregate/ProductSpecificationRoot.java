@@ -1,4 +1,4 @@
-package az.kon.academy.catalog.command.service.domain.core.aggregate.management;
+package az.kon.academy.catalog.command.service.domain.core.aggregate;
 
 import az.kon.academy.aggragate.AggregateRoot;
 import az.kon.academy.aggragate.valueobject.SeDateTime;
@@ -49,7 +49,7 @@ public class ProductSpecificationRoot extends AggregateRoot<ProductSpecification
 
     public ProductSpecificationRoot assignCategory(ProductSpecificationAssignCategoryCommand command) {
 
-        if(this.findAssignment(command.getCategoryId()).isEmpty()) return this;
+        if(this.findAssignment(command.getCategoryId()).isPresent()) return this;
 
         var changed = new HashSet<>(this.categories);
         var assignment = ProductSpecificationCategoryAssignment.initialize(

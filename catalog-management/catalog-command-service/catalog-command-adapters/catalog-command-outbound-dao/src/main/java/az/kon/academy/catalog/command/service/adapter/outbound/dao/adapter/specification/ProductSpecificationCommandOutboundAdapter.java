@@ -3,7 +3,7 @@ package az.kon.academy.catalog.command.service.adapter.outbound.dao.adapter.spec
 import az.kon.academy.application.core.annotation.CommandAdapter;
 import az.kon.academy.catalog.command.service.adapter.outbound.dao.mapper.ProductSpecificationMapper;
 import az.kon.academy.catalog.command.service.application.service.port.outbound.ProductSpecificationCommandOutboundPort;
-import az.kon.academy.catalog.command.service.domain.core.aggregate.management.ProductSpecificationRoot;
+import az.kon.academy.catalog.command.service.domain.core.aggregate.ProductSpecificationRoot;
 import org.jooq.DSLContext;
 
 import static az.kon.academy.catalog.sql.dal.Tables.PRODUCT_SPECIFICATION;

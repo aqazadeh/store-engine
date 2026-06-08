@@ -1,6 +1,6 @@
 package az.kon.academy.catalog.command.service.domain.core.port.outbound;
 
-import az.kon.academy.catalog.command.service.domain.core.aggregate.management.rejection.BrandRejectionReasonRoot;
+import az.kon.academy.catalog.command.service.domain.core.aggregate.BrandRejectionReasonRoot;
 import az.kon.academy.catalog.command.service.domain.core.vo.brand.BrandId;
 import az.kon.academy.catalog.command.service.domain.core.vo.brand.BrandRejectionReasonId;
 import az.kon.academy.domain.core.BaseQueryPort;

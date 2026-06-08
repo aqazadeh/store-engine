@@ -4,7 +4,7 @@ import az.kon.academy.application.core.annotation.QueryAdapter;
 import az.kon.academy.catalog.sql.dal.enums.RowStatusType;
 import az.kon.academy.catalog.sql.dal.tables.records.ProductSpecificationCategoryAssignmentRecord;
 import az.kon.academy.catalog.command.service.adapter.outbound.dao.mapper.ProductSpecificationMapper;
-import az.kon.academy.catalog.command.service.domain.core.aggregate.management.ProductSpecificationRoot;
+import az.kon.academy.catalog.command.service.domain.core.aggregate.ProductSpecificationRoot;
 import az.kon.academy.catalog.command.service.domain.core.exception.specification.ProductSpecificationDomainErrorCodes;
 import az.kon.academy.catalog.command.service.domain.core.exception.specification.ProductSpecificationDomainException;
 import az.kon.academy.catalog.command.service.domain.core.port.outbound.ProductSpecificationQueryOutboundPort;

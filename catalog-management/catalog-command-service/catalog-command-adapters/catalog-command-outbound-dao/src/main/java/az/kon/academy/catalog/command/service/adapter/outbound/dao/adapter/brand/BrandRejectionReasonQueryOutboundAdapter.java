@@ -3,7 +3,7 @@ package az.kon.academy.catalog.command.service.adapter.outbound.dao.adapter.bran
 import az.kon.academy.application.core.annotation.QueryAdapter;
 import az.kon.academy.catalog.sql.dal.enums.RowStatusType;
 import az.kon.academy.catalog.command.service.adapter.outbound.dao.mapper.BrandRejectionReasonMapper;
-import az.kon.academy.catalog.command.service.domain.core.aggregate.management.rejection.BrandRejectionReasonRoot;
+import az.kon.academy.catalog.command.service.domain.core.aggregate.BrandRejectionReasonRoot;
 import az.kon.academy.catalog.command.service.domain.core.exception.brand.BrandRejectionDomainErrorCodes;
 import az.kon.academy.catalog.command.service.domain.core.exception.brand.BrandRejectionDomainException;
 import az.kon.academy.catalog.command.service.domain.core.port.outbound.BrandRejectionReasonQueryOutboundPort;
