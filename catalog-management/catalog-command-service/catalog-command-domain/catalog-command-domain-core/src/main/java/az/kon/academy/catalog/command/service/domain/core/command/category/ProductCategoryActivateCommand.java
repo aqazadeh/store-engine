@@ -5,7 +5,6 @@ import lombok.Builder;
 import lombok.Getter;
 
 @Builder
-public class ProductCategoryActivateCommand {
-    @Getter
-    private final ProductCategoryId productCategoryId;
+public final  class ProductCategoryActivateCommand {
+    @Getter private final ProductCategoryId productCategoryId;
 }

@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                            http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+    <!-- ============================================================
+         Brand aggregate
+         Aggregate root: BrandRoot
+         Entities: BrandRejectionReason (List<>)
+         ============================================================ -->
+
+    <!-- Brand status enum -->
+    <changeSet id="001-1" author="rovshan.aghayev">
+        <sql>
+            CREATE TYPE brand_status_type AS ENUM ('DRAFT', 'SENT_TO_APPROVAL', 'IN_REVIEW', 'APPROVED', 'REJECTED');
+        </sql>
+        <rollback>
+            DROP TYPE brand_status_type;
+        </rollback>
+    </changeSet>
+
+    <!-- BrandRoot table -->
+    <changeSet id="001-2" author="rovshan.aghayev">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="brand"/>
+            </not>
+        </preConditions>
+
+        <createTable tableName="brand">
+            <column name="id" type="UUID">
+                <constraints primaryKey="true" nullable="false" primaryKeyName="pk_brand"/>
+            </column>
+            <column name="version" type="BIGINT" defaultValueNumeric="1">
+                <constraints nullable="false"/>
+            </column>
+            <column name="process_status" type="process_status_type">
+                <constraints nullable="false"/>
+            </column>
+            <column name="row_status" type="row_status_type">
+                <constraints nullable="false"/>
+            </column>
+            <column name="creation_ts" type="TIMESTAMPTZ">
+                <constraints nullable="false"/>
+            </column>
+            <column name="modification_ts" type="TIMESTAMPTZ">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="owner_id" type="UUID">
+                <constraints nullable="false"/>
+            </column>
+            <column name="name" type="VARCHAR(20)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="description" type="TEXT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="path" type="VARCHAR(20)">
+                <constraints nullable="false" unique="true" uniqueConstraintName="uq_brand_path"/>
+            </column>
+            <column name="image" type="VARCHAR(512)"/>
+            <column name="is_global" type="BOOLEAN" defaultValueBoolean="false">
+                <constraints nullable="false"/>
+            </column>
+            <column name="status" type="brand_status_type">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <rollback>
+            <dropTable tableName="brand"/>
+        </rollback>
+    </changeSet>
+
+    <!-- Brand indexes -->
+    <changeSet id="001-3" author="rovshan.aghayev">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <indexExists indexName="idx_brand_owner_id"/>
+            </not>
+        </preConditions>
+
+        <createIndex tableName="brand" indexName="idx_brand_owner_id">
+            <column name="owner_id"/>
+        </createIndex>
+
+        <createIndex tableName="brand" indexName="idx_brand_status">
+            <column name="status"/>
+        </createIndex>
+
+        <createIndex tableName="brand" indexName="idx_brand_row_status">
+            <column name="row_status"/>
+        </createIndex>
+
+        <rollback>
+            <dropIndex tableName="brand" indexName="idx_brand_owner_id"/>
+            <dropIndex tableName="brand" indexName="idx_brand_status"/>
+            <dropIndex tableName="brand" indexName="idx_brand_row_status"/>
+        </rollback>
+    </changeSet>
+
+    <!-- BrandRejectionReason table (List<> inside BrandRoot) -->
+    <changeSet id="001-4" author="rovshan.aghayev">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="brand_rejection_reason"/>
+            </not>
+        </preConditions>
+
+        <createTable tableName="brand_rejection_reason">
+            <column name="id" type="UUID">
+                <constraints primaryKey="true" nullable="false" primaryKeyName="pk_brand_rejection_reason"/>
+            </column>
+            <column name="version" type="BIGINT" defaultValueNumeric="1">
+                <constraints nullable="false"/>
+            </column>
+            <column name="process_status" type="process_status_type">
+                <constraints nullable="false"/>
+            </column>
+            <column name="row_status" type="row_status_type">
+                <constraints nullable="false"/>
+            </column>
+            <column name="creation_ts" type="TIMESTAMPTZ">
+                <constraints nullable="false"/>
+            </column>
+            <column name="modification_ts" type="TIMESTAMPTZ">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="brand_id" type="UUID">
+                <constraints nullable="false"
+                             foreignKeyName="fk_brand_rejection_reason_brand"
+                             references="brand(id)"/>
+            </column>
+            <column name="reason" type="TEXT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="solved" type="bool">
+                <constraints nullable="false"/>
+            </column>
+            <column name="moderated_by" type="UUID">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <rollback>
+            <dropTable tableName="brand_rejection_reason"/>
+        </rollback>
+    </changeSet>
+
+    <!-- BrandRejectionReason indexes -->
+    <changeSet id="001-5" author="rovshan.aghayev">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <indexExists indexName="idx_brand_rejection_reason_brand_id"/>
+            </not>
+        </preConditions>
+
+        <createIndex tableName="brand_rejection_reason" indexName="idx_brand_rejection_reason_brand_id">
+            <column name="brand_id"/>
+        </createIndex>
+
+        <createIndex tableName="brand_rejection_reason" indexName="idx_brand_rejection_reason_moderated_by">
+            <column name="moderated_by"/>
+        </createIndex>
+
+        <rollback>
+            <dropIndex tableName="brand_rejection_reason" indexName="idx_brand_rejection_reason_brand_id"/>
+            <dropIndex tableName="brand_rejection_reason" indexName="idx_brand_rejection_reason_moderated_by"/>
+        </rollback>
+    </changeSet>
+
+</databaseChangeLog>

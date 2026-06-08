@@ -10,7 +10,7 @@ import java.time.ZoneId;
 public class ZoneIdConversion extends Conversion<ZoneId> {
 
     static {
-        LogicalTypes.register("zoneId", schema -> new LogicalType("zoneId"));
+        LogicalTypes.register("zone-id", schema -> new LogicalType("zone-id"));
     }
 
     @Override
@@ -20,12 +20,12 @@ public class ZoneIdConversion extends Conversion<ZoneId> {
 
     @Override
     public String getLogicalTypeName() {
-        return "zoneId";
+        return "zone-id";
     }
 
     @Override
     public Schema getRecommendedSchema() {
-        return new LogicalType("zoneId").addToSchema(Schema.create(Schema.Type.STRING));
+        return new LogicalType("zone-id").addToSchema(Schema.create(Schema.Type.STRING));
     }
 
     @Override

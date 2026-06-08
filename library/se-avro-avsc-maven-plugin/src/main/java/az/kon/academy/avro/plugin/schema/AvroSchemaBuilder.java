@@ -21,11 +21,18 @@ public class AvroSchemaBuilder {
 
         // built-in Avro conversions
         this.reflectData.addLogicalTypeConversion(new Conversions.UUIDConversion());
-        this.reflectData.addLogicalTypeConversion(new BigDecimalConversion());
+        this.reflectData.addLogicalTypeConversion(new Conversions.BigDecimalConversion());
+        this.reflectData.addLogicalTypeConversion(new Conversions.DurationConversion());
+
         this.reflectData.addLogicalTypeConversion(new TimeConversions.DateConversion());
         this.reflectData.addLogicalTypeConversion(new TimeConversions.TimeMillisConversion());
+        this.reflectData.addLogicalTypeConversion(new TimeConversions.TimeMicrosConversion());
         this.reflectData.addLogicalTypeConversion(new TimeConversions.TimestampMillisConversion());
+        this.reflectData.addLogicalTypeConversion(new TimeConversions.TimestampMicrosConversion());
+        this.reflectData.addLogicalTypeConversion(new TimeConversions.TimestampNanosConversion());
         this.reflectData.addLogicalTypeConversion(new TimeConversions.LocalTimestampMillisConversion());
+        this.reflectData.addLogicalTypeConversion(new TimeConversions.LocalTimestampMicrosConversion());
+        this.reflectData.addLogicalTypeConversion(new TimeConversions.LocalTimestampNanosConversion());
 
         // custom conversions
         this.reflectData.addLogicalTypeConversion(new OffsetDateTimeConversion());

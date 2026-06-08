@@ -22,9 +22,36 @@ class SeDateTest {
     }
 
     @Test
+    void nowReturnsCurrentDate() {
+        SeDate today = SeDate.now();
+        assertNotNull(today);
+        assertNotNull(today.value());
+    }
+
+    @Test
+    void valueReturnsLocalDate() {
+        LocalDate date = LocalDate.of(2024, 5, 15);
+        SeDate seDate = SeDate.of(date);
+        assertEquals(date, seDate.value());
+    }
+
+    @Test
+    void isAfterOrEqualWithEqualValues() {
+        SeDate date = SeDate.of(LocalDate.of(2024, 1, 1));
+        assertTrue(date.isAfterOrEqual(date));
+        assertTrue(date.isAfterOrEqual(SeDate.of(LocalDate.of(2024, 1, 1))));
+    }
+
+    @Test
+    void isBeforeOrEqualWithEqualValues() {
+        SeDate date = SeDate.of(LocalDate.of(2024, 1, 1));
+        assertTrue(date.isBeforeOrEqual(date));
+        assertTrue(date.isBeforeOrEqual(SeDate.of(LocalDate.of(2024, 1, 1))));
+    }
+
+    @Test
     void toStringReturnsIsoDate() {
         SeDate date = SeDate.of(LocalDate.of(2024, 1, 1));
         assertEquals("2024-01-01", date.toString());
     }
 }
-

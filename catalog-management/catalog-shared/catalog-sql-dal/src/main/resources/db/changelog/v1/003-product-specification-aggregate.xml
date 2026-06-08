@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                            http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+    <!-- ============================================================
+         ProductSpecification aggregate
+         Aggregate root: ProductSpecificationRoot
+         Entities: SpecificationCategoryAssignment (Set<>)
+         Mappings which category a spec belongs to, and whether required.
+         ============================================================ -->
+
+    <!-- ProductSpecificationRoot table -->
+    <changeSet id="003-1" author="rovshan.aghayev">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="product_specification"/>
+            </not>
+        </preConditions>
+
+        <createTable tableName="product_specification">
+            <column name="id" type="UUID">
+                <constraints primaryKey="true" nullable="false" primaryKeyName="pk_product_specification"/>
+            </column>
+            <column name="version" type="BIGINT" defaultValueNumeric="1">
+                <constraints nullable="false"/>
+            </column>
+            <column name="process_status" type="process_status_type">
+                <constraints nullable="false"/>
+            </column>
+            <column name="row_status" type="row_status_type">
+                <constraints nullable="false"/>
+            </column>
+            <column name="creation_ts" type="TIMESTAMPTZ">
+                <constraints nullable="false"/>
+            </column>
+            <column name="modification_ts" type="TIMESTAMPTZ">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="name" type="VARCHAR(20)">
+                <constraints nullable="false" unique="true" uniqueConstraintName="uq_product_specification_name"/>
+            </column>
+            <column name="description" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+
+        </createTable>
+
+        <rollback>
+            <dropTable tableName="product_specification"/>
+        </rollback>
+    </changeSet>
+
+    <!-- ProductSpecificationRoot indexes -->
+    <changeSet id="003-2" author="rovshan.aghayev">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <indexExists indexName="idx_product_specification_row_status"/>
+            </not>
+        </preConditions>
+
+        <createIndex tableName="product_specification" indexName="idx_product_specification_row_status">
+            <column name="row_status"/>
+        </createIndex>
+
+        <rollback>
+            <dropIndex tableName="product_specification" indexName="idx_product_specification_row_status"/>
+        </rollback>
+    </changeSet>
+
+    <!-- SpecificationCategoryAssignment (Set<> inside ProductSpecificationRoot) -->
+    <changeSet id="003-3" author="rovshan.aghayev">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="product_specification_category_assignment"/>
+            </not>
+        </preConditions>
+
+        <createTable tableName="product_specification_category_assignment">
+            <column name="specification_id" type="UUID">
+                <constraints nullable="false"
+                             foreignKeyName="fk_spec_cat_asgn_specification"
+                             references="product_specification(id)"/>
+            </column>
+            <column name="category_id" type="UUID">
+                <constraints nullable="false"
+                             foreignKeyName="fk_spec_cat_asgn_category"
+                             references="product_category(id)"/>
+            </column>
+            <column name="is_required" type="BOOLEAN" defaultValueBoolean="false">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <addPrimaryKey
+                tableName="product_specification_category_assignment"
+                columnNames="specification_id, category_id"
+                constraintName="pk_product_specification_category_assignment"/>
+
+        <rollback>
+            <dropTable tableName="product_specification_category_assignment"/>
+        </rollback>
+    </changeSet>
+
+    <!-- SpecificationCategoryAssignment indexes -->
+    <changeSet id="003-4" author="rovshan.aghayev">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <indexExists indexName="idx_spec_cat_asgn_category_id"/>
+            </not>
+        </preConditions>
+
+        <createIndex tableName="product_specification_category_assignment"
+                     indexName="idx_spec_cat_asgn_category_id">
+            <column name="category_id"/>
+        </createIndex>
+
+        <rollback>
+            <dropIndex tableName="product_specification_category_assignment"
+                       indexName="idx_spec_cat_asgn_category_id"/>
+        </rollback>
+    </changeSet>
+
+</databaseChangeLog>

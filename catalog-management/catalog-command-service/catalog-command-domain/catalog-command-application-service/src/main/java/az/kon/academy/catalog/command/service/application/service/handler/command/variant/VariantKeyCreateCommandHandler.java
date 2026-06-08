@@ -1,11 +1,11 @@
 package az.kon.academy.catalog.command.service.application.service.handler.command.variant;
 
 import az.kon.academy.application.core.annotation.CommandHandler;
+import az.kon.academy.application.core.handler.AbstractCommandHandler;
 import az.kon.academy.catalog.command.service.application.service.constant.SecurityPermissions;
-import az.kon.academy.catalog.command.service.application.service.handler.AbstractCommandHandler;
-import az.kon.academy.catalog.command.service.application.service.port.outbound.VariantKeyCommandPort;
+import az.kon.academy.catalog.command.service.application.service.port.outbound.VariantKeyCommandOutboundPort;
 import az.kon.academy.catalog.command.service.domain.core.command.variant.VariantKeyCreateCommand;
-import az.kon.academy.catalog.command.service.domain.core.service.variant.VariantDomainService;
+import az.kon.academy.catalog.command.service.domain.core.port.inbound.service.variant.VariantModerationDomainService;
 import az.kon.academy.domain.core.SeDomainContext;
 import az.kon.academy.event.handler.DomainEventPublisher;
 
@@ -16,20 +16,20 @@ public class VariantKeyCreateCommandHandler implements AbstractCommandHandler<Va
 
     private final SeDomainContext domainContext;
     private final DomainEventPublisher domainEventPublisher;
-    private final VariantDomainService variantDomainService;
+    private final VariantModerationDomainService productVariantModerationDomainService;
 
     public VariantKeyCreateCommandHandler(SeDomainContext domainContext,
                                           DomainEventPublisher domainEventPublisher,
-                                          VariantDomainService variantDomainService) {
+                                          VariantModerationDomainService productVariantModerationDomainService) {
         this.domainContext = domainContext;
         this.domainEventPublisher = domainEventPublisher;
-        this.variantDomainService = variantDomainService;
+        this.productVariantModerationDomainService = productVariantModerationDomainService;
     }
 
     @Override
     public Void handle(VariantKeyCreateCommand command) {
-        var aggregate = this.variantDomainService.createKey(domainContext, command);
-        var port = this.domainContext.getCommandPort(VariantKeyCommandPort.class);
+        var aggregate = this.productVariantModerationDomainService.createKey(domainContext, command);
+        var port = this.domainContext.getCommandPort(VariantKeyCommandOutboundPort.class);
         port.save(aggregate);
         this.domainEventPublisher.publish(aggregate.getUncommittedEvents());
         return null;

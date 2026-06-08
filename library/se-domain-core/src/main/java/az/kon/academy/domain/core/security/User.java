@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 
+import java.util.List;
 import java.util.UUID;
 
 @Getter
@@ -11,4 +12,6 @@ import java.util.UUID;
 @AllArgsConstructor
 public class User {
     private final UUID userId;
+    private final List<String> roles;
+    private final List<String> permissions;
 }

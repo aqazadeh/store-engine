@@ -5,11 +5,7 @@ import lombok.Builder;
 import lombok.Getter;
 
 @Builder
-public class ProductCategoryChangeParentCommand {
-
-    @Getter
-    private final ProductCategoryId productCategoryId;
-
-    @Getter
-    private final ProductCategoryId parentId;
+public final class ProductCategoryChangeParentCommand {
+    @Getter private final ProductCategoryId productCategoryId;
+    @Getter private final ProductCategoryId parentId;
 }

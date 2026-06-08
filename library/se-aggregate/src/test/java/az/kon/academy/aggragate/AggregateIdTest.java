@@ -24,9 +24,27 @@ class AggregateIdTest {
     }
 
     @Test
+    void notEqualsNull() {
+        AggregateId<Long> id = new TestId(1L);
+        assertNotEquals(null, id);
+    }
+
+    @Test
+    void notEqualsDifferentClass() {
+        AggregateId<Long> id1 = new TestId(1L);
+        AggregateId<Long> id2 = new AggregateId<>(1L) {};
+        assertNotEquals(id1, id2);
+    }
+
+    @Test
+    void valueReturnsConstructorArgument() {
+        AggregateId<Long> id = new TestId(42L);
+        assertEquals(42L, id.value());
+    }
+
+    @Test
     void toStringReturnsValue() {
         AggregateId<Long> id = new TestId(42L);
         assertEquals("42", id.toString());
     }
 }
-

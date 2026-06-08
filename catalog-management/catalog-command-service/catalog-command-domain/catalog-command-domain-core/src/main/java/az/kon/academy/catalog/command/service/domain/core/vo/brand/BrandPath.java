@@ -2,6 +2,7 @@ package az.kon.academy.catalog.command.service.domain.core.vo.brand;
 
 import az.kon.academy.application.core.helper.Slugify;
 import az.kon.academy.catalog.command.service.domain.core.exception.brand.BrandDomainErrorCodes;
+import az.kon.academy.catalog.command.service.domain.core.exception.brand.BrandDomainException;
 import az.kon.academy.catalog.command.service.domain.core.exception.category.ProductCategoryDomainException;
 
 import java.util.Objects;
@@ -23,17 +24,17 @@ public final class BrandPath {
 
     public BrandPath(String value) {
         if (Objects.isNull(value) || value.isBlank()) {
-            throw new ProductCategoryDomainException(BrandDomainErrorCodes.PATH_REQUIRED);
+            throw new BrandDomainException(BrandDomainErrorCodes.PATH_REQUIRED);
         }
 
         String normalized = value.trim();
 
         if (normalized.length() < BrandPath.MIN_LENGTH) {
-            throw new ProductCategoryDomainException(BrandDomainErrorCodes.PATH_TOO_SHORT);
+            throw new BrandDomainException(BrandDomainErrorCodes.PATH_TOO_SHORT);
         }
 
         if (normalized.length() > BrandPath.MAX_LENGTH) {
-            throw new ProductCategoryDomainException(BrandDomainErrorCodes.PATH_TOO_LONG);
+            throw new BrandDomainException(BrandDomainErrorCodes.PATH_TOO_LONG);
         }
 
         this.value = normalized;

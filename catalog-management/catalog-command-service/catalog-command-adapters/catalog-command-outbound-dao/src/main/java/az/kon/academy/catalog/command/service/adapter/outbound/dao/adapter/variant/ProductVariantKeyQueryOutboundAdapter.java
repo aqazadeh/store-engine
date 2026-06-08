@@ -1,0 +1,42 @@
+package az.kon.academy.catalog.command.service.adapter.outbound.dao.adapter.variant;
+
+import az.kon.academy.application.core.annotation.QueryAdapter;
+import az.kon.academy.catalog.command.service.adapter.outbound.dao.mapper.VariantKeyMapper;
+import az.kon.academy.catalog.command.service.domain.core.aggregate.management.VariantKeyRoot;
+import az.kon.academy.catalog.command.service.domain.core.exception.variant.VariantDomainErrorCodes;
+import az.kon.academy.catalog.command.service.domain.core.exception.variant.VariantEntityNotFoundException;
+import az.kon.academy.catalog.command.service.domain.core.port.outbound.ProductVariantKeyQueryOutboundPort;
+import az.kon.academy.catalog.command.service.domain.core.vo.management.variant.VariantKeyId;
+import org.jooq.DSLContext;
+
+import java.util.List;
+import java.util.Optional;
+
+import static az.kon.academy.catalog.sql.dal.Tables.VARIANT_KEY;
+
+@QueryAdapter
+public class ProductVariantKeyQueryOutboundAdapter implements ProductVariantKeyQueryOutboundPort {
+
+    private final DSLContext dsl;
+    private final VariantKeyMapper mapper;
+
+    public ProductVariantKeyQueryOutboundAdapter(DSLContext dsl, VariantKeyMapper mapper) {
+        this.dsl = dsl;
+        this.mapper = mapper;
+    }
+
+    @Override
+    public Optional<VariantKeyRoot> findById(VariantKeyId id) {
+        return dsl.selectFrom(VARIANT_KEY)
+                .where(VARIANT_KEY.ID.eq(id.value()))
+                .fetchOptional()
+                .map(mapper::toDomain);
+    }
+
+    @Override
+    public VariantKeyRoot fetchById(VariantKeyId id) {
+        return this.findById(id)
+                .orElseThrow(() -> new VariantEntityNotFoundException(
+                        VariantDomainErrorCodes.KEY_NOT_FOUND, List.of(id.toString())));
+    }
+}

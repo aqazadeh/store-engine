@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                            http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+    <changeSet id="000-1" author="rovshan.aghayev">
+        <sql>
+            CREATE TYPE row_status_type AS ENUM ('ACTIVE', 'HIDDEN', 'ARCHIVED', 'DELETED');
+        </sql>
+        <rollback>
+            <sql>DROP TYPE row_status;</sql>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="000-2" author="rovshan.aghayev">
+        <sql>
+            CREATE TYPE process_status_type AS ENUM ('IN_PROGRESS', 'FAILED', 'COMPLETED', 'ROLL_BACKED');
+        </sql>
+        <rollback>
+            <sql>DROP TYPE process_status;</sql>
+        </rollback>
+    </changeSet>
+</databaseChangeLog>

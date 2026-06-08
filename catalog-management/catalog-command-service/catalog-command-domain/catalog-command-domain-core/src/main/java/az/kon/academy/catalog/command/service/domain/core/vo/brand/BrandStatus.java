@@ -3,6 +3,7 @@ package az.kon.academy.catalog.command.service.domain.core.vo.brand;
 public enum BrandStatus {
     DRAFT,
     SENT_TO_APPROVAL,
+    IN_REVIEW,
     APPROVED,
     REJECTED;
 
@@ -12,6 +13,10 @@ public enum BrandStatus {
 
     public Boolean isSentToApproval() {
         return this == SENT_TO_APPROVAL;
+    }
+
+    public Boolean isInReview() {
+        return this == IN_REVIEW;
     }
 
     public Boolean isApproved() {

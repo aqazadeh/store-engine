@@ -1,6 +1,7 @@
 package az.kon.academy.catalog.command.service.domain.core.vo.brand;
 
 import az.kon.academy.catalog.command.service.domain.core.exception.brand.BrandDomainErrorCodes;
+import az.kon.academy.catalog.command.service.domain.core.exception.brand.BrandDomainException;
 import az.kon.academy.catalog.command.service.domain.core.exception.category.ProductCategoryDomainException;
 
 import java.util.Objects;
@@ -18,17 +19,17 @@ public final class BrandDescription {
 
     public BrandDescription(String value) {
         if (Objects.isNull(value) || value.isBlank()) {
-            throw new ProductCategoryDomainException(BrandDomainErrorCodes.DESCRIPTION_REQUIRED);
+            throw new BrandDomainException(BrandDomainErrorCodes.DESCRIPTION_REQUIRED);
         }
 
         String normalized = value.trim();
 
         if (normalized.length() < BrandDescription.MIN_LENGTH) {
-            throw new ProductCategoryDomainException(BrandDomainErrorCodes.DESCRIPTION_TOO_SHORT);
+            throw new BrandDomainException(BrandDomainErrorCodes.DESCRIPTION_TOO_SHORT);
         }
 
         if (normalized.length() > BrandDescription.MAX_LENGTH) {
-            throw new ProductCategoryDomainException(BrandDomainErrorCodes.DESCRIPTION_TOO_LONG);
+            throw new BrandDomainException(BrandDomainErrorCodes.DESCRIPTION_TOO_LONG);
         }
 
         this.value = normalized;

@@ -8,16 +8,9 @@ import lombok.Builder;
 import lombok.Getter;
 
 @Builder
-public class ProductCategoryChangeInformationCommand {
-    @Getter
-    private ProductCategoryId productCategoryId;
-
-    @Getter
-    private final ProductCategoryName name;
-
-    @Getter
-    private final ProductCategoryDescription description;
-
-    @Getter
-    private final ProductCategoryPath path;
+public final class ProductCategoryChangeInformationCommand {
+    @Getter private ProductCategoryId productCategoryId;
+    @Getter private final ProductCategoryName name;
+    @Getter private final ProductCategoryDescription description;
+    @Getter private final ProductCategoryPath path;
 }

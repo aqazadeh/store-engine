@@ -1,0 +1,4 @@
+name: store-engine
+networks:
+  store-engine-network:
+    driver: bridge

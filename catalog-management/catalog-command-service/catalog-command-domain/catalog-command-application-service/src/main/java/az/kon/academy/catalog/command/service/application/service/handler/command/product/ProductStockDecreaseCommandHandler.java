@@ -1,11 +1,11 @@
 package az.kon.academy.catalog.command.service.application.service.handler.command.product;
 
 import az.kon.academy.application.core.annotation.CommandHandler;
+import az.kon.academy.application.core.handler.AbstractCommandHandler;
 import az.kon.academy.catalog.command.service.application.service.constant.SecurityPermissions;
-import az.kon.academy.catalog.command.service.application.service.handler.AbstractCommandHandler;
-import az.kon.academy.catalog.command.service.application.service.port.outbound.ProductStockCommandPort;
-import az.kon.academy.catalog.command.service.domain.core.command.product.ProductStockDecreaseCommand;
-import az.kon.academy.catalog.command.service.domain.core.service.product.ProductDomainService;
+import az.kon.academy.catalog.command.service.application.service.port.outbound.ProductStockCommandOutboundPort;
+import az.kon.academy.catalog.command.service.domain.core.command.productstock.ProductStockDecreaseCommand;
+import az.kon.academy.catalog.command.service.domain.core.port.inbound.service.product.stock.ProductStockManagementDomainService;
 import az.kon.academy.domain.core.SeDomainContext;
 import az.kon.academy.event.handler.DomainEventPublisher;
 
@@ -16,20 +16,20 @@ public class ProductStockDecreaseCommandHandler implements AbstractCommandHandle
 
     private final SeDomainContext domainContext;
     private final DomainEventPublisher domainEventPublisher;
-    private final ProductDomainService productDomainService;
+    private final ProductStockManagementDomainService productStockManagementDomainService;
 
     public ProductStockDecreaseCommandHandler(SeDomainContext domainContext,
                                               DomainEventPublisher domainEventPublisher,
-                                              ProductDomainService productDomainService) {
+                                              ProductStockManagementDomainService productStockManagementDomainService) {
         this.domainContext = domainContext;
         this.domainEventPublisher = domainEventPublisher;
-        this.productDomainService = productDomainService;
+        this.productStockManagementDomainService = productStockManagementDomainService;
     }
 
     @Override
     public Void handle(ProductStockDecreaseCommand command) {
-        var aggregate = this.productDomainService.decreaseStock(domainContext, command);
-        var port = this.domainContext.getCommandPort(ProductStockCommandPort.class);
+        var aggregate = this.productStockManagementDomainService.decreaseStock(domainContext, command);
+        var port = this.domainContext.getCommandPort(ProductStockCommandOutboundPort.class);
         port.save(aggregate);
         this.domainEventPublisher.publish(aggregate.getUncommittedEvents());
         return null;

@@ -1,0 +1,446 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                            http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+    <!-- ============================================================
+         Product aggregate
+         Aggregate root: ProductRoot
+         Entities:
+           - ProductSpecificationAssignment (List<>)
+           - ProductVariantRoot (List<>, NoAggregateRoot)
+             - ProductVariantAssignment (List<>)
+           - ProductPrice (1-to-1 with ProductVariantRoot)
+           - ProductStock (1-to-1 with ProductVariantRoot)
+           - ProductRejectionReason (List<>)
+         ============================================================ -->
+
+    <!-- Product status enum -->
+    <changeSet id="005-1" author="rovshan.aghayev">
+        <sql>
+            CREATE TYPE product_status_type AS ENUM ('DRAFT', 'SENT_TO_APPROVAL', 'IN_REVIEW', 'APPROVED', 'REJECTED', 'ARCHIVED')
+        </sql>
+        <rollback>
+            DROP TYPE product_status;
+        </rollback>
+    </changeSet>
+
+    <!-- ProductRoot table -->
+    <changeSet id="005-2" author="rovshan.aghayev">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="product"/>
+            </not>
+        </preConditions>
+
+        <createTable tableName="product">
+            <column name="id" type="UUID">
+                <constraints primaryKey="true" nullable="false" primaryKeyName="pk_product"/>
+            </column>
+            <column name="version" type="BIGINT" defaultValueNumeric="1">
+                <constraints nullable="false"/>
+            </column>
+            <column name="process_status" type="process_status_type">
+                <constraints nullable="false"/>
+            </column>
+            <column name="row_status" type="row_status_type">
+                <constraints nullable="false"/>
+            </column>
+            <column name="creation_ts" type="TIMESTAMPTZ">
+                <constraints nullable="false"/>
+            </column>
+            <column name="modification_ts" type="TIMESTAMPTZ">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="merchant_id" type="UUID">
+                <constraints nullable="false"/>
+            </column>
+            <column name="category_id" type="UUID">
+                <constraints foreignKeyName="fk_product_category"
+                             references="product_category(id)"
+                             nullable="false"/>
+            </column>
+            <column name="brand_id" type="UUID">
+                <constraints foreignKeyName="fk_product_brand"
+                             references="brand(id)"
+                             nullable="false"/>
+            </column>
+            <column name="name" type="VARCHAR(20)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="description" type="VARCHAR(150)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="barcode" type="VARCHAR(100)">
+                <constraints nullable="false" unique="true" uniqueConstraintName="uq_product_barcode"/>
+            </column>
+            <column name="auto_price_update_enabled" type="BOOLEAN">
+                <constraints nullable="false"/>
+            </column>
+            <column name="status" type="product_status_type">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <rollback>
+            <dropTable tableName="product"/>
+        </rollback>
+    </changeSet>
+
+    <!-- ProductRoot indexes -->
+    <changeSet id="005-3" author="rovshan.aghayev">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <indexExists indexName="idx_product_merchant_id"/>
+            </not>
+        </preConditions>
+
+        <createIndex tableName="product" indexName="idx_product_merchant_id">
+            <column name="merchant_id"/>
+        </createIndex>
+
+        <createIndex tableName="product" indexName="idx_product_category_id">
+            <column name="category_id"/>
+        </createIndex>
+
+        <createIndex tableName="product" indexName="idx_product_brand_id">
+            <column name="brand_id"/>
+        </createIndex>
+
+        <createIndex tableName="product" indexName="idx_product_status">
+            <column name="status"/>
+        </createIndex>
+
+        <createIndex tableName="product" indexName="idx_product_row_status">
+            <column name="row_status"/>
+        </createIndex>
+
+        <createIndex tableName="product" indexName="idx_product_merchant_status">
+            <column name="merchant_id"/>
+            <column name="status"/>
+        </createIndex>
+
+        <rollback>
+            <dropIndex tableName="product" indexName="idx_product_merchant_id"/>
+            <dropIndex tableName="product" indexName="idx_product_category_id"/>
+            <dropIndex tableName="product" indexName="idx_product_brand_id"/>
+            <dropIndex tableName="product" indexName="idx_product_status"/>
+            <dropIndex tableName="product" indexName="idx_product_row_status"/>
+            <dropIndex tableName="product" indexName="idx_product_merchant_status"/>
+        </rollback>
+    </changeSet>
+
+    <!-- ProductSpecificationAssignment (List<> inside ProductRoot) -->
+    <changeSet id="005-4" author="rovshan.aghayev">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="product_specification_assignment"/>
+            </not>
+        </preConditions>
+
+        <createTable tableName="product_specification_assignment">
+            <column name="product_id" type="UUID">
+                <constraints nullable="false"
+                             foreignKeyName="fk_prod_spec_asgn_product"
+                             references="product(id)"/>
+            </column>
+            <column name="specification_id" type="UUID">
+                <constraints nullable="false"
+                             foreignKeyName="fk_prod_spec_asgn_specification"
+                             references="product_specification(id)"/>
+            </column>
+            <column name="value" type="VARCHAR(20)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <addPrimaryKey
+                tableName="product_specification_assignment"
+                columnNames="product_id, specification_id"
+                constraintName="pk_product_specification_assignment"/>
+
+        <rollback>
+            <dropTable tableName="product_specification_assignment"/>
+        </rollback>
+    </changeSet>
+
+    <!-- ProductSpecificationAssignment indexes -->
+    <changeSet id="005-5" author="rovshan.aghayev">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <indexExists indexName="idx_prod_spec_asgn_specification_id"/>
+            </not>
+        </preConditions>
+
+        <createIndex tableName="product_specification_assignment"
+                     indexName="idx_prod_spec_asgn_specification_id">
+            <column name="specification_id"/>
+        </createIndex>
+
+        <rollback>
+            <dropIndex tableName="product_specification_assignment"
+                       indexName="idx_prod_spec_asgn_specification_id"/>
+        </rollback>
+    </changeSet>
+
+    <!-- ProductVariantRoot (List<>, NoAggregateRoot, owned by ProductRoot) -->
+    <changeSet id="005-6" author="rovshan.aghayev">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="product_variant"/>
+            </not>
+        </preConditions>
+
+        <createTable tableName="product_variant">
+            <column name="id" type="UUID">
+                <constraints primaryKey="true" nullable="false" primaryKeyName="pk_product_variant"/>
+            </column>
+            <column name="creation_ts" type="TIMESTAMPTZ">
+                <constraints nullable="false"/>
+            </column>
+            <column name="modification_ts" type="TIMESTAMPTZ">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="product_id" type="UUID">
+                <constraints nullable="false"
+                             foreignKeyName="fk_product_variant_product"
+                             references="product(id)"/>
+            </column>
+        </createTable>
+
+        <rollback>
+            <dropTable tableName="product_variant"/>
+        </rollback>
+    </changeSet>
+
+    <!-- ProductVariantRoot index -->
+    <changeSet id="005-7" author="rovshan.aghayev">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <indexExists indexName="idx_product_variant_product_id"/>
+            </not>
+        </preConditions>
+
+        <createIndex tableName="product_variant" indexName="idx_product_variant_product_id">
+            <column name="product_id"/>
+        </createIndex>
+
+        <rollback>
+            <dropIndex tableName="product_variant" indexName="idx_product_variant_product_id"/>
+        </rollback>
+    </changeSet>
+
+    <!-- ProductVariantAssignment (List<> inside ProductVariantRoot) -->
+    <changeSet id="005-8" author="rovshan.aghayev">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="product_variant_assignment"/>
+            </not>
+        </preConditions>
+
+        <createTable tableName="product_variant_assignment">
+            <column name="variant_id" type="UUID">
+                <constraints nullable="false"
+                             foreignKeyName="fk_variant_asgn_variant"
+                             references="product_variant(id)"/>
+            </column>
+            <column name="variant_key_id" type="UUID">
+                <constraints nullable="false"
+                             foreignKeyName="fk_variant_asgn_key"
+                             references="variant_key(id)"/>
+            </column>
+            <column name="variant_value_id" type="UUID">
+                <constraints nullable="false"
+                             foreignKeyName="fk_variant_asgn_value"
+                             references="variant_value(id)"/>
+            </column>
+        </createTable>
+
+        <addPrimaryKey
+                tableName="product_variant_assignment"
+                columnNames="variant_id, variant_key_id"
+                constraintName="pk_product_variant_assignment"/>
+
+        <rollback>
+            <dropTable tableName="product_variant_assignment"/>
+        </rollback>
+    </changeSet>
+
+    <!-- ProductVariantAssignment indexes -->
+    <changeSet id="005-9" author="rovshan.aghayev">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <indexExists indexName="idx_variant_asgn_key_id"/>
+            </not>
+        </preConditions>
+
+        <createIndex tableName="product_variant_assignment" indexName="idx_variant_asgn_key_id">
+            <column name="variant_key_id"/>
+        </createIndex>
+
+        <createIndex tableName="product_variant_assignment" indexName="idx_variant_asgn_value_id">
+            <column name="variant_value_id"/>
+        </createIndex>
+
+        <rollback>
+            <dropIndex tableName="product_variant_assignment" indexName="idx_variant_asgn_key_id"/>
+            <dropIndex tableName="product_variant_assignment" indexName="idx_variant_asgn_value_id"/>
+        </rollback>
+    </changeSet>
+
+    <!-- ProductPrice (1-to-1 with ProductVariantRoot) -->
+    <changeSet id="005-10" author="rovshan.aghayev">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="product_price"/>
+            </not>
+        </preConditions>
+
+        <createTable tableName="product_price">
+            <column name="id" type="UUID">
+                <constraints primaryKey="true" nullable="false" primaryKeyName="pk_product_price"/>
+            </column>
+            <column name="version" type="BIGINT" defaultValueNumeric="1">
+                <constraints nullable="false"/>
+            </column>
+            <column name="creation_ts" type="TIMESTAMPTZ">
+                <constraints nullable="false"/>
+            </column>
+            <column name="modification_ts" type="TIMESTAMPTZ">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="variant_id" type="UUID">
+                <constraints nullable="false" unique="true"
+                             uniqueConstraintName="uq_product_price_variant"
+                             foreignKeyName="fk_product_price_variant"
+                             references="product_variant(id)"/>
+            </column>
+            <column name="min_price" type="NUMERIC(19, 4)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="max_price" type="NUMERIC(19, 4)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <rollback>
+            <dropTable tableName="product_price"/>
+        </rollback>
+    </changeSet>
+
+    <!-- ProductStock (1-to-1 with ProductVariantRoot) -->
+    <changeSet id="005-11" author="rovshan.aghayev">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="product_stock"/>
+            </not>
+        </preConditions>
+
+        <createTable tableName="product_stock">
+            <column name="id" type="UUID">
+                <constraints primaryKey="true" nullable="false" primaryKeyName="pk_product_stock"/>
+            </column>
+            <column name="version" type="BIGINT" defaultValueNumeric="1">
+                <constraints nullable="false"/>
+            </column>
+            <column name="creation_ts" type="TIMESTAMPTZ">
+                <constraints nullable="false"/>
+            </column>
+            <column name="modification_ts" type="TIMESTAMPTZ">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="variant_id" type="UUID">
+                <constraints nullable="false" unique="true"
+                             uniqueConstraintName="uq_product_stock_variant"
+                             foreignKeyName="fk_product_stock_variant"
+                             references="product_variant(id)"/>
+            </column>
+            <column name="quantity" type="INTEGER" defaultValueNumeric="0">
+                <constraints nullable="false" checkConstraint="quantity >= 0"/>
+            </column>
+        </createTable>
+
+        <rollback>
+            <dropTable tableName="product_stock"/>
+        </rollback>
+    </changeSet>
+
+    <!-- ProductRejectionReason (List<> inside ProductRoot) -->
+    <changeSet id="005-12" author="rovshan.aghayev">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="product_rejection_reason"/>
+            </not>
+        </preConditions>
+
+        <createTable tableName="product_rejection_reason">
+            <column name="id" type="UUID">
+                <constraints primaryKey="true" nullable="false" primaryKeyName="pk_product_rejection_reason"/>
+            </column>
+            <column name="version" type="BIGINT" defaultValueNumeric="1">
+                <constraints nullable="false"/>
+            </column>
+            <column name="process_status" type="process_status_type">
+                <constraints nullable="false"/>
+            </column>
+            <column name="row_status" type="row_status_type">
+                <constraints nullable="false"/>
+            </column>
+            <column name="creation_ts" type="TIMESTAMPTZ">
+                <constraints nullable="false"/>
+            </column>
+            <column name="modification_ts" type="TIMESTAMPTZ">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="product_id" type="UUID">
+                <constraints nullable="false"
+                             foreignKeyName="fk_product_rejection_reason_product"
+                             references="product(id)"/>
+            </column>
+            <column name="reason" type="TEXT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="moderated_by" type="UUID">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <rollback>
+            <dropTable tableName="product_rejection_reason"/>
+        </rollback>
+    </changeSet>
+
+    <!-- ProductRejectionReason indexes -->
+    <changeSet id="005-13" author="rovshan.aghayev">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <indexExists indexName="idx_product_rejection_reason_product_id"/>
+            </not>
+        </preConditions>
+
+        <createIndex tableName="product_rejection_reason"
+                     indexName="idx_product_rejection_reason_product_id">
+            <column name="product_id"/>
+        </createIndex>
+
+        <createIndex tableName="product_rejection_reason"
+                     indexName="idx_product_rejection_reason_moderated_by">
+            <column name="moderated_by"/>
+        </createIndex>
+
+        <rollback>
+            <dropIndex tableName="product_rejection_reason"
+                       indexName="idx_product_rejection_reason_product_id"/>
+            <dropIndex tableName="product_rejection_reason"
+                       indexName="idx_product_rejection_reason_moderated_by"/>
+        </rollback>
+    </changeSet>
+
+</databaseChangeLog>

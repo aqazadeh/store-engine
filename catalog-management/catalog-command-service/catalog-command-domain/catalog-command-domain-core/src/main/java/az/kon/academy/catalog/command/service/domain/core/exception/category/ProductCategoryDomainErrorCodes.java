@@ -5,22 +5,26 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = lombok.AccessLevel.PRIVATE)
 public final class ProductCategoryDomainErrorCodes {
 
-    public static final String ENTITY_NOT_FOUND                 = "000001";
-    public static final String PARENT_NOT_FOUND                 = "000002";
+    public static final String ENTITY_NOT_FOUND                         = "000001";
+    public static final String PARENT_NOT_FOUND                         = "000002";
 
-    public static final String NAME_REQUIRED                    = "000003";
-    public static final String NAME_TOO_LONG                    = "000004";
-    public static final String NAME_TOO_SHORT                   = "000005";
+    public static final String NAME_REQUIRED                            = "000003";
+    public static final String NAME_TOO_LONG                            = "000004";
+    public static final String NAME_TOO_SHORT                           = "000005";
 
-    public static final String DESCRIPTION_REQUIRED             = "000006";
-    public static final String DESCRIPTION_TOO_LONG             = "000007";
-    public static final String DESCRIPTION_TOO_SHORT            = "000008";
+    public static final String DESCRIPTION_REQUIRED                     = "000006";
+    public static final String DESCRIPTION_TOO_LONG                     = "000007";
+    public static final String DESCRIPTION_TOO_SHORT                    = "000008";
 
-    public static final String PATH_REQUIRED                    = "000009";
-    public static final String PATH_TOO_LONG                    = "000010";
-    public static final String PATH_TOO_SHORT                   = "000011";
+    public static final String PATH_REQUIRED                            = "000009";
+    public static final String PATH_TOO_LONG                            = "000010";
+    public static final String PATH_TOO_SHORT                           = "000011";
 
-    public static final String SPECIFICATION_VALUE_REQUIRED     = "000012";
-    public static final String SPECIFICATION_VALUE_TOO_SHORT    = "000013";
-    public static final String SPECIFICATION_VALUE_TOO_LONG     = "000014";
+    public static final String SPECIFICATION_VALUE_REQUIRED             = "000012";
+    public static final String SPECIFICATION_VALUE_TOO_SHORT            = "000013";
+    public static final String SPECIFICATION_VALUE_TOO_LONG             = "000014";
+    public static final String HAS_ACTIVE_PRODUCT                       = "000015";
+    public static final String HAS_ACTIVE_SPECIFICATION_ASSIGNMENT      = "000016";
+    public static final String CIRCULAR_PARENT_REFERENCE                = "000017";
+    public static final String NAME_ALREADY_EXISTS                      = "000018";
 }

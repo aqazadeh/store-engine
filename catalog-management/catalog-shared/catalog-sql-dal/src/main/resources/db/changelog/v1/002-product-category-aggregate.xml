@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                            http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+    <!-- ============================================================
+         ProductCategory aggregate
+         Aggregate root: ProductCategoryRoot
+         Self-referencing hierarchy (parent_id)
+         ============================================================ -->
+
+    <changeSet id="002-1" author="rovshan.aghayev">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="product_category"/>
+            </not>
+        </preConditions>
+
+        <createTable tableName="product_category">
+            <column name="id" type="UUID">
+                <constraints primaryKey="true" nullable="false" primaryKeyName="pk_product_category"/>
+            </column>
+            <column name="version" type="BIGINT" defaultValueNumeric="1">
+                <constraints nullable="false"/>
+            </column>
+            <column name="process_status" type="process_status_type">
+                <constraints nullable="false"/>
+            </column>
+            <column name="row_status" type="row_status_type">
+                <constraints nullable="false"/>
+            </column>
+            <column name="creation_ts" type="TIMESTAMPTZ">
+                <constraints nullable="false"/>
+            </column>
+            <column name="modification_ts" type="TIMESTAMPTZ">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="parent_id" type="UUID">
+                <constraints foreignKeyName="fk_product_category_parent"
+                             references="product_category(id)"/>
+            </column>
+            <column name="name" type="VARCHAR(40)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="path" type="VARCHAR(40)">
+                <constraints nullable="false" unique="true" uniqueConstraintName="uq_product_category_path"/>
+            </column>
+            <column name="description" type="TEXT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="image" type="VARCHAR(512)"/>
+        </createTable>
+
+        <rollback>
+            <dropTable tableName="product_category"/>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="002-2" author="rovshan.aghayev">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <indexExists indexName="idx_product_category_parent_id"/>
+            </not>
+        </preConditions>
+
+        <createIndex tableName="product_category" indexName="idx_product_category_parent_id">
+            <column name="parent_id"/>
+        </createIndex>
+
+        <createIndex tableName="product_category" indexName="idx_product_category_row_status">
+            <column name="row_status"/>
+        </createIndex>
+
+        <rollback>
+            <dropIndex tableName="product_category" indexName="idx_product_category_parent_id"/>
+            <dropIndex tableName="product_category" indexName="idx_product_category_row_status"/>
+        </rollback>
+    </changeSet>
+
+</databaseChangeLog>

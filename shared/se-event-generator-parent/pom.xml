@@ -25,7 +25,8 @@
     </developers>
 
     <properties>
-
+        <avro.output.directory>${project.build.directory}/generated-sources/avro</avro.output.directory>
+        <mapper.directory>${project.build.directory}/generated-sources/mapper</mapper.directory>
 
     </properties>
 
@@ -53,20 +54,15 @@
                         <goals>
                             <goal>generate-avsc</goal>
                         </goals>
-                        <configuration>
-                            <prettyPrint>true</prettyPrint>
-                            <outputDirectory>${project.basedir}/src/main/avro</outputDirectory>
-                        </configuration>
                     </execution>
                     <execution>
                         <id>generate-mappers</id>
                         <goals>
                             <goal>generate-mapper</goal>
                         </goals>
-                        <configuration>
-                            <avroDirectory>${project.basedir}/src/main/avro</avroDirectory>
-                            <outputDirectory>${project.basedir}/src/main/java</outputDirectory>
-                        </configuration>
+<!--                        <configuration>-->
+<!--                            <avroDirectory>${avro.directory}</avroDirectory>-->
+<!--                        </configuration>-->
                     </execution>
                 </executions>
             </plugin>
@@ -80,8 +76,11 @@
                             <goal>schema</goal>
                         </goals>
                         <configuration>
-                            <sourceDirectory>${project.basedir}/src/main/avro/</sourceDirectory>
-                            <outputDirectory>${project.basedir}/src/main/java/</outputDirectory>
+                            <createOptionalGetters>true</createOptionalGetters>
+                            <enableDecimalLogicalType>false</enableDecimalLogicalType>
+                            <fieldVisibility>PRIVATE</fieldVisibility>
+                            <optionalGettersForNullableFieldsOnly>true</optionalGettersForNullableFieldsOnly>
+                            <sourceDirectory>${project.build.directory}/generated-sources/avsc</sourceDirectory>
                         </configuration>
                     </execution>
                 </executions>
@@ -89,6 +88,15 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <annotationProcessorPaths>
+                        <path>
+                            <groupId>org.mapstruct</groupId>
+                            <artifactId>mapstruct-processor</artifactId>
+                            <version>${mapstruct.version}</version>
+                        </path>
+                    </annotationProcessorPaths>
+                </configuration>
             </plugin>
         </plugins>
         </pluginManagement>

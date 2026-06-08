@@ -2,12 +2,9 @@ package az.kon.academy.catalog.command.service.domain.core.aggregate;
 
 import az.kon.academy.catalog.command.service.domain.core.command.product.*;
 import az.kon.academy.catalog.command.service.domain.core.exception.product.ProductDomainException;
-import az.kon.academy.catalog.command.service.domain.core.vo.Barcode;
 import az.kon.academy.catalog.command.service.domain.core.vo.brand.BrandId;
 import az.kon.academy.catalog.command.service.domain.core.vo.management.category.ProductCategoryId;
 import az.kon.academy.catalog.command.service.domain.core.vo.management.specification.ProductSpecificationId;
-import az.kon.academy.catalog.command.service.domain.core.vo.management.variant.VariantKeyId;
-import az.kon.academy.catalog.command.service.domain.core.vo.management.variant.VariantValueId;
 import az.kon.academy.catalog.command.service.domain.core.vo.merchent.MerchantId;
 import az.kon.academy.catalog.command.service.domain.core.vo.product.*;
 import az.kon.academy.catalog.event.product.*;
@@ -17,7 +14,6 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
-import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -30,7 +26,6 @@ class ProductRootTest {
     private BrandId brandId;
     private ProductName name;
     private ProductDescription description;
-    private Barcode barcode;
     private ProductCreateCommand createCommand;
 
     @BeforeEach
@@ -40,14 +35,12 @@ class ProductRootTest {
         brandId = BrandId.random();
         name = new ProductName("Gaming Laptop");
         description = new ProductDescription("A high-end gaming laptop for professionals");
-        barcode = Barcode.of("1234567890123");
         createCommand = ProductCreateCommand.builder()
                 .merchantId(merchantId)
                 .categoryId(categoryId)
                 .brandId(brandId)
                 .name(name)
                 .description(description)
-                .barcode(barcode)
                 .build();
     }
 
@@ -60,7 +53,7 @@ class ProductRootTest {
     }
 
     private ProductRoot productInApprovedState() {
-        return productInSentToApprovalState().approve();
+        return productInSentToApprovalState().moveToInReview().approve();
     }
 
     private ProductRoot productInRejectedState() {
@@ -142,22 +135,6 @@ class ProductRootTest {
                 assertThat(product.getDescription().value()).isEqualTo(description.value());
             }
 
-            @Test
-            @DisplayName("Sets barcode from command")
-            void setsBarcode() {
-                var product = ProductRoot.initialize(createCommand);
-
-                assertThat(product.getBarcode()).isEqualTo(barcode);
-                assertThat(product.getBarcode().value()).isEqualTo(barcode.value());
-            }
-
-            @Test
-            @DisplayName("autoPriceUpdateEnabled defaults to false")
-            void autoPriceUpdateEnabledDefaultsFalse() {
-                var product = ProductRoot.initialize(createCommand);
-
-                assertThat(product.getAutoPriceUpdateEnabled()).isFalse();
-            }
 
             @Test
             @DisplayName("Status defaults to DRAFT")
@@ -173,14 +150,6 @@ class ProductRootTest {
                 var product = ProductRoot.initialize(createCommand);
 
                 assertThat(product.getSpecifications()).isEmpty();
-            }
-
-            @Test
-            @DisplayName("Variants initialized as empty list")
-            void variantsInitializedEmpty() {
-                var product = ProductRoot.initialize(createCommand);
-
-                assertThat(product.getVariants()).isEmpty();
             }
 
             @Test
@@ -285,15 +254,6 @@ class ProductRootTest {
                 var event = (ProductCreatedEvent) product.getUncommittedEvents().getFirst();
 
                 assertThat(event.getDescription()).isEqualTo(description.value());
-            }
-
-            @Test
-            @DisplayName("Event carries the barcode")
-            void eventCarriesBarcode() {
-                var product = ProductRoot.initialize(createCommand);
-                var event = (ProductCreatedEvent) product.getUncommittedEvents().getFirst();
-
-                assertThat(event.getBarcode()).isEqualTo(barcode.value());
             }
 
             @Test
@@ -470,7 +430,7 @@ class ProductRootTest {
             @Test
             @DisplayName("Sets status to APPROVED")
             void setsStatusToApproved() {
-                var result = productInSentToApprovalState().approve();
+                var result = productInSentToApprovalState().moveToInReview().approve();
 
                 assertThat(result.getStatus()).isEqualTo(ProductStatus.APPROVED);
             }
@@ -478,16 +438,16 @@ class ProductRootTest {
             @Test
             @DisplayName("ID is preserved")
             void idPreserved() {
-                var sentToApproval = productInSentToApprovalState();
-                var result = sentToApproval.approve();
+                var inReview = productInSentToApprovalState().moveToInReview();
+                var result = inReview.approve();
 
-                assertThat(result.getRootID()).isEqualTo(sentToApproval.getRootID());
+                assertThat(result.getRootID()).isEqualTo(inReview.getRootID());
             }
 
             @Test
             @DisplayName("modificationTs is updated")
             void modificationTsIsUpdated() {
-                var result = productInSentToApprovalState().approve();
+                var result = productInSentToApprovalState().moveToInReview().approve();
 
                 assertThat(result.getModificationTs()).isNotNull();
             }
@@ -495,10 +455,10 @@ class ProductRootTest {
             @Test
             @DisplayName("Original aggregate is unchanged")
             void originalAggregateIsUnchanged() {
-                var sentToApproval = productInSentToApprovalState();
-                sentToApproval.approve();
+                var inReview = productInSentToApprovalState().moveToInReview();
+                inReview.approve();
 
-                assertThat(sentToApproval.getStatus()).isEqualTo(ProductStatus.SENT_TO_APPROVAL);
+                assertThat(inReview.getStatus()).isEqualTo(ProductStatus.IN_REVIEW);
             }
         }
 
@@ -509,7 +469,7 @@ class ProductRootTest {
             @Test
             @DisplayName("Registers exactly one uncommitted event")
             void registersExactlyOneEvent() {
-                var result = productInSentToApprovalState().approve();
+                var result = productInSentToApprovalState().moveToInReview().approve();
 
                 assertThat(result.getUncommittedEvents()).hasSize(1);
             }
@@ -517,7 +477,7 @@ class ProductRootTest {
             @Test
             @DisplayName("Registered event is ProductApprovedEvent")
             void registeredEventIsCorrectType() {
-                var result = productInSentToApprovalState().approve();
+                var result = productInSentToApprovalState().moveToInReview().approve();
 
                 assertThat(result.getUncommittedEvents().getFirst())
                         .isInstanceOf(ProductApprovedEvent.class);
@@ -526,7 +486,7 @@ class ProductRootTest {
             @Test
             @DisplayName("Event aggregateId matches the product ID")
             void eventAggregateIdMatchesProductId() {
-                var result = productInSentToApprovalState().approve();
+                var result = productInSentToApprovalState().moveToInReview().approve();
                 var event = result.getUncommittedEvents().getFirst();
 
                 assertThat(event.getAggregateId())
@@ -536,7 +496,7 @@ class ProductRootTest {
             @Test
             @DisplayName("Event carries APPROVED status")
             void eventCarriesStatus() {
-                var result = productInSentToApprovalState().approve();
+                var result = productInSentToApprovalState().moveToInReview().approve();
                 var event = (ProductApprovedEvent) result.getUncommittedEvents().getFirst();
 
                 assertThat(event.getStatus()).isEqualTo(ProductStatus.APPROVED.name());
@@ -708,12 +668,11 @@ class ProductRootTest {
             }
 
             @Test
-            @DisplayName("Throws when status is REJECTED")
-            void throwsWhenRejected() {
-                var rejected = productInRejectedState();
+            @DisplayName("Allowed when status is REJECTED")
+            void allowedWhenRejected() {
+                var result = productInRejectedState().moveToDraft();
 
-                assertThatThrownBy(rejected::moveToDraft)
-                        .isInstanceOf(ProductDomainException.class);
+                assertThat(result.getStatus()).isEqualTo(ProductStatus.DRAFT);
             }
 
             @Test
@@ -728,8 +687,115 @@ class ProductRootTest {
     }
 
     // ─────────────────────────────────────────────────────────────────────────
-    // archive()
+    // moveToInReview()
     // ─────────────────────────────────────────────────────────────────────────
+
+    @Nested
+    @DisplayName("moveToInReview()")
+    class MoveToInReview {
+
+        @Nested
+        @DisplayName("Aggregate state")
+        class AggregateState {
+
+            @Test
+            @DisplayName("Sets status to IN_REVIEW from SENT_TO_APPROVAL")
+            void setsStatusToInReview() {
+                var result = productInSentToApprovalState().moveToInReview();
+
+                assertThat(result.getStatus()).isEqualTo(ProductStatus.IN_REVIEW);
+            }
+
+            @Test
+            @DisplayName("ID is preserved")
+            void idPreserved() {
+                var sentToApproval = productInSentToApprovalState();
+                var result = sentToApproval.moveToInReview();
+
+                assertThat(result.getRootID()).isEqualTo(sentToApproval.getRootID());
+            }
+
+            @Test
+            @DisplayName("modificationTs is updated")
+            void modificationTsIsUpdated() {
+                var result = productInSentToApprovalState().moveToInReview();
+
+                assertThat(result.getModificationTs()).isNotNull();
+            }
+
+            @Test
+            @DisplayName("Original aggregate is unchanged")
+            void originalAggregateIsUnchanged() {
+                var original = productInSentToApprovalState();
+                original.moveToInReview();
+
+                assertThat(original.getStatus()).isEqualTo(ProductStatus.SENT_TO_APPROVAL);
+            }
+        }
+
+        @Nested
+        @DisplayName("Event publishing")
+        class EventPublishing {
+
+            @Test
+            @DisplayName("Registers exactly one uncommitted event")
+            void registersExactlyOneEvent() {
+                var result = productInSentToApprovalState().moveToInReview();
+
+                assertThat(result.getUncommittedEvents()).hasSize(1);
+            }
+
+            @Test
+            @DisplayName("Registered event is ProductMovedToInReviewEvent")
+            void registeredEventIsCorrectType() {
+                var result = productInSentToApprovalState().moveToInReview();
+
+                assertThat(result.getUncommittedEvents().getFirst())
+                        .isInstanceOf(ProductMovedToInReviewEvent.class);
+            }
+
+            @Test
+            @DisplayName("Event carries IN_REVIEW status")
+            void eventCarriesStatus() {
+                var result = productInSentToApprovalState().moveToInReview();
+                var event = (ProductMovedToInReviewEvent) result.getUncommittedEvents().getFirst();
+
+                assertThat(event.getStatus()).isEqualTo(ProductStatus.IN_REVIEW.name());
+            }
+        }
+
+        @Nested
+        @DisplayName("Guard")
+        class Guard {
+
+            @Test
+            @DisplayName("Throws when status is DRAFT")
+            void throwsWhenDraft() {
+                var draft = freshProduct();
+
+                assertThatThrownBy(draft::moveToInReview)
+                        .isInstanceOf(ProductDomainException.class);
+            }
+
+            @Test
+            @DisplayName("Throws when status is APPROVED")
+            void throwsWhenApproved() {
+                var approved = productInApprovedState();
+
+                assertThatThrownBy(approved::moveToInReview)
+                        .isInstanceOf(ProductDomainException.class);
+            }
+
+            @Test
+            @DisplayName("Throws when status is REJECTED")
+            void throwsWhenRejected() {
+                var rejected = productInRejectedState();
+
+                assertThatThrownBy(rejected::moveToInReview)
+                        .isInstanceOf(ProductDomainException.class);
+            }
+        }
+    }
 
     @Nested
     @DisplayName("archive()")
@@ -1255,6 +1321,112 @@ class ProductRootTest {
     }
 
     // ─────────────────────────────────────────────────────────────────────────
+    // assignSpecifications()
+    // ─────────────────────────────────────────────────────────────────────────
+
+    @Nested
+    @DisplayName("assignSpecifications()")
+    class AssignSpecifications {
+
+        private ProductSpecificationId specId1;
+        private ProductSpecificationId specId2;
+        private ProductSpecificationValue specValue1;
+        private ProductSpecificationValue specValue2;
+        private ProductAssignSpecificationsCommand assignSpecsCommand;
+
+        @BeforeEach
+        void setUpCommand() {
+            specId1 = ProductSpecificationId.random();
+            specId2 = ProductSpecificationId.random();
+            specValue1 = new ProductSpecificationValue("Black");
+            specValue2 = new ProductSpecificationValue("Large");
+            assignSpecsCommand = ProductAssignSpecificationsCommand.builder()
+                    .productId(ProductId.random())
+                    .entries(List.of(
+                            new ProductAssignSpecificationsCommand.SpecificationEntry(specId1, specValue1),
+                            new ProductAssignSpecificationsCommand.SpecificationEntry(specId2, specValue2)
+                    ))
+                    .build();
+        }
+
+        @Nested
+        @DisplayName("Aggregate state")
+        class AggregateState {
+
+            @Test
+            @DisplayName("Assigns multiple specifications at once")
+            void assignsMultipleSpecifications() {
+                var result = freshProduct().assignSpecifications(assignSpecsCommand);
+
+                assertThat(result.getSpecifications()).hasSize(2);
+                assertThat(result.getSpecifications())
+                        .anyMatch(s -> s.getSpecificationId().equals(specId1) && s.getValue().equals(specValue1));
+                assertThat(result.getSpecifications())
+                        .anyMatch(s -> s.getSpecificationId().equals(specId2) && s.getValue().equals(specValue2));
+            }
+
+            @Test
+            @DisplayName("Replaces existing specifications entirely")
+            void replacesExistingSpecifications() {
+                var addCmd = ProductAssignSpecificationCommand.builder()
+                        .productId(ProductId.random())
+                        .specificationId(ProductSpecificationId.random())
+                        .value(new ProductSpecificationValue("OldVal"))
+                        .build();
+
+                var result = freshProduct()
+                        .assignSpecification(addCmd)
+                        .assignSpecifications(assignSpecsCommand);
+
+                assertThat(result.getSpecifications()).hasSize(2);
+                assertThat(result.getSpecifications())
+                        .noneMatch(s -> s.getValue().equals(new ProductSpecificationValue("OldVal")));
+            }
+
+            @Test
+            @DisplayName("Original aggregate is unchanged")
+            void originalAggregateIsUnchanged() {
+                var original = freshProduct();
+                original.assignSpecifications(assignSpecsCommand);
+
+                assertThat(original.getSpecifications()).isEmpty();
+            }
+        }
+
+        @Nested
+        @DisplayName("Event publishing")
+        class EventPublishing {
+
+            @Test
+            @DisplayName("Registers exactly one uncommitted event")
+            void registersExactlyOneEvent() {
+                var result = freshProduct().assignSpecifications(assignSpecsCommand);
+
+                assertThat(result.getUncommittedEvents()).hasSize(1);
+            }
+
+            @Test
+            @DisplayName("Registered event is ProductSpecificationsAssignedEvent")
+            void registeredEventIsCorrectType() {
+                var result = freshProduct().assignSpecifications(assignSpecsCommand);
+
+                assertThat(result.getUncommittedEvents().getFirst())
+                        .isInstanceOf(ProductSpecificationsAssignedEvent.class);
+            }
+
+            @Test
+            @DisplayName("Event carries the specificationIds and values")
+            void eventCarriesSpecificationIdsAndValues() {
+                var result = freshProduct().assignSpecifications(assignSpecsCommand);
+                var event = (ProductSpecificationsAssignedEvent) result.getUncommittedEvents().getFirst();
+
+                assertThat(event.getSpecificationIds()).containsExactly(specId1.value(), specId2.value());
+                assertThat(event.getValues()).containsExactly(specValue1.value(), specValue2.value());
+            }
+        }
+    }
+
+    // ─────────────────────────────────────────────────────────────────────────
     // removeSpecification()
     // ─────────────────────────────────────────────────────────────────────────
 
@@ -1362,260 +1534,7 @@ class ProductRootTest {
         }
     }
 
-    // ─────────────────────────────────────────────────────────────────────────
-    // addVariant()
-    // ─────────────────────────────────────────────────────────────────────────
 
-    @Nested
-    @DisplayName("addVariant()")
-    class AddVariant {
-
-        private VariantKeyId keyId;
-        private VariantValueId valueId;
-        private ProductAddVariantCommand addVariantCommand;
-
-        @BeforeEach
-        void setUpCommand() {
-            keyId = VariantKeyId.random();
-            valueId = VariantValueId.random();
-            addVariantCommand = ProductAddVariantCommand.builder()
-                    .productId(ProductId.random())
-                    .assignments(List.of(ProductVariantAssignment.of(keyId, valueId)))
-                    .build();
-        }
-
-        @Nested
-        @DisplayName("Aggregate state")
-        class AggregateState {
-
-            @Test
-            @DisplayName("Adds variant to empty list")
-            void addsVariantToEmptyList() {
-                var result = freshProduct().addVariant(addVariantCommand);
-
-                assertThat(result.getVariants()).hasSize(1);
-            }
-
-            @Test
-            @DisplayName("Added variant has a non-null ID")
-            void addedVariantHasNonNullId() {
-                var result = freshProduct().addVariant(addVariantCommand);
-
-                assertThat(result.getVariants().getFirst().getRootID()).isNotNull();
-                assertThat(result.getVariants().getFirst().getRootID().value()).isNotNull();
-            }
-
-            @Test
-            @DisplayName("Added variant has correct assignments")
-            void addedVariantHasCorrectAssignments() {
-                var result = freshProduct().addVariant(addVariantCommand);
-                var variant = result.getVariants().getFirst();
-
-                assertThat(variant.getAssignments()).hasSize(1);
-                assertThat(variant.getAssignments().getFirst().getVariantKeyId()).isEqualTo(keyId);
-                assertThat(variant.getAssignments().getFirst().getVariantValueId()).isEqualTo(valueId);
-            }
-
-            @Test
-            @DisplayName("Adding two variants results in two entries")
-            void addingTwoVariantsResultsInTwoEntries() {
-                var secondCmd = ProductAddVariantCommand.builder()
-                        .productId(ProductId.random())
-                        .assignments(List.of(ProductVariantAssignment.of(VariantKeyId.random(), VariantValueId.random())))
-                        .build();
-
-                var result = freshProduct()
-                        .addVariant(addVariantCommand)
-                        .addVariant(secondCmd);
-
-                assertThat(result.getVariants()).hasSize(2);
-            }
-
-            @Test
-            @DisplayName("Original aggregate is unchanged")
-            void originalAggregateIsUnchanged() {
-                var original = freshProduct();
-                original.addVariant(addVariantCommand);
-
-                assertThat(original.getVariants()).isEmpty();
-            }
-        }
-
-        @Nested
-        @DisplayName("Event publishing")
-        class EventPublishing {
-
-            @Test
-            @DisplayName("Registers exactly one uncommitted event")
-            void registersExactlyOneEvent() {
-                var result = freshProduct().addVariant(addVariantCommand);
-
-                assertThat(result.getUncommittedEvents()).hasSize(1);
-            }
-
-            @Test
-            @DisplayName("Registered event is ProductVariantAddedEvent")
-            void registeredEventIsCorrectType() {
-                var result = freshProduct().addVariant(addVariantCommand);
-
-                assertThat(result.getUncommittedEvents().getFirst())
-                        .isInstanceOf(ProductVariantAddedEvent.class);
-            }
-
-            @Test
-            @DisplayName("Event variantId matches the created variant's ID")
-            void eventVariantIdMatchesCreatedVariant() {
-                var result = freshProduct().addVariant(addVariantCommand);
-                var event = (ProductVariantAddedEvent) result.getUncommittedEvents().getFirst();
-
-                assertThat(event.getVariantId())
-                        .isEqualTo(result.getVariants().getFirst().getRootID().value());
-            }
-
-            @Test
-            @DisplayName("Event carries the variantKeyIds and variantValueIds")
-            void eventCarriesAssignmentIds() {
-                var result = freshProduct().addVariant(addVariantCommand);
-                var event = (ProductVariantAddedEvent) result.getUncommittedEvents().getFirst();
-
-                assertThat(event.getVariantKeyIds()).containsExactly(keyId.value());
-                assertThat(event.getVariantValueIds()).containsExactly(valueId.value());
-            }
-
-        }
-    }
-
-    // ─────────────────────────────────────────────────────────────────────────
-    // removeVariant()
-    // ─────────────────────────────────────────────────────────────────────────
-
-    @Nested
-    @DisplayName("removeVariant()")
-    class RemoveVariant {
-
-        private ProductAddVariantCommand addVariantCommand;
-
-        @BeforeEach
-        void setUpCommand() {
-            addVariantCommand = ProductAddVariantCommand.builder()
-                    .productId(ProductId.random())
-                    .assignments(List.of(ProductVariantAssignment.of(VariantKeyId.random(), VariantValueId.random())))
-                    .build();
-        }
-
-        @Nested
-        @DisplayName("Aggregate state")
-        class AggregateState {
-
-            @Test
-            @DisplayName("Removes variant by ID")
-            void removesVariantById() {
-                var withVariant = freshProduct().addVariant(addVariantCommand);
-                var variantId = withVariant.getVariants().getFirst().getRootID();
-
-                var removeCmd = ProductRemoveVariantCommand.builder()
-                        .productId(ProductId.random())
-                        .variantId((ProductVariantId) variantId)
-                        .build();
-
-                var result = withVariant.removeVariant(removeCmd);
-
-                assertThat(result.getVariants()).isEmpty();
-            }
-
-            @Test
-            @DisplayName("Other variants are preserved")
-            void otherVariantsPreserved() {
-                var secondCmd = ProductAddVariantCommand.builder()
-                        .productId(ProductId.random())
-                        .assignments(List.of(ProductVariantAssignment.of(VariantKeyId.random(), VariantValueId.random())))
-                        .build();
-
-                var withTwo = freshProduct().addVariant(addVariantCommand).addVariant(secondCmd);
-                var firstVariantId = withTwo.getVariants().getFirst().getRootID();
-
-                var removeCmd = ProductRemoveVariantCommand.builder()
-                        .productId(ProductId.random())
-                        .variantId((ProductVariantId) firstVariantId)
-                        .build();
-
-                var result = withTwo.removeVariant(removeCmd);
-
-                assertThat(result.getVariants()).hasSize(1);
-            }
-
-            @Test
-            @DisplayName("Original aggregate is unchanged")
-            void originalAggregateIsUnchanged() {
-                var withVariant = freshProduct().addVariant(addVariantCommand);
-                var variantId = withVariant.getVariants().getFirst().getRootID();
-
-                var removeCmd = ProductRemoveVariantCommand.builder()
-                        .productId(ProductId.random())
-                        .variantId((ProductVariantId) variantId)
-                        .build();
-
-                withVariant.removeVariant(removeCmd);
-
-                assertThat(withVariant.getVariants()).hasSize(1);
-            }
-        }
-
-        @Nested
-        @DisplayName("Event publishing")
-        class EventPublishing {
-
-            @Test
-            @DisplayName("Registers exactly one uncommitted event")
-            void registersExactlyOneEvent() {
-                var withVariant = freshProduct().addVariant(addVariantCommand);
-                var variantId = withVariant.getVariants().getFirst().getRootID();
-
-                var removeCmd = ProductRemoveVariantCommand.builder()
-                        .productId(ProductId.random())
-                        .variantId((ProductVariantId) variantId)
-                        .build();
-
-                var result = withVariant.removeVariant(removeCmd);
-
-                assertThat(result.getUncommittedEvents()).hasSize(1);
-            }
-
-            @Test
-            @DisplayName("Registered event is ProductVariantRemovedEvent")
-            void registeredEventIsCorrectType() {
-                var withVariant = freshProduct().addVariant(addVariantCommand);
-                var variantId = withVariant.getVariants().getFirst().getRootID();
-
-                var removeCmd = ProductRemoveVariantCommand.builder()
-                        .productId(ProductId.random())
-                        .variantId((ProductVariantId) variantId)
-                        .build();
-
-                var result = withVariant.removeVariant(removeCmd);
-
-                assertThat(result.getUncommittedEvents().getFirst())
-                        .isInstanceOf(ProductVariantRemovedEvent.class);
-            }
-
-            @Test
-            @DisplayName("Event carries the removed variantId")
-            void eventCarriesVariantId() {
-                var withVariant = freshProduct().addVariant(addVariantCommand);
-                var variantId = withVariant.getVariants().getFirst().getRootID();
-
-                var removeCmd = ProductRemoveVariantCommand.builder()
-                        .productId(ProductId.random())
-                        .variantId((ProductVariantId) variantId)
-                        .build();
-
-                var result = withVariant.removeVariant(removeCmd);
-                var event = (ProductVariantRemovedEvent) result.getUncommittedEvents().getFirst();
-
-                assertThat(event.getVariantId()).isEqualTo(variantId.value());
-            }
-        }
-    }
 
     // ─────────────────────────────────────────────────────────────────────────
     // Immutability
@@ -1645,25 +1564,16 @@ class ProductRootTest {
         }
 
         @Test
-        @DisplayName("Variants list is unmodifiable after addVariant")
-        void variantsListIsUnmodifiable() {
-            var cmd = ProductAddVariantCommand.builder()
-                    .productId(ProductId.random())
-                    .assignments(List.of(ProductVariantAssignment.of(VariantKeyId.random(), VariantValueId.random())))
-                    .build();
-
-            assertThat(freshProduct().addVariant(cmd).getVariants()).isUnmodifiable();
-        }
-
-        @Test
         @DisplayName("Sequential lifecycle operations return new instances each time")
         void sequentialLifecycleOperationsReturnNewInstances() {
             var draft = freshProduct();
             var sentToApproval = draft.sentToApproval();
-            var approved = sentToApproval.approve();
+            var inReview = sentToApproval.moveToInReview();
+            var approved = inReview.approve();
 
             assertThat(draft.getStatus()).isEqualTo(ProductStatus.DRAFT);
             assertThat(sentToApproval.getStatus()).isEqualTo(ProductStatus.SENT_TO_APPROVAL);
+            assertThat(inReview.getStatus()).isEqualTo(ProductStatus.IN_REVIEW);
             assertThat(approved.getStatus()).isEqualTo(ProductStatus.APPROVED);
         }
 
@@ -1676,7 +1586,6 @@ class ProductRootTest {
                     .brandId(BrandId.random())
                     .name(new ProductName("Tablet Model"))
                     .description(new ProductDescription("A portable tablet for everyday use"))
-                    .barcode(Barcode.of("9876543210987"))
                     .build();
 
             var first = freshProduct();

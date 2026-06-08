@@ -29,7 +29,7 @@ public class GenerateAvscMojo extends AbstractMojo {
     private String inputPackage;
 
     /** Directory where generated .avsc files will be written. */
-    @Parameter(defaultValue = "${project.basedir}/src/main/avro", property = "avro.outputDirectory")
+    @Parameter(defaultValue = "${project.build.directory}/generated-sources/avsc", property = "avro.avsc.outputDirectory")
     private File outputDirectory;
 
     @Parameter(defaultValue = "${project.compileClasspathElements}", readonly = true)

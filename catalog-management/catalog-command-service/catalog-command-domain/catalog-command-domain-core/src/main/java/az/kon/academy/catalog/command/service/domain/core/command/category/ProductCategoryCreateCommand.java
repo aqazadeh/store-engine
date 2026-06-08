@@ -7,13 +7,8 @@ import lombok.Builder;
 import lombok.Getter;
 
 @Builder
-public class ProductCategoryCreateCommand {
-    @Getter
-    private final ProductCategoryName name;
-
-    @Getter
-    private final ProductCategoryDescription description;
-
-    @Getter
-    private final ProductCategoryPath path;
+public final class ProductCategoryCreateCommand {
+    @Getter private final ProductCategoryName name;
+    @Getter private final ProductCategoryDescription description;
+    @Getter private final ProductCategoryPath path;
 }
