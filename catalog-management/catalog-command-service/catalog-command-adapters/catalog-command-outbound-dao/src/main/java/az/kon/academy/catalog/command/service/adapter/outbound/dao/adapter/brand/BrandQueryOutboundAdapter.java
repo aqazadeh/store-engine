@@ -101,6 +101,12 @@ public class BrandQueryOutboundAdapter implements BrandQueryOutboundPort {
 
     @Override
     public void checkExitsById(BrandId brandId) {
-
+        if (!dsl.fetchExists(
+                BRAND,
+                BRAND.ID.eq(brandId.value())
+                        .and(BRAND.ROW_STATUS.eq(RowStatusType.ACTIVE))
+        )) {
+            throw new BrandDomainException(BrandDomainErrorCodes.ENTITY_NOT_FOUND, List.of(brandId.toString()));
+        }
     }
 }

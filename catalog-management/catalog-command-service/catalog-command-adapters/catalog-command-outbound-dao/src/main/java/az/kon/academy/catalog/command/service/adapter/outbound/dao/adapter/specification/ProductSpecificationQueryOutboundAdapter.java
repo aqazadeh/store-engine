@@ -7,6 +7,7 @@ import az.kon.academy.catalog.command.service.adapter.outbound.dao.mapper.Produc
 import az.kon.academy.catalog.command.service.domain.core.aggregate.ProductSpecificationRoot;
 import az.kon.academy.catalog.command.service.domain.core.exception.specification.ProductSpecificationDomainErrorCodes;
 import az.kon.academy.catalog.command.service.domain.core.exception.specification.ProductSpecificationDomainException;
+import az.kon.academy.catalog.command.service.domain.core.exception.specification.ProductSpecificationEntityNotFoundException;
 import az.kon.academy.catalog.command.service.domain.core.port.outbound.ProductSpecificationQueryOutboundPort;
 import az.kon.academy.catalog.command.service.domain.core.vo.management.category.ProductCategoryId;
 import az.kon.academy.catalog.command.service.domain.core.vo.management.specification.ProductSpecificationId;
@@ -71,11 +72,29 @@ public class ProductSpecificationQueryOutboundAdapter implements ProductSpecific
 
     @Override
     public List<ProductSpecificationId> findRequiredByCategoryId(ProductCategoryId categoryId) {
-        return List.of();
+        return dsl.select(PRODUCT_SPECIFICATION_CATEGORY_ASSIGNMENT.SPECIFICATION_ID)
+                .from(PRODUCT_SPECIFICATION_CATEGORY_ASSIGNMENT)
+                .where(PRODUCT_SPECIFICATION_CATEGORY_ASSIGNMENT.CATEGORY_ID.eq(categoryId.value())
+                        .and(PRODUCT_SPECIFICATION_CATEGORY_ASSIGNMENT.IS_REQUIRED.eq(Boolean.TRUE)))
+                .fetch()
+                .map(r -> ProductSpecificationId.from(r.value1()));
     }
 
     @Override
     public void checkAllExistByIds(List<ProductSpecificationId> ids) {
-
+        if (ids == null || ids.isEmpty()) {
+            return;
+        }
+        var uuidList = ids.stream().map(ProductSpecificationId::value).toList();
+        var foundCount = dsl.selectCount()
+                .from(PRODUCT_SPECIFICATION)
+                .where(PRODUCT_SPECIFICATION.ID.in(uuidList)
+                        .and(PRODUCT_SPECIFICATION.ROW_STATUS.eq(RowStatusType.ACTIVE)))
+                .fetchOne(0, Integer.class);
+        if (foundCount != ids.size()) {
+            throw new ProductSpecificationEntityNotFoundException(
+                    ProductSpecificationDomainErrorCodes.ENTITY_NOT_FOUND,
+                    ids.stream().map(ProductSpecificationId::toString).toList());
+        }
     }
 }

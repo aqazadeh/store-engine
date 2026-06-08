@@ -11,7 +11,6 @@ import az.kon.academy.catalog.sql.dal.tables.records.ProductRecord;
 import az.kon.academy.catalog.sql.dal.tables.records.ProductSpecificationAssignmentRecord;
 import az.kon.academy.catalog.command.service.domain.core.aggregate.ProductRoot;
 import az.kon.academy.catalog.command.service.domain.core.aggregate.ProductVariantRoot;
-import az.kon.academy.catalog.command.service.domain.core.vo.Barcode;
 import az.kon.academy.catalog.command.service.domain.core.vo.brand.BrandId;
 import az.kon.academy.catalog.command.service.domain.core.vo.management.category.ProductCategoryId;
 import az.kon.academy.catalog.command.service.domain.core.vo.management.specification.ProductSpecificationId;
@@ -38,8 +37,6 @@ public class ProductMapper {
                 .setBrandId(root.getBrandId() != null ? root.getBrandId().value() : null)
                 .setName(root.getName().value())
                 .setDescription(root.getDescription().value())
-                .setBarcode(root.getBarcode().value())
-                .setAutoPriceUpdateEnabled(root.getAutoPriceUpdateEnabled())
                 .setStatus(ProductStatusType.valueOf(root.getStatus().name()));
     }
 
@@ -76,11 +73,8 @@ public class ProductMapper {
                 .brandId(r.getBrandId() != null ? BrandId.from(r.getBrandId()) : null)
                 .name(ProductName.of(r.getName()))
                 .description(ProductDescription.of(r.getDescription()))
-                .barcode(Barcode.of(r.getBarcode()))
-                .autoPriceUpdateEnabled(r.getAutoPriceUpdateEnabled())
                 .status(ProductStatus.valueOf(r.getStatus().name()))
                 .specifications(specAssignments)
-                .variants(variants)
                 .build();
     }
 }

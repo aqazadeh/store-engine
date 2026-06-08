@@ -12,8 +12,10 @@ import az.kon.academy.catalog.command.service.domain.core.vo.brand.BrandId;
 import az.kon.academy.catalog.command.service.domain.core.vo.brand.BrandRejectionReasonId;
 import org.jooq.DSLContext;
 
+import java.util.List;
 import java.util.Optional;
 
+import static az.kon.academy.catalog.sql.dal.Tables.BRAND;
 import static az.kon.academy.catalog.sql.dal.Tables.BRAND_REJECTION_REASON;
 
 @QueryAdapter
@@ -53,6 +55,16 @@ public class BrandRejectionReasonQueryOutboundAdapter implements BrandRejectionR
 
     @Override
     public void checkExistsByIdAndMerchantId(BrandRejectionReasonId id, MerchantId merchantId) {
-
+        if (!dsl.fetchExists(
+                dsl.selectOne()
+                        .from(BRAND_REJECTION_REASON)
+                        .join(BRAND).on(BRAND_REJECTION_REASON.BRAND_ID.eq(BRAND.ID))
+                        .where(BRAND_REJECTION_REASON.ID.eq(id.value())
+                                .and(BRAND.OWNER_ID.eq(merchantId.value()))
+                                .and(BRAND_REJECTION_REASON.ROW_STATUS.eq(RowStatusType.ACTIVE)))
+        )) {
+            throw new BrandRejectionDomainException(BrandRejectionDomainErrorCodes.ENTITY_NOT_FOUND,
+                    List.of(id.toString()));
+        }
     }
 }

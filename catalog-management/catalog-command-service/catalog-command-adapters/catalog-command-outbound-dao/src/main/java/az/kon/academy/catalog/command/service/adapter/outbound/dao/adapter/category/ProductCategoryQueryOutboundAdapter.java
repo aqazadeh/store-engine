@@ -4,6 +4,7 @@ import az.kon.academy.application.core.annotation.QueryAdapter;
 import az.kon.academy.catalog.command.service.adapter.outbound.dao.mapper.ProductCategoryMapper;
 import az.kon.academy.catalog.command.service.domain.core.aggregate.ProductCategoryRoot;
 import az.kon.academy.catalog.command.service.domain.core.exception.category.ProductCategoryDomainErrorCodes;
+import az.kon.academy.catalog.command.service.domain.core.exception.category.ProductCategoryDomainException;
 import az.kon.academy.catalog.command.service.domain.core.exception.category.ProductCategoryEntityNotFoundException;
 import az.kon.academy.catalog.command.service.domain.core.port.outbound.ProductCategoryQueryOutboundPort;
 import az.kon.academy.catalog.command.service.domain.core.vo.management.category.ProductCategoryId;
@@ -59,6 +60,30 @@ public class ProductCategoryQueryOutboundAdapter implements ProductCategoryQuery
 
     @Override
     public void checkIsNotDescendant(ProductCategoryId categoryId, ProductCategoryId parentId) {
-        
+        if (parentId == null) {
+            return;
+        }
+        if (categoryId.value().equals(parentId.value())) {
+            throw new ProductCategoryDomainException(
+                    ProductCategoryDomainErrorCodes.CIRCULAR_PARENT_REFERENCE,
+                    List.of(categoryId.toString(), parentId.toString()));
+        }
+        var currentId = parentId.value();
+        while (currentId != null) {
+            var parent = dsl.select(PRODUCT_CATEGORY.PARENT_ID)
+                    .from(PRODUCT_CATEGORY)
+                    .where(PRODUCT_CATEGORY.ID.eq(currentId)
+                            .and(PRODUCT_CATEGORY.ROW_STATUS.eq(RowStatusType.ACTIVE)))
+                    .fetchOne();
+            if (parent == null || parent.value1() == null) {
+                break;
+            }
+            if (parent.value1().equals(categoryId.value())) {
+                throw new ProductCategoryDomainException(
+                        ProductCategoryDomainErrorCodes.CIRCULAR_PARENT_REFERENCE,
+                        List.of(categoryId.toString(), parentId.toString()));
+            }
+            currentId = parent.value1();
+        }
     }
 }

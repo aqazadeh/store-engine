@@ -2,12 +2,10 @@ package az.kon.academy.catalog.command.service.adapter.outbound.dao.adapter.prod
 
 import az.kon.academy.application.core.annotation.CommandAdapter;
 import az.kon.academy.catalog.command.service.adapter.outbound.dao.mapper.ProductMapper;
-import az.kon.academy.catalog.command.service.adapter.outbound.dao.mapper.ProductVariantMapper;
 import az.kon.academy.catalog.command.service.application.service.port.outbound.ProductCommandOutboundPort;
 import az.kon.academy.catalog.command.service.domain.core.aggregate.ProductRoot;
 import org.jooq.DSLContext;
 
-import java.util.List;
 import java.util.UUID;
 
 import static az.kon.academy.catalog.sql.dal.Tables.*;
@@ -17,12 +15,10 @@ public class ProductCommandOutboundAdapter implements ProductCommandOutboundPort
 
     private final DSLContext dsl;
     private final ProductMapper mapper;
-    private final ProductVariantMapper variantMapper;
 
-    public ProductCommandOutboundAdapter(DSLContext dsl, ProductMapper mapper, ProductVariantMapper variantMapper) {
+    public ProductCommandOutboundAdapter(DSLContext dsl, ProductMapper mapper) {
         this.dsl = dsl;
         this.mapper = mapper;
-        this.variantMapper = variantMapper;
     }
 
     @Override
@@ -46,35 +42,6 @@ public class ProductCommandOutboundAdapter implements ProductCommandOutboundPort
                     .map(s -> mapper.toSpecAssignmentRecord(aggregate, s))
                     .toList();
             dsl.batchInsert(specRecords).execute();
-        }
-
-        dsl.deleteFrom(PRODUCT_VARIANT_ASSIGNMENT)
-                .where(PRODUCT_VARIANT_ASSIGNMENT.VARIANT_ID.in(
-                        dsl.select(PRODUCT_VARIANT.ID)
-                                .from(PRODUCT_VARIANT)
-                                .where(PRODUCT_VARIANT.PRODUCT_ID.eq(productId))
-                ))
-                .execute();
-
-        dsl.deleteFrom(PRODUCT_VARIANT)
-                .where(PRODUCT_VARIANT.PRODUCT_ID.eq(productId))
-                .execute();
-
-        if (!aggregate.getVariants().isEmpty()) {
-            var variantRecords = aggregate.getVariants().stream()
-                    .map(v -> variantMapper.toRecord(v, productId))
-                    .toList();
-            dsl.batchInsert(variantRecords).execute();
-
-            List<az.kon.academy.catalog.sql.dal.tables.records.ProductVariantAssignmentRecord> assignmentRecords =
-                    aggregate.getVariants().stream()
-                            .flatMap(v -> v.getAssignments().stream()
-                                    .map(a -> variantMapper.toAssignmentRecord(v.getRootID().value(), a)))
-                            .toList();
-
-            if (!assignmentRecords.isEmpty()) {
-                dsl.batchInsert(assignmentRecords).execute();
-            }
         }
 
         return aggregate;

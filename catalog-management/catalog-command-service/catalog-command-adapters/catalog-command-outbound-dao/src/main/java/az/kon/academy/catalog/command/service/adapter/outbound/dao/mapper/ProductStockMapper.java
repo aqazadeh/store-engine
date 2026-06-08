@@ -24,8 +24,7 @@ public class ProductStockMapper {
                 .setModificationTs(root.getModificationTs().toOffsetDateTime())
 
                 .setVariantId(root.getVariantId().value())
-                .setQuantity(root.getQuantity().intValue())
-                .setReservedQuantity(root.getReservedQuantity().intValue());
+                .setQuantity(root.getQuantity().intValue());
     }
 
     public ProductStockAggregateRoot toDomain(ProductStockRecord r) {
@@ -37,7 +36,6 @@ public class ProductStockMapper {
 
                 .variantId(ProductVariantId.from(r.getVariantId()))
                 .quantity(Quantity.of(r.getQuantity()))
-                .reservedQuantity(Quantity.of(r.getReservedQuantity()))
                 .build();
     }
 }

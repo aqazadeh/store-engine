@@ -28,10 +28,10 @@ public class ProductRemoveVariantCommandHandler implements AbstractCommandHandle
 
     @Override
     public Void handle(ProductVariantRemoveCommand command) {
-        var aggregate = this.productManagementDomainService.removeVariant(domainContext, command);
-        var port = this.domainContext.getCommandPort(ProductCommandOutboundPort.class);
-        port.save(aggregate);
-        this.domainEventPublisher.publish(aggregate.getUncommittedEvents());
+//        var aggregate = this.productManagementDomainService.removeVariant(domainContext, command);
+//        var port = this.domainContext.getCommandPort(ProductCommandOutboundPort.class);
+//        port.save(aggregate);
+//        this.domainEventPublisher.publish(aggregate.getUncommittedEvents());
         return null;
     }
 }

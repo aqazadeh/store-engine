@@ -28,10 +28,10 @@ public class ProductAddVariantCommandHandler implements AbstractCommandHandler<P
 
     @Override
     public Void handle(ProductVariantAddCommand command) {
-        var aggregate = this.productManagementDomainService.addVariant(domainContext, command);
-        var port = this.domainContext.getCommandPort(ProductCommandOutboundPort.class);
-        port.save(aggregate);
-        this.domainEventPublisher.publish(aggregate.getUncommittedEvents());
+//        var aggregate = this.productManagementDomainService.addVariant(domainContext, command);
+//        var port = this.domainContext.getCommandPort(ProductCommandOutboundPort.class);
+//        port.save(aggregate);
+//        this.domainEventPublisher.publish(aggregate.getUncommittedEvents());
         return null;
     }
 }

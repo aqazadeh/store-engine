@@ -3,11 +3,14 @@ package az.kon.academy.catalog.command.service.adapter.outbound.dao.adapter.stoc
 import az.kon.academy.application.core.annotation.QueryAdapter;
 import az.kon.academy.catalog.command.service.adapter.outbound.dao.mapper.ProductStockMapper;
 import az.kon.academy.catalog.command.service.domain.core.aggregate.ProductStockAggregateRoot;
+import az.kon.academy.catalog.command.service.domain.core.exception.product.ProductDomainErrorCodes;
+import az.kon.academy.catalog.command.service.domain.core.exception.product.ProductEntityNotFoundException;
 import az.kon.academy.catalog.command.service.domain.core.port.outbound.ProductStockQueryOutboundPort;
 import az.kon.academy.catalog.command.service.domain.core.vo.merchent.MerchantId;
 import az.kon.academy.catalog.command.service.domain.core.vo.product.ProductStockId;
 import org.jooq.DSLContext;
 
+import java.util.List;
 import java.util.Optional;
 
 import static az.kon.academy.catalog.sql.dal.Tables.PRODUCT;
@@ -35,7 +38,9 @@ public class ProductStockQueryOutboundAdapter implements ProductStockQueryOutbou
 
     @Override
     public ProductStockAggregateRoot fetchById(ProductStockId id) {
-        return null;
+        return this.findById(id)
+                .orElseThrow(() -> new ProductEntityNotFoundException(
+                        ProductDomainErrorCodes.STOCK_NOT_FOUND, List.of(id.toString())));
     }
 
     @Override
@@ -52,6 +57,8 @@ public class ProductStockQueryOutboundAdapter implements ProductStockQueryOutbou
 
     @Override
     public ProductStockAggregateRoot fetchByIdAndMerchantId(ProductStockId id, MerchantId merchantId) {
-        return null;
+        return this.findByIdAndMerchantId(id, merchantId)
+                .orElseThrow(() -> new ProductEntityNotFoundException(
+                        ProductDomainErrorCodes.STOCK_NOT_FOUND, List.of(id.toString())));
     }
 }
