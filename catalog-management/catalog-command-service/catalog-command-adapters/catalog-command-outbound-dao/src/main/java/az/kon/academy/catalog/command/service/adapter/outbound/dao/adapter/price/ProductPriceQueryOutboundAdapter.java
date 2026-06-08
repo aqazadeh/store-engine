@@ -34,14 +34,13 @@ public class ProductPriceQueryOutboundAdapter implements ProductPriceQueryOutbou
     }
 
     @Override
-    public Optional<ProductPriceAggregateRoot> findByIdAndMerchantId(ProductPriceId id, MerchantId merchantId) {
-        return dsl.select(PRODUCT_PRICE.fields())
-                .from(PRODUCT_PRICE)
-                .join(PRODUCT_VARIANT).on(PRODUCT_PRICE.VARIANT_ID.eq(PRODUCT_VARIANT.ID))
-                .join(PRODUCT).on(PRODUCT_VARIANT.PRODUCT_ID.eq(PRODUCT.ID))
-                .where(PRODUCT_PRICE.ID.eq(id.value())
-                        .and(PRODUCT.MERCHANT_ID.eq(merchantId.value())))
-                .fetchOptional()
-                .map(r -> mapper.toDomain(r.into(PRODUCT_PRICE)));
+    public ProductPriceAggregateRoot fetchById(ProductPriceId id) {
+        return null;
     }
+
+    @Override
+    public ProductPriceAggregateRoot fetchByIdAndMerchantId(ProductPriceId id, MerchantId merchantId) {
+        return null;
+    }
+
 }

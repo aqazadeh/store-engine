@@ -68,4 +68,14 @@ public class ProductSpecificationQueryOutboundAdapter implements ProductSpecific
                 PRODUCT_SPECIFICATION_CATEGORY_ASSIGNMENT.CATEGORY_ID.eq(categoryId.value())
         );
     }
+
+    @Override
+    public List<ProductSpecificationId> findRequiredByCategoryId(ProductCategoryId categoryId) {
+        return List.of();
+    }
+
+    @Override
+    public void checkAllExistByIds(List<ProductSpecificationId> ids) {
+
+    }
 }

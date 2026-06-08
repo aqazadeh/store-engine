@@ -24,7 +24,7 @@ public final class ProductRejectionModerationDomainServiceImpl implements Produc
     @Override
     public ProductRejectionReasonRoot changeReason(SeDomainContext context, ProductRejectionReasonChangeReasonCommand command) {
         final var rejectionReasonQueryPort = context.getQueryPort(ProductRejectionReasonQueryOutboundPort.class);
-        final var rejectionReason = rejectionReasonQueryPort.fetchByIdAndRowStatusActive(command.getProductRejectionReasonId());
+        final var rejectionReason = rejectionReasonQueryPort.fetchById(command.getProductRejectionReasonId());
         checkProductStatusForRejection(context, rejectionReason.getProductId());
         return rejectionReason.changeReason(command);
     }
@@ -32,7 +32,7 @@ public final class ProductRejectionModerationDomainServiceImpl implements Produc
     @Override
     public ProductRejectionReasonRoot remove(SeDomainContext context, ProductRejectionReasonRemoveCommand command) {
         final var rejectionReasonQuery = context.getQueryPort(ProductRejectionReasonQueryOutboundPort.class);
-        final var rejectionReason = rejectionReasonQuery.fetchByIdAndRowStatusActive(command.getProductRejectionReasonId());
+        final var rejectionReason = rejectionReasonQuery.fetchById(command.getProductRejectionReasonId());
         checkProductStatusForRejection(context, rejectionReason.getProductId());
         return rejectionReason.remove(command);
     }

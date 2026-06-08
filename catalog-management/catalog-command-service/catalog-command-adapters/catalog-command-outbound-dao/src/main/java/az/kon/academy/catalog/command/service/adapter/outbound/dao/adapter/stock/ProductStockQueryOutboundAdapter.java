@@ -34,6 +34,11 @@ public class ProductStockQueryOutboundAdapter implements ProductStockQueryOutbou
     }
 
     @Override
+    public ProductStockAggregateRoot fetchById(ProductStockId id) {
+        return null;
+    }
+
+    @Override
     public Optional<ProductStockAggregateRoot> findByIdAndMerchantId(ProductStockId id, MerchantId merchantId) {
         return dsl.select(PRODUCT_STOCK.fields())
                 .from(PRODUCT_STOCK)
@@ -43,5 +48,10 @@ public class ProductStockQueryOutboundAdapter implements ProductStockQueryOutbou
                         .and(PRODUCT.MERCHANT_ID.eq(merchantId.value())))
                 .fetchOptional()
                 .map(r -> mapper.toDomain(r.into(PRODUCT_STOCK)));
+    }
+
+    @Override
+    public ProductStockAggregateRoot fetchByIdAndMerchantId(ProductStockId id, MerchantId merchantId) {
+        return null;
     }
 }

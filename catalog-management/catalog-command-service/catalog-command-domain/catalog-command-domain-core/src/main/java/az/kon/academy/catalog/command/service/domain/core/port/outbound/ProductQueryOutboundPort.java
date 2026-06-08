@@ -18,10 +18,7 @@ public interface ProductQueryOutboundPort extends BaseQueryPort {
 
     ProductRoot fetchById(ProductId id);
 
-    Optional<ProductRoot> findByIdAndMerchantId(ProductId id, MerchantId merchantId);
     ProductRoot fetchByIdAndMerchantId(ProductId id, MerchantId merchantId);
-
-    Boolean existsByIdAndVarintIdAndMerchantId(ProductId productId, ProductVariantId productVariantId, MerchantId merchantId);
 
     void checkExistsByIdAndMerchantId(ProductId id, MerchantId merchantId);
 

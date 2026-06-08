@@ -14,19 +14,9 @@ public interface ProductStockQueryOutboundPort extends BaseQueryPort {
 
     Optional<ProductStockAggregateRoot> findById(ProductStockId id);
 
-    default ProductStockAggregateRoot fetchById(ProductStockId id) {
-        return this.findById(id)
-                .orElseThrow(() -> new ProductEntityNotFoundException(
-                        ProductDomainErrorCodes.STOCK_NOT_FOUND,
-                        List.of(id.value().toString())));
-    }
+    ProductStockAggregateRoot fetchById(ProductStockId id);
 
     Optional<ProductStockAggregateRoot> findByIdAndMerchantId(ProductStockId id, MerchantId merchantId);
 
-    default ProductStockAggregateRoot fetchByIdAndMerchantId(ProductStockId id, MerchantId merchantId) {
-        return this.findByIdAndMerchantId(id, merchantId)
-                .orElseThrow(() -> new ProductEntityNotFoundException(
-                        ProductDomainErrorCodes.STOCK_NOT_FOUND,
-                        List.of(id.value().toString())));
-    }
+    ProductStockAggregateRoot fetchByIdAndMerchantId(ProductStockId id, MerchantId merchantId);
 }

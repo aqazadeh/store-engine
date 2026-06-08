@@ -29,4 +29,9 @@ public class ProductVariantKeyQueryOutboundAdapter implements ProductVariantKeyQ
                 .fetchOptional()
                 .map(mapper::toDomain);
     }
+
+    @Override
+    public VariantKeyRoot fetchById(VariantKeyId id) {
+        return null;
+    }
 }

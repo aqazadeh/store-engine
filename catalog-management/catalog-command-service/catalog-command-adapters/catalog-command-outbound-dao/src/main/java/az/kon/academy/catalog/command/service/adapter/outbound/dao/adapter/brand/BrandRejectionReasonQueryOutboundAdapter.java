@@ -1,6 +1,7 @@
 package az.kon.academy.catalog.command.service.adapter.outbound.dao.adapter.brand;
 
 import az.kon.academy.application.core.annotation.QueryAdapter;
+import az.kon.academy.catalog.command.service.domain.core.vo.merchent.MerchantId;
 import az.kon.academy.catalog.sql.dal.enums.RowStatusType;
 import az.kon.academy.catalog.command.service.adapter.outbound.dao.mapper.BrandRejectionReasonMapper;
 import az.kon.academy.catalog.command.service.domain.core.aggregate.BrandRejectionReasonRoot;
@@ -48,5 +49,10 @@ public class BrandRejectionReasonQueryOutboundAdapter implements BrandRejectionR
                         .and(BRAND_REJECTION_REASON.SOLVED.eq(Boolean.FALSE))
                         .and(BRAND_REJECTION_REASON.ROW_STATUS.eq(RowStatusType.ACTIVE))
         );
+    }
+
+    @Override
+    public void checkExistsByIdAndMerchantId(BrandRejectionReasonId id, MerchantId merchantId) {
+
     }
 }

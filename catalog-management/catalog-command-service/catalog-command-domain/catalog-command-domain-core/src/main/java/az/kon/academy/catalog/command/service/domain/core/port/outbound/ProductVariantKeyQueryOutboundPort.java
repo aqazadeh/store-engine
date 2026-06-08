@@ -16,26 +16,6 @@ public interface ProductVariantKeyQueryOutboundPort extends BaseQueryPort {
 
     Optional<VariantKeyRoot> findById(VariantKeyId id);
 
-    List<VariantKeyRoot> findAllById(List<VariantKeyId> ids);
+    VariantKeyRoot fetchById(VariantKeyId id);
 
-    default VariantKeyRoot fetchById(VariantKeyId id) {
-        return this.findById(id)
-                .orElseThrow(() -> new VariantEntityNotFoundException(
-                        VariantDomainErrorCodes.KEY_NOT_FOUND,
-                        List.of(id.value().toString())));
-    }
-
-    default void checkAllKeysExist(List<VariantKeyId> ids) {
-        var found = this.findAllById(ids);
-        if (found.size() != ids.size()) {
-            var foundIds = found.stream().map(BaseRoot::getRootID).collect(Collectors.toSet());
-            var missing = ids.stream()
-                    .filter(id -> !foundIds.contains(id))
-                    .map(id -> id.value().toString())
-                    .collect(Collectors.joining(", "));
-            throw new VariantEntityNotFoundException(
-                    VariantDomainErrorCodes.KEY_NOT_FOUND,
-                    List.of(missing));
-        }
-    }
 }

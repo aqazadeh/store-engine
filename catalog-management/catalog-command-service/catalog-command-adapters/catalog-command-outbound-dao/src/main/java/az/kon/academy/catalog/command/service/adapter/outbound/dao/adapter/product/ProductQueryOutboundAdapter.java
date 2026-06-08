@@ -1,29 +1,19 @@
 package az.kon.academy.catalog.command.service.adapter.outbound.dao.adapter.product;
 
-import az.kon.academy.aggragate.valueobject.RowStatus;
 import az.kon.academy.application.core.annotation.QueryAdapter;
-import az.kon.academy.catalog.command.service.domain.core.exception.product.ProductDomainErrorCodes;
-import az.kon.academy.catalog.command.service.domain.core.exception.product.ProductEntityNotFoundException;
-import az.kon.academy.catalog.command.service.domain.core.vo.merchent.MerchantId;
-import az.kon.academy.catalog.command.service.domain.core.vo.product.ProductVariantId;
-import az.kon.academy.catalog.sql.dal.enums.RowStatusType;
-import az.kon.academy.catalog.sql.dal.tables.records.ProductVariantRecord;
 import az.kon.academy.catalog.command.service.adapter.outbound.dao.mapper.ProductMapper;
 import az.kon.academy.catalog.command.service.adapter.outbound.dao.mapper.ProductVariantMapper;
 import az.kon.academy.catalog.command.service.domain.core.aggregate.ProductRoot;
-import az.kon.academy.catalog.command.service.domain.core.aggregate.ProductVariantRoot;
+import az.kon.academy.catalog.command.service.domain.core.exception.product.ProductDomainErrorCodes;
+import az.kon.academy.catalog.command.service.domain.core.exception.product.ProductEntityNotFoundException;
 import az.kon.academy.catalog.command.service.domain.core.port.outbound.ProductQueryOutboundPort;
 import az.kon.academy.catalog.command.service.domain.core.vo.management.category.ProductCategoryId;
+import az.kon.academy.catalog.command.service.domain.core.vo.merchent.MerchantId;
 import az.kon.academy.catalog.command.service.domain.core.vo.product.ProductId;
 import org.jooq.DSLContext;
 
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
-import java.util.UUID;
-import java.util.stream.Collectors;
-
-import static az.kon.academy.catalog.sql.dal.Tables.*;
 
 @QueryAdapter
 public class ProductQueryOutboundAdapter implements ProductQueryOutboundPort {
@@ -40,45 +30,7 @@ public class ProductQueryOutboundAdapter implements ProductQueryOutboundPort {
 
     @Override
     public Optional<ProductRoot> findById(ProductId id) {
-        return dsl.selectFrom(PRODUCT)
-                .where(PRODUCT.ID.eq(id.value())
-                        .and(PRODUCT.ROW_STATUS.eq(RowStatusType.ACTIVE)))
-                .fetchOptional()
-                .map(productRecord -> {
-                    UUID productId = productRecord.getId();
-
-                    var specAssignments = dsl.selectFrom(PRODUCT_SPECIFICATION_ASSIGNMENT)
-                            .where(PRODUCT_SPECIFICATION_ASSIGNMENT.PRODUCT_ID.eq(productId))
-                            .fetch();
-
-                    var variantRecords = dsl.selectFrom(PRODUCT_VARIANT)
-                            .where(PRODUCT_VARIANT.PRODUCT_ID.eq(productId))
-                            .fetch();
-
-                    List<UUID> variantIds = variantRecords.stream()
-                            .map(ProductVariantRecord::getId)
-                            .toList();
-
-                    Map<UUID, List<az.kon.academy.catalog.sql.dal.tables.records.ProductVariantAssignmentRecord>> assignmentsByVariant =
-                            variantIds.isEmpty()
-                                    ? Map.of()
-                                    : dsl.selectFrom(PRODUCT_VARIANT_ASSIGNMENT)
-                                    .where(PRODUCT_VARIANT_ASSIGNMENT.VARIANT_ID.in(variantIds))
-                                    .fetch()
-                                    .stream()
-                                    .collect(Collectors.groupingBy(
-                                            az.kon.academy.catalog.sql.dal.tables.records.ProductVariantAssignmentRecord::getVariantId
-                                    ));
-
-                    List<ProductVariantRoot> variants = variantRecords.stream()
-                            .map(v -> variantMapper.toDomain(
-                                    v,
-                                    assignmentsByVariant.getOrDefault(v.getId(), List.of())
-                            ))
-                            .toList();
-
-                    return mapper.toDomain(productRecord, specAssignments, variants);
-                });
+        return Optional.empty();
     }
 
     @Override
@@ -88,8 +40,18 @@ public class ProductQueryOutboundAdapter implements ProductQueryOutboundPort {
     }
 
     @Override
-    public Boolean existsByIdAndVarintIdAndMerchantId(ProductId productId, ProductVariantId productVariantId, MerchantId merchantId) {
+    public ProductRoot fetchByIdAndMerchantId(ProductId id, MerchantId merchantId) {
         return null;
+    }
+
+    @Override
+    public void checkExistsByIdAndMerchantId(ProductId id, MerchantId merchantId) {
+
+    }
+
+    @Override
+    public void checkExistsById(ProductId id) {
+
     }
 
     @Override

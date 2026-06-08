@@ -56,4 +56,9 @@ public class ProductCategoryQueryOutboundAdapter implements ProductCategoryQuery
             );
         }
     }
+
+    @Override
+    public void checkIsNotDescendant(ProductCategoryId categoryId, ProductCategoryId parentId) {
+        
+    }
 }

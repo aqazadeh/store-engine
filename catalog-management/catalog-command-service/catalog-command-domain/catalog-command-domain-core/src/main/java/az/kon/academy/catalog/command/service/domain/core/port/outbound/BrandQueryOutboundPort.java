@@ -11,16 +11,20 @@ import java.util.Optional;
 public interface BrandQueryOutboundPort extends BaseQueryPort {
 
     Optional<BrandRoot> findById(final BrandId brandId);
+
     BrandRoot fetchById(final BrandId brandId);
 
     Optional<BrandRoot> findByIdAndMerchantId(final BrandId brandId, final MerchantId merchantId);
+
     BrandRoot fetchByIdAndMerchantId(final BrandId brandId, final MerchantId merchantId);
 
     Optional<BrandRoot> findByIdAndIsGlobalTrue(final BrandId brandId);
+
     BrandRoot fetchByIdAndIsGlobalTrue(final BrandId brandId);
 
     Integer fetchCountByMerchantId(final MerchantId merchantId);
+
     void checkExistsByName(final BrandName name);
-    Boolean exitsById(BrandId brandId);
+
     void checkExitsById(BrandId brandId);
 }

@@ -98,4 +98,9 @@ public class BrandQueryOutboundAdapter implements BrandQueryOutboundPort {
             );
         }
     }
+
+    @Override
+    public void checkExitsById(BrandId brandId) {
+
+    }
 }

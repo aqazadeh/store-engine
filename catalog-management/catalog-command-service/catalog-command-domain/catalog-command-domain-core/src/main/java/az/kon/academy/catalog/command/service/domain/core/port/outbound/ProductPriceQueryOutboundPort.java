@@ -14,19 +14,7 @@ public interface ProductPriceQueryOutboundPort extends BaseQueryPort {
 
     Optional<ProductPriceAggregateRoot> findById(ProductPriceId id);
 
-    default ProductPriceAggregateRoot fetchById(ProductPriceId id) {
-        return this.findById(id)
-                .orElseThrow(() -> new ProductEntityNotFoundException(
-                        ProductDomainErrorCodes.PRICE_NOT_FOUND,
-                        List.of(id.value().toString())));
-    }
+    ProductPriceAggregateRoot fetchById(ProductPriceId id);
 
-    Optional<ProductPriceAggregateRoot> findByIdAndMerchantId(ProductPriceId id, MerchantId merchantId);
-
-    default ProductPriceAggregateRoot fetchByIdAndMerchantId(ProductPriceId id, MerchantId merchantId) {
-        return this.findByIdAndMerchantId(id, merchantId)
-                .orElseThrow(() -> new ProductEntityNotFoundException(
-                        ProductDomainErrorCodes.PRICE_NOT_FOUND,
-                        List.of(id.value().toString())));
-    }
+    ProductPriceAggregateRoot fetchByIdAndMerchantId(ProductPriceId id, MerchantId merchantId);
 }

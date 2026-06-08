@@ -15,7 +15,5 @@ public interface ProductCategoryQueryOutboundPort extends BaseQueryPort {
 
     void checkExitsById(ProductCategoryId productCategoryId);
 
-    void checkNameUniqueByParent(ProductCategoryName name, ProductCategoryId parentId);
-
     void checkIsNotDescendant(ProductCategoryId categoryId, ProductCategoryId parentId);
 }

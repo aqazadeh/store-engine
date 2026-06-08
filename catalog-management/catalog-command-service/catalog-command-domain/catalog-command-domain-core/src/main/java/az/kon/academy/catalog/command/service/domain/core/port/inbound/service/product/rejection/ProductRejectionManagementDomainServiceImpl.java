@@ -12,7 +12,7 @@ public final class ProductRejectionManagementDomainServiceImpl implements Produc
         final var rejectionReasonQuery = context.getQueryPort(ProductRejectionReasonQueryOutboundPort.class);
         rejectionReasonQuery.checkExistsByIdAndMerchantId(
                 command.getRejectionReasonId(), command.getMerchantId());
-        final var rejectionReason = rejectionReasonQuery.fetchByIdAndRowStatusActive(command.getRejectionReasonId());
+        final var rejectionReason = rejectionReasonQuery.fetchById(command.getRejectionReasonId());
         return rejectionReason.markAsSolved();
     }
 

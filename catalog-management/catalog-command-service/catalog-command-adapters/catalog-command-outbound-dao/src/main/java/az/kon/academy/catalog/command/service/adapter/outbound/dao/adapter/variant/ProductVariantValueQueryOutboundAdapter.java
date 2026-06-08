@@ -4,9 +4,12 @@ import az.kon.academy.application.core.annotation.QueryAdapter;
 import az.kon.academy.catalog.command.service.adapter.outbound.dao.mapper.VariantValueMapper;
 import az.kon.academy.catalog.command.service.domain.core.aggregate.management.VariantValueRoot;
 import az.kon.academy.catalog.command.service.domain.core.port.outbound.ProductVariantValueQueryOutboundPort;
+import az.kon.academy.catalog.command.service.domain.core.vo.management.variant.VariantKeyId;
 import az.kon.academy.catalog.command.service.domain.core.vo.management.variant.VariantValueId;
 import org.jooq.DSLContext;
 
+import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import static az.kon.academy.catalog.sql.dal.Tables.VARIANT_VALUE;
@@ -28,5 +31,15 @@ public class ProductVariantValueQueryOutboundAdapter implements ProductVariantVa
                 .where(VARIANT_VALUE.ID.eq(id.value()))
                 .fetchOptional()
                 .map(mapper::toDomain);
+    }
+
+    @Override
+    public VariantValueRoot fetchById(VariantValueId id) {
+        return null;
+    }
+
+    @Override
+    public void checkAllAssignmentsExist(Map<VariantKeyId, List<VariantValueId>> assignmentMap) {
+
     }
 }
