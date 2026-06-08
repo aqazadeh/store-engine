@@ -7,7 +7,10 @@ import az.kon.academy.catalog.command.service.domain.core.vo.management.category
 import az.kon.academy.catalog.command.service.domain.core.vo.management.category.ProductCategoryId;
 import az.kon.academy.catalog.command.service.domain.core.vo.management.category.ProductCategoryName;
 import az.kon.academy.catalog.command.service.domain.core.vo.management.category.ProductCategoryPath;
+import az.kon.academy.catalog.event.management.category.ProductCategoryArchivedEvent;
+import az.kon.academy.catalog.event.management.category.ProductCategoryActivatedEvent;
 import az.kon.academy.catalog.event.management.category.ProductCategoryCreatedEvent;
+import az.kon.academy.catalog.event.management.category.ProductCategoryDeletedEvent;
 import az.kon.academy.catalog.event.management.category.ProductCategoryImageChangedEvent;
 import az.kon.academy.catalog.event.management.category.ProductCategoryInformationChangedEvent;
 import az.kon.academy.catalog.event.management.category.ProductCategoryParentChangedEvent;
@@ -762,8 +765,215 @@ class ProductCategoryRootTest {
     }
 
     @Nested
-    @DisplayName("Immutability")
-    class Immutability {
+    @DisplayName("archive()")
+    class Archive {
+
+        @Nested
+        @DisplayName("Aggregate state")
+        class AggregateState {
+
+            @Test
+            @DisplayName("Sets row status to ARCHIVED")
+            void setsRowStatusToArchived() {
+                var result = freshCategory().archive();
+
+                assertThat(result.isArchived()).isTrue();
+            }
+
+            @Test
+            @DisplayName("Preserves existing fields after archive")
+            void preservesFields() {
+                var original = freshCategory();
+                var result = original.archive();
+
+                assertThat(result.getRootID()).isEqualTo(original.getRootID());
+                assertThat(result.getName()).isEqualTo(original.getName());
+                assertThat(result.getPath()).isEqualTo(original.getPath());
+                assertThat(result.getDescription()).isEqualTo(original.getDescription());
+            }
+
+            @Test
+            @DisplayName("Original aggregate is unchanged")
+            void originalAggregateIsUnchanged() {
+                var original = freshCategory();
+                original.archive();
+
+                assertThat(original.isArchived()).isFalse();
+            }
+        }
+
+        @Nested
+        @DisplayName("Event publishing")
+        class EventPublishing {
+
+            @Test
+            @DisplayName("Registers exactly one uncommitted event")
+            void registersExactlyOneEvent() {
+                var result = freshCategory().archive();
+
+                assertThat(result.getUncommittedEvents()).hasSize(1);
+            }
+
+            @Test
+            @DisplayName("Registered event is ProductCategoryArchivedEvent")
+            void registeredEventIsCorrectType() {
+                var result = freshCategory().archive();
+
+                assertThat(result.getUncommittedEvents().getFirst())
+                        .isInstanceOf(ProductCategoryArchivedEvent.class);
+            }
+
+            @Test
+            @DisplayName("Event aggregateId matches the category ID")
+            void eventAggregateIdMatchesCategoryId() {
+                var result = freshCategory().archive();
+                var event = result.getUncommittedEvents().getFirst();
+
+                assertThat(event.getAggregateId())
+                        .isEqualTo(result.getRootID().value().toString());
+            }
+        }
+    }
+
+    @Nested
+    @DisplayName("activate()")
+    class Activate {
+
+        @Nested
+        @DisplayName("Aggregate state")
+        class AggregateState {
+
+            @Test
+            @DisplayName("Sets row status to ACTIVE")
+            void setsRowStatusToActive() {
+                var result = freshCategory().activate();
+
+                assertThat(result.isActive()).isTrue();
+            }
+
+            @Test
+            @DisplayName("Preserves existing fields after activate")
+            void preservesFields() {
+                var original = freshCategory();
+                var result = original.activate();
+
+                assertThat(result.getRootID()).isEqualTo(original.getRootID());
+                assertThat(result.getName()).isEqualTo(original.getName());
+                assertThat(result.getPath()).isEqualTo(original.getPath());
+                assertThat(result.getDescription()).isEqualTo(original.getDescription());
+            }
+
+            @Test
+            @DisplayName("Original aggregate is unchanged")
+            void originalAggregateIsUnchanged() {
+                var original = freshCategory();
+                original.activate();
+
+                assertThat(original.isActive()).isFalse();
+            }
+        }
+
+        @Nested
+        @DisplayName("Event publishing")
+        class EventPublishing {
+
+            @Test
+            @DisplayName("Registers exactly one uncommitted event")
+            void registersExactlyOneEvent() {
+                var result = freshCategory().activate();
+
+                assertThat(result.getUncommittedEvents()).hasSize(1);
+            }
+
+            @Test
+            @DisplayName("Registered event is ProductCategoryActivatedEvent")
+            void registeredEventIsCorrectType() {
+                var result = freshCategory().activate();
+
+                assertThat(result.getUncommittedEvents().getFirst())
+                        .isInstanceOf(ProductCategoryActivatedEvent.class);
+            }
+
+            @Test
+            @DisplayName("Event aggregateId matches the category ID")
+            void eventAggregateIdMatchesCategoryId() {
+                var result = freshCategory().activate();
+                var event = result.getUncommittedEvents().getFirst();
+
+                assertThat(event.getAggregateId())
+                        .isEqualTo(result.getRootID().value().toString());
+            }
+        }
+    }
+
+    @Nested
+    @DisplayName("delete()")
+    class Delete {
+
+        @Nested
+        @DisplayName("Aggregate state")
+        class AggregateState {
+
+            @Test
+            @DisplayName("Sets row status to ARCHIVED")
+            void setsRowStatusToArchived() {
+                var result = freshCategory().delete();
+
+                assertThat(result.isArchived()).isTrue();
+            }
+
+            @Test
+            @DisplayName("Preserves existing fields after delete")
+            void preservesFields() {
+                var original = freshCategory();
+                var result = original.delete();
+
+                assertThat(result.getRootID()).isEqualTo(original.getRootID());
+                assertThat(result.getName()).isEqualTo(original.getName());
+            }
+
+            @Test
+            @DisplayName("Original aggregate is unchanged")
+            void originalAggregateIsUnchanged() {
+                var original = freshCategory();
+                original.delete();
+
+                assertThat(original.isArchived()).isFalse();
+            }
+        }
+
+        @Nested
+        @DisplayName("Event publishing")
+        class EventPublishing {
+
+            @Test
+            @DisplayName("Registers exactly one uncommitted event")
+            void registersExactlyOneEvent() {
+                var result = freshCategory().delete();
+
+                assertThat(result.getUncommittedEvents()).hasSize(1);
+            }
+
+            @Test
+            @DisplayName("Registered event is ProductCategoryDeletedEvent")
+            void registeredEventIsCorrectType() {
+                var result = freshCategory().delete();
+
+                assertThat(result.getUncommittedEvents().getFirst())
+                        .isInstanceOf(ProductCategoryDeletedEvent.class);
+            }
+
+            @Test
+            @DisplayName("Event aggregateId matches the category ID")
+            void eventAggregateIdMatchesCategoryId() {
+                var result = freshCategory().delete();
+                var event = result.getUncommittedEvents().getFirst();
+
+                assertThat(event.getAggregateId())
+                        .isEqualTo(result.getRootID().value().toString());
+            }
+        }
+    }
 
         @Test
         @DisplayName("Uncommitted events list is unmodifiable")

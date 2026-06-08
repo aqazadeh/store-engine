@@ -27,4 +27,11 @@ public final class ProductModerationDomainServiceImpl implements ProductModerati
         var product = productQueryPort.fetchById(command.getProductId());
         return product.moveToInReview();
     }
+
+    @Override
+    public ProductRoot archive(SeDomainContext context, ProductArchiveCommand command) {
+        var productQueryPort = context.getQueryPort(ProductQueryOutboundPort.class);
+        var product = productQueryPort.fetchById(command.getProductId());
+        return product.archive();
+    }
 }

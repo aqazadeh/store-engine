@@ -1,10 +1,17 @@
 package az.kon.academy.catalog.command.service.domain.core.aggregate.management;
 
+import az.kon.academy.aggragate.valueobject.RowStatus;
 import az.kon.academy.catalog.command.service.domain.core.aggregate.management.rejection.ProductRejectionReasonRoot;
 import az.kon.academy.catalog.command.service.domain.core.command.product.ProductCreateRejectionReasonCommand;
+import az.kon.academy.catalog.command.service.domain.core.command.product.ProductRejectionReasonChangeReasonCommand;
+import az.kon.academy.catalog.command.service.domain.core.command.product.ProductRejectionReasonRemoveCommand;
+import az.kon.academy.catalog.command.service.domain.core.vo.management.ProductRejectionReasonId;
 import az.kon.academy.catalog.command.service.domain.core.vo.moderation.ModeratorId;
 import az.kon.academy.catalog.command.service.domain.core.vo.product.ProductId;
+import az.kon.academy.catalog.event.productrejection.ProductRejectionReasonChangedReasonEvent;
 import az.kon.academy.catalog.event.productrejection.ProductRejectionReasonCreatedEvent;
+import az.kon.academy.catalog.event.productrejection.ProductRejectionReasonDeletedEvent;
+import az.kon.academy.catalog.event.productrejection.ProductRejectionReasonSolvedEvent;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -175,8 +182,219 @@ class ProductRejectionReasonRootTest {
     }
 
     @Nested
-    @DisplayName("Immutability")
-    class Immutability {
+    @DisplayName("markAsSolved()")
+    class MarkAsSolved {
+
+        @Nested
+        @DisplayName("When not yet solved")
+        class WhenNotYetSolved {
+
+            @Nested
+            @DisplayName("Aggregate state")
+            class AggregateState {
+
+                @Test
+                @DisplayName("solved becomes true")
+                void solvedBecomesTrue() {
+                    var result = ProductRejectionReasonRoot.initialize(command).markAsSolved();
+
+                    assertThat(result.getSolved()).isTrue();
+                }
+
+                @Test
+                @DisplayName("Original aggregate is unchanged")
+                void originalAggregateIsUnchanged() {
+                    var original = ProductRejectionReasonRoot.initialize(command);
+                    original.markAsSolved();
+
+                    assertThat(original.getSolved()).isFalse();
+                }
+            }
+
+            @Nested
+            @DisplayName("Event publishing")
+            class EventPublishing {
+
+                @Test
+                @DisplayName("Registers exactly one uncommitted event")
+                void registersExactlyOneEvent() {
+                    var result = ProductRejectionReasonRoot.initialize(command).markAsSolved();
+
+                    assertThat(result.getUncommittedEvents()).hasSize(1);
+                }
+
+                @Test
+                @DisplayName("Registered event is ProductRejectionReasonSolvedEvent")
+                void registeredEventIsCorrectType() {
+                    var result = ProductRejectionReasonRoot.initialize(command).markAsSolved();
+
+                    assertThat(result.getUncommittedEvents().getFirst())
+                            .isInstanceOf(ProductRejectionReasonSolvedEvent.class);
+                }
+            }
+        }
+
+        @Nested
+        @DisplayName("When already solved")
+        class WhenAlreadySolved {
+
+            @Test
+            @DisplayName("Returns the same aggregate unchanged")
+            void returnsSameAggregateUnchanged() {
+                var solved = ProductRejectionReasonRoot.initialize(command).markAsSolved();
+                var result = solved.markAsSolved();
+
+                assertThat(result).isSameAs(solved);
+                assertThat(result.getSolved()).isTrue();
+            }
+        }
+    }
+
+    @Nested
+    @DisplayName("changeReason()")
+    class ChangeReason {
+
+        private String newReason;
+        private ModeratorId newModeratorId;
+        private ProductRejectionReasonChangeReasonCommand changeCommand;
+
+        @BeforeEach
+        void setUp() {
+            newReason = "Updated rejection reason";
+            newModeratorId = ModeratorId.from(UUID.randomUUID());
+            changeCommand = ProductRejectionReasonChangeReasonCommand.builder()
+                    .productRejectionReasonId(ProductRejectionReasonId.random())
+                    .reason(newReason)
+                    .moderatorId(newModeratorId)
+                    .build();
+        }
+
+        @Nested
+        @DisplayName("When reason is different")
+        class WhenReasonIsDifferent {
+
+            @Test
+            @DisplayName("Updates reason from command")
+            void updatesReason() {
+                var result = ProductRejectionReasonRoot.initialize(command).changeReason(changeCommand);
+
+                assertThat(result.getReason()).isEqualTo(newReason);
+            }
+
+            @Test
+            @DisplayName("Updates moderatedBy from command")
+            void updatesModeratedBy() {
+                var result = ProductRejectionReasonRoot.initialize(command).changeReason(changeCommand);
+
+                assertThat(result.getModeratedBy()).isEqualTo(newModeratorId);
+            }
+
+            @Test
+            @DisplayName("Original aggregate is unchanged")
+            void originalAggregateIsUnchanged() {
+                var original = ProductRejectionReasonRoot.initialize(command);
+                original.changeReason(changeCommand);
+
+                assertThat(original.getReason()).isEqualTo(reason);
+            }
+
+            @Test
+            @DisplayName("Registers exactly one uncommitted event")
+            void registersExactlyOneEvent() {
+                var result = ProductRejectionReasonRoot.initialize(command).changeReason(changeCommand);
+
+                assertThat(result.getUncommittedEvents()).hasSize(1);
+            }
+
+            @Test
+            @DisplayName("Registered event is ProductRejectionReasonChangedReasonEvent")
+            void registeredEventIsCorrectType() {
+                var result = ProductRejectionReasonRoot.initialize(command).changeReason(changeCommand);
+
+                assertThat(result.getUncommittedEvents().getFirst())
+                        .isInstanceOf(ProductRejectionReasonChangedReasonEvent.class);
+            }
+        }
+
+        @Nested
+        @DisplayName("When reason is the same")
+        class WhenReasonIsSame {
+
+            @Test
+            @DisplayName("Returns the same aggregate unchanged")
+            void returnsSameAggregateUnchanged() {
+                var sameReasonCommand = ProductRejectionReasonChangeReasonCommand.builder()
+                        .productRejectionReasonId(ProductRejectionReasonId.random())
+                        .reason(reason)
+                        .moderatorId(newModeratorId)
+                        .build();
+                var original = ProductRejectionReasonRoot.initialize(command);
+                var result = original.changeReason(sameReasonCommand);
+
+                assertThat(result).isSameAs(original);
+                assertThat(result.getReason()).isEqualTo(reason);
+            }
+        }
+    }
+
+    @Nested
+    @DisplayName("remove()")
+    class Remove {
+
+        private ModeratorId removeModeratorId;
+        private ProductRejectionReasonRemoveCommand removeCommand;
+
+        @BeforeEach
+        void setUp() {
+            removeModeratorId = ModeratorId.from(UUID.randomUUID());
+            removeCommand = ProductRejectionReasonRemoveCommand.builder()
+                    .productRejectionReasonId(ProductRejectionReasonId.random())
+                    .moderatorId(removeModeratorId)
+                    .build();
+        }
+
+        @Test
+        @DisplayName("Row status becomes DELETED")
+        void rowStatusIsDeleted() {
+            var result = ProductRejectionReasonRoot.initialize(command).remove(removeCommand);
+
+            assertThat(result.getRowStatus()).isEqualTo(RowStatus.DELETED);
+        }
+
+        @Test
+        @DisplayName("Updates moderatedBy from command")
+        void updatesModeratedBy() {
+            var result = ProductRejectionReasonRoot.initialize(command).remove(removeCommand);
+
+            assertThat(result.getModeratedBy()).isEqualTo(removeModeratorId);
+        }
+
+        @Test
+        @DisplayName("Original aggregate is unchanged")
+        void originalAggregateIsUnchanged() {
+            var original = ProductRejectionReasonRoot.initialize(command);
+            original.remove(removeCommand);
+
+            assertThat(original.getRowStatus()).isEqualTo(RowStatus.ACTIVE);
+        }
+
+        @Test
+        @DisplayName("Registers exactly one uncommitted event")
+        void registersExactlyOneEvent() {
+            var result = ProductRejectionReasonRoot.initialize(command).remove(removeCommand);
+
+            assertThat(result.getUncommittedEvents()).hasSize(1);
+        }
+
+        @Test
+        @DisplayName("Registered event is ProductRejectionReasonDeletedEvent")
+        void registeredEventIsCorrectType() {
+            var result = ProductRejectionReasonRoot.initialize(command).remove(removeCommand);
+
+            assertThat(result.getUncommittedEvents().getFirst())
+                    .isInstanceOf(ProductRejectionReasonDeletedEvent.class);
+        }
+    }
 
         @Test
         @DisplayName("Two different commands produce independent aggregates")

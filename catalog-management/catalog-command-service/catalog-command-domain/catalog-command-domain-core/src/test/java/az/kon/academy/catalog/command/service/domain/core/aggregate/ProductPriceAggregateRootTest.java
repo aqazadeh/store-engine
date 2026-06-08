@@ -92,6 +92,44 @@ class ProductPriceAggregateRootTest {
     }
 
     // ═════════════════════════════════════════════════════════════════════
+    // from
+    // ═════════════════════════════════════════════════════════════════════
+
+    @Nested
+    @DisplayName("from()")
+    class From {
+
+        @Test
+        @DisplayName("Factory method creates aggregate with given ID and replays events")
+        void createsWithGivenIdAndReplaysEvents() {
+            var event = new ProductPriceCreatedEvent(
+                    UUID.randomUUID(), priceId.value().toString(), OffsetDateTime.now(), 1,
+                    variantId.value(),
+                    new BigDecimal("10"), new BigDecimal("50"), new BigDecimal("30"), new BigDecimal("30"), false);
+
+            var result = ProductPriceAggregateRoot.from(priceId, List.of(event));
+
+            assertThat(result.getRootID()).isEqualTo(priceId);
+            assertThat(result.getMinPrice()).isEqualTo(Money.of(new BigDecimal("10")));
+            assertThat(result.getMaxPrice()).isEqualTo(Money.of(new BigDecimal("50")));
+            assertThat(result.getActualPrice()).isEqualTo(Money.of(new BigDecimal("30")));
+            assertThat(result.getAutoPriceChangeEnabled()).isFalse();
+            assertThat(result.getUncommittedEvents()).isEmpty();
+        }
+
+        @Test
+        @DisplayName("Factory with empty event list produces aggregate with only ID set")
+        void withEmptyEventList() {
+            var result = ProductPriceAggregateRoot.from(priceId, List.of());
+
+            assertThat(result.getRootID()).isEqualTo(priceId);
+            assertThat(result.getMinPrice()).isNull();
+            assertThat(result.getMaxPrice()).isNull();
+            assertThat(result.getUncommittedEvents()).isEmpty();
+        }
+    }
+
+    // ═════════════════════════════════════════════════════════════════════
     // initialize
     // ═════════════════════════════════════════════════════════════════════
 

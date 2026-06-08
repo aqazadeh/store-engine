@@ -4,7 +4,11 @@ import az.kon.academy.catalog.command.service.domain.core.aggregate.ProductVaria
 import az.kon.academy.catalog.command.service.domain.core.command.productvariant.*;
 import az.kon.academy.catalog.command.service.domain.core.port.outbound.ProductQueryOutboundPort;
 import az.kon.academy.catalog.command.service.domain.core.port.outbound.ProductVariantQueryOutboundPort;
+import az.kon.academy.catalog.command.service.domain.core.port.outbound.ProductVariantValueQueryOutboundPort;
+import az.kon.academy.catalog.command.service.domain.core.vo.product.ProductVariantAssignment;
 import az.kon.academy.domain.core.SeDomainContext;
+
+import java.util.stream.Collectors;
 
 public final class ProductVariantManagementDomainServiceImpl implements ProductVariantManagementDomainService {
 
@@ -12,6 +16,14 @@ public final class ProductVariantManagementDomainServiceImpl implements ProductV
     public ProductVariantRoot addVariant(SeDomainContext context, ProductVariantAddCommand command) {
         var productQuery = context.getQueryPort(ProductQueryOutboundPort.class);
         productQuery.checkExistsByIdAndMerchantId(command.getProductId(), command.getMerchantId());
+
+        var valueQuery = context.getQueryPort(ProductVariantValueQueryOutboundPort.class);
+        var assignmentMap = command.getAssignments().stream().collect(Collectors.groupingBy(
+                ProductVariantAssignment::getVariantKeyId,
+                Collectors.mapping(ProductVariantAssignment::getVariantValueId, Collectors.toList())
+        ));
+        valueQuery.checkAllAssignmentsExist(assignmentMap);
+
         return ProductVariantRoot.initialize(command);
     }
 

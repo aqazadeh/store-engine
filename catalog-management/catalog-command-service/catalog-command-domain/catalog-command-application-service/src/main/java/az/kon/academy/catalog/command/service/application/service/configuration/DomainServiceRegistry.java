@@ -12,6 +12,8 @@ import az.kon.academy.catalog.command.service.domain.core.port.inbound.service.c
 import az.kon.academy.catalog.command.service.domain.core.port.inbound.service.category.ProductCategoryModerationDomainServiceImpl;
 import az.kon.academy.catalog.command.service.domain.core.port.inbound.service.product.general.ProductManagementDomainService;
 import az.kon.academy.catalog.command.service.domain.core.port.inbound.service.product.general.ProductManagementDomainServiceImpl;
+import az.kon.academy.catalog.command.service.domain.core.port.inbound.service.product.general.ProductModerationDomainService;
+import az.kon.academy.catalog.command.service.domain.core.port.inbound.service.product.general.ProductModerationDomainServiceImpl;
 import az.kon.academy.catalog.command.service.domain.core.port.inbound.service.product.price.ProductPriceManagementDomainService;
 import az.kon.academy.catalog.command.service.domain.core.port.inbound.service.product.price.ProductPriceManagementDomainServiceImpl;
 import az.kon.academy.catalog.command.service.domain.core.port.inbound.service.product.price.ProductPriceModerationDomainService;
@@ -71,6 +73,11 @@ public class DomainServiceRegistry {
     @Bean
     public ProductManagementDomainService productDomainService() {
         return new ProductManagementDomainServiceImpl();
+    }
+
+    @Bean
+    public ProductModerationDomainService productModerationDomainService() {
+        return new ProductModerationDomainServiceImpl();
     }
 
     @Bean

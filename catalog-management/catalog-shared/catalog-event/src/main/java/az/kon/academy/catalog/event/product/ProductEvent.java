@@ -6,6 +6,5 @@ public sealed interface ProductEvent permits
         ProductMovedToInReviewEvent, ProductMovedToDraftEvent, ProductArchivedEvent,
         ProductInformationChangedEvent,
         ProductCategoryAssignedEvent, ProductBrandAssignedEvent,
-        ProductSpecificationAssignedEvent, ProductSpecificationRemovedEvent,
-        ProductVariantAddedEvent, ProductVariantRemovedEvent {
+        ProductSpecificationAssignedEvent, ProductSpecificationsAssignedEvent, ProductSpecificationRemovedEvent {
 }

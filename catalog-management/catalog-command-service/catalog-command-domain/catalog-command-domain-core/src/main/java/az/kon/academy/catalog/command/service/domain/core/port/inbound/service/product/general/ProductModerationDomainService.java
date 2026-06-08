@@ -8,4 +8,5 @@ public sealed interface ProductModerationDomainService extends ProductDomainServ
     ProductRoot approve(SeDomainContext context, ProductApproveCommand command);
     ProductRoot reject(SeDomainContext context, ProductRejectCommand command);
     ProductRoot moveToInReview(SeDomainContext context, ProductMoveToInReviewCommand command);
+    ProductRoot archive(SeDomainContext context, ProductArchiveCommand command);
 }

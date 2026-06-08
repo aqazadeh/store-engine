@@ -5,6 +5,7 @@ import az.kon.academy.catalog.command.service.domain.core.vo.management.category
 import az.kon.academy.catalog.command.service.domain.core.vo.management.specification.ProductSpecificationId;
 import az.kon.academy.domain.core.BaseQueryPort;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface ProductSpecificationQueryOutboundPort extends BaseQueryPort {
@@ -13,4 +14,8 @@ public interface ProductSpecificationQueryOutboundPort extends BaseQueryPort {
     ProductSpecificationRoot fetchById(ProductSpecificationId productSpecificationId);
 
     Boolean existsAssignmentByCategoryId(ProductCategoryId categoryId);
+
+    List<ProductSpecificationId> findRequiredByCategoryId(ProductCategoryId categoryId);
+
+    void checkAllExistByIds(List<ProductSpecificationId> ids);
 }

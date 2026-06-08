@@ -1,11 +1,13 @@
 package az.kon.academy.catalog.command.service.domain.core.port.inbound.service.product.variant;
 
 import az.kon.academy.catalog.command.service.domain.core.aggregate.ProductVariantRoot;
+import az.kon.academy.catalog.command.service.domain.core.aggregate.management.VariantValueRoot;
 import az.kon.academy.catalog.command.service.domain.core.command.productvariant.*;
 import az.kon.academy.catalog.command.service.domain.core.exception.product.ProductVariantDomainException;
-import az.kon.academy.catalog.command.service.domain.core.exception.product.ProductVariantDomainErrorCodes;
+import az.kon.academy.catalog.command.service.domain.core.exception.variant.VariantEntityNotFoundException;
 import az.kon.academy.catalog.command.service.domain.core.port.outbound.ProductQueryOutboundPort;
 import az.kon.academy.catalog.command.service.domain.core.port.outbound.ProductVariantQueryOutboundPort;
+import az.kon.academy.catalog.command.service.domain.core.port.outbound.ProductVariantValueQueryOutboundPort;
 import az.kon.academy.catalog.command.service.domain.core.vo.Barcode;
 import az.kon.academy.catalog.command.service.domain.core.vo.management.variant.VariantKeyId;
 import az.kon.academy.catalog.command.service.domain.core.vo.management.variant.VariantValueId;
@@ -25,6 +27,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -46,6 +49,9 @@ class ProductVariantManagementDomainServiceImplTest {
 
     @Mock
     private ProductVariantQueryOutboundPort variantQuery;
+
+    @Mock
+    private ProductVariantValueQueryOutboundPort variantValueQuery;
 
     private ProductVariantManagementDomainServiceImpl service;
 
@@ -80,6 +86,7 @@ class ProductVariantManagementDomainServiceImplTest {
 
         when(context.getQueryPort(ProductQueryOutboundPort.class)).thenReturn(productQuery);
         lenient().when(context.getQueryPort(ProductVariantQueryOutboundPort.class)).thenReturn(variantQuery);
+        lenient().when(context.getQueryPort(ProductVariantValueQueryOutboundPort.class)).thenReturn(variantValueQuery);
     }
 
     private ProductVariantRoot variantInDraft() {
@@ -114,9 +121,26 @@ class ProductVariantManagementDomainServiceImplTest {
     @DisplayName("addVariant()")
     class AddVariant {
 
+        private VariantKeyId keyId;
+        private VariantValueId valueId;
+
+        @BeforeEach
+        void setUp() {
+            keyId = assignment.getVariantKeyId();
+            valueId = assignment.getVariantValueId();
+        }
+
+        private void stubValidAssignments() {
+            var value = VariantValueRoot.builder().id(valueId).keyId(keyId).build();
+            when(variantValueQuery.findAllByKeyValueMap(Map.of(keyId, List.of(valueId))))
+                    .thenReturn(List.of(value));
+        }
+
         @Test
-        @DisplayName("Checks product exists and initializes variant")
+        @DisplayName("Checks product exists, validates assignments and initializes variant")
         void checksProductAndInitializes() {
+            stubValidAssignments();
+
             var result = service.addVariant(context, addCommand);
 
             verify(productQuery).checkExistsByIdAndMerchantId(productId, merchantId);
@@ -135,6 +159,16 @@ class ProductVariantManagementDomainServiceImplTest {
 
             assertThatThrownBy(() -> service.addVariant(context, addCommand))
                     .isSameAs(ex);
+        }
+
+        @Test
+        @DisplayName("Throws when variant assignments are invalid")
+        void throwsWhenAssignmentsInvalid() {
+            when(variantValueQuery.findAllByKeyValueMap(Map.of(keyId, List.of(valueId))))
+                    .thenReturn(List.of());
+
+            assertThatThrownBy(() -> service.addVariant(context, addCommand))
+                    .isInstanceOf(VariantEntityNotFoundException.class);
         }
     }
 

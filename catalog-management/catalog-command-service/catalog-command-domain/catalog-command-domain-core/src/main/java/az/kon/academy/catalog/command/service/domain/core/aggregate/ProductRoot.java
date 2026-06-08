@@ -3,8 +3,6 @@ package az.kon.academy.catalog.command.service.domain.core.aggregate;
 import az.kon.academy.aggragate.AggregateRoot;
 import az.kon.academy.aggragate.valueobject.SeDateTime;
 import az.kon.academy.catalog.command.service.domain.core.command.product.*;
-import az.kon.academy.catalog.command.service.domain.core.command.productvariant.ProductVariantAddCommand;
-import az.kon.academy.catalog.command.service.domain.core.command.productvariant.ProductVariantRemoveCommand;
 import az.kon.academy.catalog.command.service.domain.core.exception.product.ProductDomainErrorCodes;
 import az.kon.academy.catalog.command.service.domain.core.exception.product.ProductDomainException;
 import az.kon.academy.catalog.command.service.domain.core.vo.brand.BrandId;
@@ -20,17 +18,15 @@ import java.util.Collections;
 import java.util.List;
 
 @SuperBuilder(toBuilder = true)
-public class ProductRoot extends AggregateRoot<ProductRoot, ProductId> {
+public final class ProductRoot extends AggregateRoot<ProductRoot, ProductId> {
 
     @Getter private final MerchantId merchantId;
-    @Getter private ProductCategoryId categoryId;
-    @Getter private BrandId brandId;
-    @Getter private ProductName name;
-    @Getter private ProductDescription description;
-    @Getter private Boolean autoPriceUpdateEnabled;
-    @Getter private ProductStatus status;
-    @Getter private List<ProductSpecificationAssignment> specifications;
-    @Getter private List<ProductVariantRoot> variants;
+    @Getter private final ProductCategoryId categoryId;
+    @Getter private final BrandId brandId;
+    @Getter private final ProductName name;
+    @Getter private final ProductDescription description;
+    @Getter private final ProductStatus status;
+    @Getter private final List<ProductSpecificationAssignment> specifications;
 
     public static ProductRoot initialize(ProductCreateCommand command) {
         var product = ProductRoot.builder()
@@ -40,10 +36,8 @@ public class ProductRoot extends AggregateRoot<ProductRoot, ProductId> {
                 .brandId(command.getBrandId())
                 .name(command.getName())
                 .description(command.getDescription())
-                .autoPriceUpdateEnabled(Boolean.FALSE)
                 .status(ProductStatus.DRAFT)
                 .specifications(Collections.emptyList())
-                .variants(Collections.emptyList())
                 .build();
 
         var event = ProductCreatedEvent.of(
@@ -83,6 +77,13 @@ public class ProductRoot extends AggregateRoot<ProductRoot, ProductId> {
     }
 
     public ProductRoot approve() {
+        if (!this.status.isInReview()) {
+            throw new ProductDomainException(
+                    ProductDomainErrorCodes.STATUS_INVALID_FOR_APPROVE,
+                    List.of(this.getRootID().toString())
+            );
+        }
+
         var product = this.toBuilder()
                 .status(ProductStatus.APPROVED)
                 .modificationTs(SeDateTime.now())
@@ -97,6 +98,13 @@ public class ProductRoot extends AggregateRoot<ProductRoot, ProductId> {
     }
 
     public ProductRoot reject() {
+        if (!this.status.isSentToApproval()) {
+            throw new ProductDomainException(
+                    ProductDomainErrorCodes.STATUS_INVALID_FOR_REJECT,
+                    List.of(this.getRootID().toString())
+            );
+        }
+
         var product = this.toBuilder()
                 .status(ProductStatus.REJECTED)
                 .modificationTs(SeDateTime.now())
@@ -111,7 +119,7 @@ public class ProductRoot extends AggregateRoot<ProductRoot, ProductId> {
     }
 
     public ProductRoot moveToDraft() {
-        if (!this.status.isSentToApproval()) {
+        if (!this.status.isSentToApproval() && !this.status.isRejected()) {
             throw new ProductDomainException(
                     ProductDomainErrorCodes.STATUS_INVALID_FOR_MOVE_TO_DRAFT,
                     List.of(this.getRootID().toString())
@@ -174,9 +182,13 @@ public class ProductRoot extends AggregateRoot<ProductRoot, ProductId> {
     }
 
     public ProductRoot changeInformation(ProductChangeInformationCommand command) {
-        if (this.status.isInReview()) {
+        if (this.status.isArchived() || this.status.isInReview() || this.status.isSentToApproval()) {
             throw new ProductDomainException(
-                    ProductDomainErrorCodes.CANNOT_BE_CHANGED_WHEN_IN_REVIEW,
+                    this.status.isArchived()
+                            ? ProductDomainErrorCodes.STATUS_INVALID_FOR_ARCHIVE
+                            : this.status.isInReview()
+                                ? ProductDomainErrorCodes.CANNOT_BE_CHANGED_WHEN_IN_REVIEW
+                                : ProductDomainErrorCodes.CANNOT_BE_CHANGED_WHEN_SENT_TO_APPROVAL,
                     List.of(this.getRootID().toString())
             );
         }
@@ -197,6 +209,17 @@ public class ProductRoot extends AggregateRoot<ProductRoot, ProductId> {
     }
 
     public ProductRoot assignCategory(ProductAssignCategoryCommand command) {
+        if (this.status.isArchived() || this.status.isInReview() || this.status.isSentToApproval()) {
+            throw new ProductDomainException(
+                    this.status.isArchived()
+                            ? ProductDomainErrorCodes.STATUS_INVALID_FOR_ARCHIVE
+                            : this.status.isInReview()
+                                ? ProductDomainErrorCodes.CANNOT_BE_CHANGED_WHEN_IN_REVIEW
+                                : ProductDomainErrorCodes.CANNOT_BE_CHANGED_WHEN_SENT_TO_APPROVAL,
+                    List.of(this.getRootID().toString())
+            );
+        }
+
         var product = this.toBuilder()
                 .categoryId(command.getCategoryId())
                 .modificationTs(SeDateTime.now())
@@ -211,6 +234,17 @@ public class ProductRoot extends AggregateRoot<ProductRoot, ProductId> {
     }
 
     public ProductRoot assignBrand(ProductAssignBrandCommand command) {
+        if (this.status.isArchived() || this.status.isInReview() || this.status.isSentToApproval()) {
+            throw new ProductDomainException(
+                    this.status.isArchived()
+                            ? ProductDomainErrorCodes.STATUS_INVALID_FOR_ARCHIVE
+                            : this.status.isInReview()
+                                ? ProductDomainErrorCodes.CANNOT_BE_CHANGED_WHEN_IN_REVIEW
+                                : ProductDomainErrorCodes.CANNOT_BE_CHANGED_WHEN_SENT_TO_APPROVAL,
+                    List.of(this.getRootID().toString())
+            );
+        }
+
         var product = this.toBuilder()
                 .brandId(command.getBrandId())
                 .modificationTs(SeDateTime.now())
@@ -224,7 +258,48 @@ public class ProductRoot extends AggregateRoot<ProductRoot, ProductId> {
         return product;
     }
 
+    public ProductRoot assignSpecifications(ProductAssignSpecificationsCommand command) {
+        if (this.status.isArchived() || this.status.isInReview() || this.status.isSentToApproval()) {
+            throw new ProductDomainException(
+                    this.status.isArchived()
+                            ? ProductDomainErrorCodes.STATUS_INVALID_FOR_ARCHIVE
+                            : this.status.isInReview()
+                                ? ProductDomainErrorCodes.CANNOT_BE_CHANGED_WHEN_IN_REVIEW
+                                : ProductDomainErrorCodes.CANNOT_BE_CHANGED_WHEN_SENT_TO_APPROVAL,
+                    List.of(this.getRootID().toString())
+            );
+        }
+
+        var specs = command.getEntries().stream()
+                .map(e -> ProductSpecificationAssignment.of(e.specificationId(), e.value()))
+                .toList();
+
+        var product = this.toBuilder()
+                .specifications(specs)
+                .modificationTs(SeDateTime.now())
+                .build();
+
+        product.addEvent(ProductSpecificationsAssignedEvent.of(
+                product.getRootID().value().toString(),
+                product.getModificationTs().toOffsetDateTime(),
+                command.getEntries().stream().map(e -> e.specificationId().value()).toList(),
+                command.getEntries().stream().map(e -> e.value().value()).toList()
+        ));
+        return product;
+    }
+
     public ProductRoot assignSpecification(ProductAssignSpecificationCommand command) {
+        if (this.status.isArchived() || this.status.isInReview() || this.status.isSentToApproval()) {
+            throw new ProductDomainException(
+                    this.status.isArchived()
+                            ? ProductDomainErrorCodes.STATUS_INVALID_FOR_ARCHIVE
+                            : this.status.isInReview()
+                                ? ProductDomainErrorCodes.CANNOT_BE_CHANGED_WHEN_IN_REVIEW
+                                : ProductDomainErrorCodes.CANNOT_BE_CHANGED_WHEN_SENT_TO_APPROVAL,
+                    List.of(this.getRootID().toString())
+            );
+        }
+
         var changed = new ArrayList<>(this.specifications);
         changed.removeIf(s -> command.getSpecificationId().equals(s.getSpecificationId()));
         changed.add(ProductSpecificationAssignment.of(command.getSpecificationId(), command.getValue()));
@@ -244,6 +319,17 @@ public class ProductRoot extends AggregateRoot<ProductRoot, ProductId> {
     }
 
     public ProductRoot removeSpecification(ProductRemoveSpecificationCommand command) {
+        if (this.status.isArchived() || this.status.isInReview() || this.status.isSentToApproval()) {
+            throw new ProductDomainException(
+                    this.status.isArchived()
+                            ? ProductDomainErrorCodes.STATUS_INVALID_FOR_ARCHIVE
+                            : this.status.isInReview()
+                                ? ProductDomainErrorCodes.CANNOT_BE_CHANGED_WHEN_IN_REVIEW
+                                : ProductDomainErrorCodes.CANNOT_BE_CHANGED_WHEN_SENT_TO_APPROVAL,
+                    List.of(this.getRootID().toString())
+            );
+        }
+
         var changed = new ArrayList<>(this.specifications);
         changed.removeIf(s -> command.getSpecificationId().equals(s.getSpecificationId()));
 
@@ -256,52 +342,6 @@ public class ProductRoot extends AggregateRoot<ProductRoot, ProductId> {
                 product.getRootID().value().toString(),
                 product.getModificationTs().toOffsetDateTime(),
                 command.getSpecificationId().value()
-        ));
-        return product;
-    }
-
-    public ProductRoot addVariant(ProductVariantAddCommand command) {
-        var variant = ProductVariantRoot.initialize(command);
-
-        var updatedVariants = new ArrayList<>(this.variants);
-        updatedVariants.add(variant);
-
-        var product = this.toBuilder()
-                .variants(Collections.unmodifiableList(updatedVariants))
-                .modificationTs(SeDateTime.now())
-                .build();
-
-        var keyIds = command.getAssignments().stream()
-                .map(a -> a.getVariantKeyId().value())
-                .toList();
-        var valueIds = command.getAssignments().stream()
-                .map(a -> a.getVariantValueId().value())
-                .toList();
-
-        product.addEvent(ProductVariantAddedEvent.of(
-                product.getRootID().value().toString(),
-                product.getModificationTs().toOffsetDateTime(),
-                variant.getRootID().value(),
-                keyIds,
-                valueIds
-        ));
-        return product;
-    }
-
-    public ProductRoot removeVariant(ProductVariantRemoveCommand command) {
-        var updatedVariants = this.variants.stream()
-                .filter(v -> !command.getVariantId().value().equals(v.getRootID().value()))
-                .toList();
-
-        var product = this.toBuilder()
-                .variants(updatedVariants)
-                .modificationTs(SeDateTime.now())
-                .build();
-
-        product.addEvent(ProductVariantRemovedEvent.of(
-                product.getRootID().value().toString(),
-                product.getModificationTs().toOffsetDateTime(),
-                command.getVariantId().value()
         ));
         return product;
     }

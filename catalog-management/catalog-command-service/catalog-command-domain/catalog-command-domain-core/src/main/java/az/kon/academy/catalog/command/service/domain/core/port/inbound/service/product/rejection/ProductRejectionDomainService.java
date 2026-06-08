@@ -1,4 +1,4 @@
 package az.kon.academy.catalog.command.service.domain.core.port.inbound.service.product.rejection;
 
-public interface ProductRejectionDomainService {
+public sealed interface ProductRejectionDomainService permits ProductRejectionManagementDomainService, ProductRejectionModerationDomainService {
 }

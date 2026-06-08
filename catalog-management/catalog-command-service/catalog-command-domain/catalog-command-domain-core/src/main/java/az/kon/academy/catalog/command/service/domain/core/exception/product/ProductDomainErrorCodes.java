@@ -22,4 +22,9 @@ public final class ProductDomainErrorCodes {
     public static final String BARCODE_INVALID_FORMAT                  = "000011";
     public static final String BARCODE_TOO_SHORT                       = "000012";
     public static final String BARCODE_TOO_LONG                        = "000013";
+    public static final String STATUS_INVALID_FOR_APPROVE              = "000014";
+    public static final String STATUS_INVALID_FOR_REJECT               = "000015";
+    public static final String CANNOT_BE_CHANGED_WHEN_SENT_TO_APPROVAL  = "000016";
+    public static final String REQUIRED_SPECIFICATION_MISSING           = "000017";
+    public static final String STATUS_INVALID_FOR_REJECTION_OPERATION   = "000018";
 }

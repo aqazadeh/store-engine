@@ -1,5 +1,6 @@
 package az.kon.academy.catalog.event.productrejection;
 
 public sealed interface ProductRejectionReasonEvent permits
-        ProductRejectionReasonCreatedEvent {
+        ProductRejectionReasonCreatedEvent, ProductRejectionReasonSolvedEvent,
+        ProductRejectionReasonChangedReasonEvent, ProductRejectionReasonDeletedEvent {
 }

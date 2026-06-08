@@ -7,10 +7,15 @@ import az.kon.academy.catalog.command.service.domain.core.vo.product.ProductSpec
 import lombok.Builder;
 import lombok.Getter;
 
+import java.util.List;
+
 @Builder
-public final class ProductAssignSpecificationCommand {
+public final class ProductAssignSpecificationsCommand {
     @Getter private final MerchantId merchantId;
     @Getter private final ProductId productId;
-    @Getter private final ProductSpecificationId specificationId;
-    @Getter private final ProductSpecificationValue value;
+    @Getter private final List<SpecificationEntry> entries;
+
+    @Builder
+    public record SpecificationEntry(ProductSpecificationId specificationId, ProductSpecificationValue value) {
+    }
 }

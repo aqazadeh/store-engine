@@ -80,6 +80,13 @@ public class ProductVariantRoot extends AggregateRoot<ProductVariantRoot, Produc
     }
 
     public ProductVariantRoot addImage(String image) {
+        if (this.status.isArchived() || this.status.isDiscontinued()) {
+            throw new ProductVariantDomainException(
+                    ProductVariantDomainErrorCodes.ONLY_DRAFT_CAN_BE_CHANGED,
+                    List.of(this.getRootID().toString())
+            );
+        }
+
         var changed = new ArrayList<>(this.images);
         changed.add(image);
         var productVariant = this.toBuilder()
@@ -98,6 +105,13 @@ public class ProductVariantRoot extends AggregateRoot<ProductVariantRoot, Produc
     }
 
     public ProductVariantRoot removeImage(String image) {
+        if (this.status.isArchived() || this.status.isDiscontinued()) {
+            throw new ProductVariantDomainException(
+                    ProductVariantDomainErrorCodes.ONLY_DRAFT_CAN_BE_CHANGED,
+                    List.of(this.getRootID().toString())
+            );
+        }
+
         var changed = new ArrayList<>(this.images);
         changed.removeIf(i -> i.equals(image));
         var productVariant = this.toBuilder()
@@ -116,6 +130,13 @@ public class ProductVariantRoot extends AggregateRoot<ProductVariantRoot, Produc
     }
 
     public ProductVariantRoot markImagePrimary(String image) {
+        if (this.status.isArchived() || this.status.isDiscontinued()) {
+            throw new ProductVariantDomainException(
+                    ProductVariantDomainErrorCodes.ONLY_DRAFT_CAN_BE_CHANGED,
+                    List.of(this.getRootID().toString())
+            );
+        }
+
         var changed = new ArrayList<>(this.images);
         changed.removeIf(i -> i.equals(image));
         changed.addFirst(image);
@@ -135,6 +156,13 @@ public class ProductVariantRoot extends AggregateRoot<ProductVariantRoot, Produc
     }
 
     public ProductVariantRoot activate() {
+        if (!this.status.isDraft() && !this.status.isInactive() && !this.status.isOutOfStock()) {
+            throw new ProductVariantDomainException(
+                    ProductVariantDomainErrorCodes.STATUS_INVALID_FOR_ACTIVATE,
+                    List.of(this.getRootID().toString())
+            );
+        }
+
         var productVariant = this.toBuilder()
                 .status(ProductVariantStatus.ACTIVE)
                 .modificationTs(SeDateTime.now())
@@ -150,6 +178,13 @@ public class ProductVariantRoot extends AggregateRoot<ProductVariantRoot, Produc
     }
 
     public ProductVariantRoot deactivate() {
+        if (!this.status.isActive()) {
+            throw new ProductVariantDomainException(
+                    ProductVariantDomainErrorCodes.STATUS_INVALID_FOR_DEACTIVATE,
+                    List.of(this.getRootID().toString())
+            );
+        }
+
         var productVariant = this.toBuilder()
                 .status(ProductVariantStatus.INACTIVE)
                 .modificationTs(SeDateTime.now())
@@ -165,6 +200,13 @@ public class ProductVariantRoot extends AggregateRoot<ProductVariantRoot, Produc
     }
 
     public ProductVariantRoot markOutOfStock() {
+        if (!this.status.isActive()) {
+            throw new ProductVariantDomainException(
+                    ProductVariantDomainErrorCodes.STATUS_INVALID_FOR_OUT_OF_STOCK,
+                    List.of(this.getRootID().toString())
+            );
+        }
+
         var productVariant = this.toBuilder()
                 .status(ProductVariantStatus.OUT_OF_STOCK)
                 .modificationTs(SeDateTime.now())
@@ -180,6 +222,13 @@ public class ProductVariantRoot extends AggregateRoot<ProductVariantRoot, Produc
     }
 
     public ProductVariantRoot discontinue() {
+        if (this.status.isArchived() || this.status.isDiscontinued()) {
+            throw new ProductVariantDomainException(
+                    ProductVariantDomainErrorCodes.STATUS_INVALID_FOR_DISCONTINUE,
+                    List.of(this.getRootID().toString())
+            );
+        }
+
         var productVariant = this.toBuilder()
                 .status(ProductVariantStatus.DISCONTINUED)
                 .modificationTs(SeDateTime.now())
@@ -195,6 +244,13 @@ public class ProductVariantRoot extends AggregateRoot<ProductVariantRoot, Produc
     }
 
     public ProductVariantRoot archive() {
+        if (!this.status.isDiscontinued()) {
+            throw new ProductVariantDomainException(
+                    ProductVariantDomainErrorCodes.STATUS_INVALID_FOR_ARCHIVE,
+                    List.of(this.getRootID().toString())
+            );
+        }
+
         var productVariant = this.toBuilder()
                 .status(ProductVariantStatus.ARCHIVED)
                 .modificationTs(SeDateTime.now())

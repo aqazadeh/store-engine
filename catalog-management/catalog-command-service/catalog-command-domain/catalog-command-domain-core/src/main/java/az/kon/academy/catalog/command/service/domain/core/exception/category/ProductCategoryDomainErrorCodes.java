@@ -25,4 +25,6 @@ public final class ProductCategoryDomainErrorCodes {
     public static final String SPECIFICATION_VALUE_TOO_LONG             = "000014";
     public static final String HAS_ACTIVE_PRODUCT                       = "000015";
     public static final String HAS_ACTIVE_SPECIFICATION_ASSIGNMENT      = "000016";
+    public static final String CIRCULAR_PARENT_REFERENCE                = "000017";
+    public static final String NAME_ALREADY_EXISTS                      = "000018";
 }

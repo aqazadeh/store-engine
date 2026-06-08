@@ -1435,7 +1435,7 @@ class BrandRootTest {
         @Test
         @DisplayName("Sets isGlobal to true")
         void setIsGlobalToTrue() {
-            var result = brandInDraftState().changeGlobal(globalCommand);
+            var result = brandInApprovedState().changeGlobal(globalCommand);
 
             assertThat(result.getIsGlobal()).isTrue();
         }
@@ -1443,7 +1443,7 @@ class BrandRootTest {
         @Test
         @DisplayName("modificationTs is updated")
         void modificationTsIsUpdated() {
-            var result = brandInDraftState().changeGlobal(globalCommand);
+            var result = brandInApprovedState().changeGlobal(globalCommand);
 
             assertThat(result.getModificationTs()).isNotNull();
         }
@@ -1451,7 +1451,7 @@ class BrandRootTest {
         @Test
         @DisplayName("Original aggregate is unchanged")
         void originalAggregateIsUnchanged() {
-            var original = brandInDraftState();
+            var original = brandInApprovedState();
             original.changeGlobal(globalCommand);
 
             assertThat(original.getIsGlobal()).isFalse();
@@ -1460,7 +1460,7 @@ class BrandRootTest {
         @Test
         @DisplayName("Other fields are preserved")
         void otherFieldsPreserved() {
-            var original = brandInDraftState();
+            var original = brandInApprovedState();
             var result = original.changeGlobal(globalCommand);
 
             assertThat(result.getRootID()).isEqualTo(original.getRootID());
@@ -1471,7 +1471,7 @@ class BrandRootTest {
         @Test
         @DisplayName("Registers exactly one uncommitted event")
         void registersExactlyOneEvent() {
-            var result = brandInDraftState().changeGlobal(globalCommand);
+            var result = brandInApprovedState().changeGlobal(globalCommand);
 
             assertThat(result.getUncommittedEvents()).hasSize(1);
         }
@@ -1479,7 +1479,7 @@ class BrandRootTest {
         @Test
         @DisplayName("Registered event is BrandToGlobalChangedEvent")
         void registeredEventIsBrandToGlobalChangedEvent() {
-            var result = brandInDraftState().changeGlobal(globalCommand);
+            var result = brandInApprovedState().changeGlobal(globalCommand);
 
             assertThat(result.getUncommittedEvents().getFirst())
                     .isInstanceOf(BrandToGlobalChangedEvent.class);
@@ -1488,16 +1488,16 @@ class BrandRootTest {
         @Test
         @DisplayName("Event isGlobal is true")
         void eventIsGlobalIsTrue() {
-            var result = brandInDraftState().changeGlobal(globalCommand);
+            var result = brandInApprovedState().changeGlobal(globalCommand);
             var event = (BrandToGlobalChangedEvent) result.getUncommittedEvents().getFirst();
 
-            assertThat(event.getIsGLobal()).isTrue();
+            assertThat(event.getIsGlobal()).isTrue();
         }
 
         @Test
         @DisplayName("Event aggregateId matches the brand ID")
         void eventAggregateIdMatchesBrandId() {
-            var result = brandInDraftState().changeGlobal(globalCommand);
+            var result = brandInApprovedState().changeGlobal(globalCommand);
             var event = result.getUncommittedEvents().getFirst();
 
             assertThat(event.getAggregateId())
@@ -1507,19 +1507,37 @@ class BrandRootTest {
         @Test
         @DisplayName("Event timestamp matches aggregate modificationTs")
         void eventTimestampMatchesModificationTs() {
-            var result = brandInDraftState().changeGlobal(globalCommand);
+            var result = brandInApprovedState().changeGlobal(globalCommand);
             var event = result.getUncommittedEvents().getFirst();
 
             assertThat(event.getTimestamp())
                     .isEqualTo(result.getModificationTs().toOffsetDateTime());
         }
 
-        @Test
-        @DisplayName("Works regardless of status")
-        void worksRegardlessOfStatus() {
-            assertThat(brandInSentToApprovalState().changeGlobal(globalCommand).getIsGlobal()).isTrue();
-            assertThat(brandInApprovedState().changeGlobal(globalCommand).getIsGlobal()).isTrue();
-            assertThat(brandInRejectedState().changeGlobal(globalCommand).getIsGlobal()).isTrue();
+        @Nested
+        @DisplayName("Guard: invalid statuses")
+        class Guard {
+
+            @Test
+            @DisplayName("Throws BrandDomainException when status is DRAFT")
+            void throwsWhenDraft() {
+                assertThatThrownBy(() -> brandInDraftState().changeGlobal(globalCommand))
+                        .isInstanceOf(BrandDomainException.class);
+            }
+
+            @Test
+            @DisplayName("Throws BrandDomainException when status is SENT_TO_APPROVAL")
+            void throwsWhenSentToApproval() {
+                assertThatThrownBy(() -> brandInSentToApprovalState().changeGlobal(globalCommand))
+                        .isInstanceOf(BrandDomainException.class);
+            }
+
+            @Test
+            @DisplayName("Throws BrandDomainException when status is REJECTED")
+            void throwsWhenRejected() {
+                assertThatThrownBy(() -> brandInRejectedState().changeGlobal(globalCommand))
+                        .isInstanceOf(BrandDomainException.class);
+            }
         }
     }
 

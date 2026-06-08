@@ -22,4 +22,5 @@ public interface BrandQueryOutboundPort extends BaseQueryPort {
     Integer fetchCountByMerchantId(final MerchantId merchantId);
     void checkExistsByName(final BrandName name);
     Boolean exitsById(BrandId brandId);
+    void checkExitsById(BrandId brandId);
 }

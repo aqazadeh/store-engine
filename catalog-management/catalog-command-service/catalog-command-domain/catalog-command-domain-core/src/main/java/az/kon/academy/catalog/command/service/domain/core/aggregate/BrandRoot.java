@@ -190,9 +190,11 @@ public class BrandRoot extends AggregateRoot<BrandRoot, BrandId> {
 
     public BrandRoot changeInformation(BrandChangeInformationCommand command) {
 
-        if (this.status.isSentToApproval()) {
+        if (this.status.isSentToApproval() || this.status.isInReview()) {
             throw new BrandDomainException(
-                    BrandDomainErrorCodes.STATUS_INVALID_FOR_SENT_TO_APPROVAL,
+                    this.status.isInReview()
+                            ? BrandDomainErrorCodes.CANNOT_BE_CHANGED_WHEN_IN_REVIEW
+                            : BrandDomainErrorCodes.STATUS_INVALID_FOR_SENT_TO_APPROVAL,
                     List.of(this.getRootID().toString())
             );
         }
@@ -215,9 +217,11 @@ public class BrandRoot extends AggregateRoot<BrandRoot, BrandId> {
 
     public BrandRoot changeImage(BrandChangeImageCommand command) {
 
-        if (this.status.isSentToApproval()) {
+        if (this.status.isSentToApproval() || this.status.isInReview()) {
             throw new BrandDomainException(
-                    BrandDomainErrorCodes.STATUS_INVALID_FOR_SENT_TO_APPROVAL,
+                    this.status.isInReview()
+                            ? BrandDomainErrorCodes.CANNOT_BE_CHANGED_WHEN_IN_REVIEW
+                            : BrandDomainErrorCodes.STATUS_INVALID_FOR_SENT_TO_APPROVAL,
                     List.of(this.getRootID().toString())
             );
         }
@@ -252,6 +256,13 @@ public class BrandRoot extends AggregateRoot<BrandRoot, BrandId> {
     }
 
     public BrandRoot changeGlobal(BrandChangeGlobalCommand command) {
+        if (!this.status.isApproved()) {
+            throw new BrandDomainException(
+                    BrandDomainErrorCodes.STATUS_INVALID_FOR_CHANGE_TO_GLOBAL,
+                    List.of(this.getRootID().toString())
+            );
+        }
+
         var brand = this.toBuilder()
                 .isGlobal(Boolean.TRUE)
                 .modificationTs(SeDateTime.now())

@@ -16,6 +16,14 @@ public final class ProductCategoryModerationDomainServiceImpl implements Product
 
     @Override
     public ProductCategoryRoot createCategory(final SeDomainContext context, final ProductCategoryCreateCommand command) {
+        final var categoryQuery = context.getQueryPort(ProductCategoryQueryOutboundPort.class);
+
+        if (command.getParentId() != null) {
+            categoryQuery.fetchById(command.getParentId());
+        }
+
+        categoryQuery.checkNameUniqueByParent(command.getName(), command.getParentId());
+
         return ProductCategoryRoot.initialize(command);
     }
 
@@ -40,13 +48,38 @@ public final class ProductCategoryModerationDomainServiceImpl implements Product
         if (Objects.isNull(command.getParentId()))
             return category.removeParent();
 
-        final var parentCategoryQuery = context.getQueryPort(ProductCategoryQueryOutboundPort.class);
-        final var parentCategory = parentCategoryQuery.fetchById(command.getParentId());
-        return category.changeParent(parentCategory.getRootID());
+        if (command.getProductCategoryId().equals(command.getParentId())) {
+            throw new ProductCategoryDomainException(
+                    ProductCategoryDomainErrorCodes.CIRCULAR_PARENT_REFERENCE,
+                    List.of(command.getProductCategoryId().toString())
+            );
+        }
+
+        productCategoryQuery.checkIsNotDescendant(command.getProductCategoryId(), command.getParentId());
+
+        return category.changeParent(command.getParentId());
     }
 
     @Override
     public ProductCategoryRoot archive(final SeDomainContext context, final ProductCategoryArchiveCommand command) {
+        final var productQuery = context.getQueryPort(ProductQueryOutboundPort.class);
+        final var existsProduct = productQuery.exitsByCategoryId(command.getProductCategoryId());
+        if (existsProduct) {
+            throw new ProductCategoryDomainException(
+                    ProductCategoryDomainErrorCodes.HAS_ACTIVE_PRODUCT,
+                    List.of(command.getProductCategoryId().toString())
+            );
+        }
+
+        final var productSpecificationQuery = context.getQueryPort(ProductSpecificationQueryOutboundPort.class);
+        final var existsSpecificationAssignment = productSpecificationQuery.existsAssignmentByCategoryId(command.getProductCategoryId());
+        if (existsSpecificationAssignment) {
+            throw new ProductCategoryDomainException(
+                    ProductCategoryDomainErrorCodes.HAS_ACTIVE_SPECIFICATION_ASSIGNMENT,
+                    List.of(command.getProductCategoryId().toString())
+            );
+        }
+
         final var productCategoryQuery = context.getQueryPort(ProductCategoryQueryOutboundPort.class);
         final var category = productCategoryQuery.fetchById(command.getProductCategoryId());
         return category.archive();

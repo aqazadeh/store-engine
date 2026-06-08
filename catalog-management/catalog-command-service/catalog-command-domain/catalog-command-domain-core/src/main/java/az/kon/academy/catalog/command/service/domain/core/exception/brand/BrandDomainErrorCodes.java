@@ -28,4 +28,7 @@ public interface BrandDomainErrorCodes {
 
     String HAS_UNSOLVED_REASON                      = "000017";
     String AT_LEAST_ONE_REJECTION_REASON_REQUIRED   = "000018";
+    String CANNOT_BE_CHANGED_WHEN_IN_REVIEW         = "000019";
+    String STATUS_INVALID_FOR_CHANGE_TO_GLOBAL      = "000020";
+    String STATUS_INVALID_FOR_REJECTION_OPERATION   = "000021";
 }

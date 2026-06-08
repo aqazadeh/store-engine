@@ -5,12 +5,16 @@ import az.kon.academy.catalog.command.service.domain.core.command.productstock.P
 import az.kon.academy.catalog.command.service.domain.core.command.productstock.ProductStockDecreaseCommand;
 import az.kon.academy.catalog.command.service.domain.core.command.productstock.ProductStockIncreaseCommand;
 import az.kon.academy.catalog.command.service.domain.core.port.outbound.ProductStockQueryOutboundPort;
+import az.kon.academy.catalog.command.service.domain.core.port.outbound.ProductVariantQueryOutboundPort;
 import az.kon.academy.domain.core.SeDomainContext;
 
 public final class ProductStockManagementDomainServiceImpl implements ProductStockManagementDomainService {
 
     @Override
     public ProductStockAggregateRoot createStock(SeDomainContext context, ProductStockCreateCommand command) {
+        var variantQueryPort = context.getQueryPort(ProductVariantQueryOutboundPort.class);
+        variantQueryPort.fetchByIdAndProductIdAndMerchantId(
+                command.getVariantId(), command.getProductId(), command.getMerchantId());
         return ProductStockAggregateRoot.initialize(command);
     }
 
