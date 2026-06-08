@@ -7,6 +7,10 @@ import az.kon.academy.catalog.command.service.domain.core.vo.Barcode;
 import az.kon.academy.catalog.command.service.domain.core.vo.product.ProductId;
 import az.kon.academy.catalog.command.service.domain.core.vo.product.ProductVariantAssignment;
 import az.kon.academy.catalog.command.service.domain.core.vo.product.ProductVariantId;
+import az.kon.academy.catalog.command.service.domain.core.vo.product.ProductVariantSku;
+import az.kon.academy.catalog.command.service.domain.core.vo.product.ProductVariantStatus;
+import az.kon.academy.catalog.command.service.domain.core.exception.product.ProductVariantDomainErrorCodes;
+import az.kon.academy.catalog.command.service.domain.core.exception.product.ProductVariantDomainException;
 import az.kon.academy.catalog.event.productvariant.*;
 import lombok.Getter;
 import lombok.experimental.SuperBuilder;
@@ -21,15 +25,21 @@ public class ProductVariantRoot extends AggregateRoot<ProductVariantRoot, Produc
     @Getter private final ProductId productId;
     @Getter private final List<ProductVariantAssignment> assignments;
     @Getter private final Barcode barcode;
+    @Getter private final ProductVariantSku sku;
     @Getter private final List<String> images;
+    @Getter private final ProductVariantStatus status;
 
 
     public static ProductVariantRoot initialize(ProductVariantAddCommand command) {
 
         var productVariant = ProductVariantRoot.builder()
                 .id(ProductVariantId.random())
+                .productId(command.getProductId())
                 .assignments(List.copyOf(command.getAssignments()))
                 .barcode(command.getBarcode())
+                .sku(command.getSku())
+                .images(List.of())
+                .status(ProductVariantStatus.DRAFT)
                 .build();
 
         var event = ProductVariantAddedEvent.create(
@@ -38,7 +48,9 @@ public class ProductVariantRoot extends AggregateRoot<ProductVariantRoot, Produc
                 productVariant.getProductId().value(),
                 productVariant.getAssignments().stream().map(a -> a.getVariantKeyId().value()).toList(),
                 productVariant.getAssignments().stream().map(a -> a.getVariantValueId().value()).toList(),
-                productVariant.getBarcode().value()
+                productVariant.getBarcode().value(),
+                productVariant.getStatus().name(),
+                productVariant.getSku().value()
         );
 
         productVariant.addEvent(event);
@@ -46,6 +58,13 @@ public class ProductVariantRoot extends AggregateRoot<ProductVariantRoot, Produc
     }
 
     public ProductVariantRoot changeBarcode(Barcode barcode) {
+        if (!this.status.isDraft()) {
+            throw new ProductVariantDomainException(
+                    ProductVariantDomainErrorCodes.ONLY_DRAFT_CAN_BE_CHANGED,
+                    List.of(this.getRootID().toString())
+            );
+        }
+
         var productVariant = this.toBuilder()
                 .barcode(barcode)
                 .modificationTs(SeDateTime.now())
@@ -113,5 +132,117 @@ public class ProductVariantRoot extends AggregateRoot<ProductVariantRoot, Produc
 
         productVariant.addEvent(event);
         return productVariant;
+    }
+
+    public ProductVariantRoot activate() {
+        var productVariant = this.toBuilder()
+                .status(ProductVariantStatus.ACTIVE)
+                .modificationTs(SeDateTime.now())
+                .build();
+
+        var event = ProductVariantActivatedEvent.create(
+                productVariant.getRootID().value().toString(),
+                productVariant.getModificationTs().toOffsetDateTime(),
+                productVariant.getStatus().name()
+        );
+        productVariant.addEvent(event);
+        return productVariant;
+    }
+
+    public ProductVariantRoot deactivate() {
+        var productVariant = this.toBuilder()
+                .status(ProductVariantStatus.INACTIVE)
+                .modificationTs(SeDateTime.now())
+                .build();
+
+        var event = ProductVariantDeactivatedEvent.create(
+                productVariant.getRootID().value().toString(),
+                productVariant.getModificationTs().toOffsetDateTime(),
+                productVariant.getStatus().name()
+        );
+        productVariant.addEvent(event);
+        return productVariant;
+    }
+
+    public ProductVariantRoot markOutOfStock() {
+        var productVariant = this.toBuilder()
+                .status(ProductVariantStatus.OUT_OF_STOCK)
+                .modificationTs(SeDateTime.now())
+                .build();
+
+        var event = ProductVariantMarkedOutOfStockEvent.create(
+                productVariant.getRootID().value().toString(),
+                productVariant.getModificationTs().toOffsetDateTime(),
+                productVariant.getStatus().name()
+        );
+        productVariant.addEvent(event);
+        return productVariant;
+    }
+
+    public ProductVariantRoot discontinue() {
+        var productVariant = this.toBuilder()
+                .status(ProductVariantStatus.DISCONTINUED)
+                .modificationTs(SeDateTime.now())
+                .build();
+
+        var event = ProductVariantDiscontinuedEvent.create(
+                productVariant.getRootID().value().toString(),
+                productVariant.getModificationTs().toOffsetDateTime(),
+                productVariant.getStatus().name()
+        );
+        productVariant.addEvent(event);
+        return productVariant;
+    }
+
+    public ProductVariantRoot archive() {
+        var productVariant = this.toBuilder()
+                .status(ProductVariantStatus.ARCHIVED)
+                .modificationTs(SeDateTime.now())
+                .build();
+
+        var event = ProductVariantArchivedEvent.create(
+                productVariant.getRootID().value().toString(),
+                productVariant.getModificationTs().toOffsetDateTime()
+        );
+        productVariant.addEvent(event);
+        return productVariant;
+    }
+
+    public ProductVariantRoot changeSku(ProductVariantSku sku) {
+        if (!this.status.isDraft()) {
+            throw new ProductVariantDomainException(
+                    ProductVariantDomainErrorCodes.ONLY_DRAFT_CAN_BE_CHANGED,
+                    List.of(this.getRootID().toString())
+            );
+        }
+
+        var productVariant = this.toBuilder()
+                .sku(sku)
+                .modificationTs(SeDateTime.now())
+                .build();
+
+        var event = ProductVariantSkuChangedEvent.create(
+                productVariant.getRootID().value().toString(),
+                productVariant.getModificationTs().toOffsetDateTime(),
+                productVariant.getSku() != null ? productVariant.getSku().value() : null
+        );
+        productVariant.addEvent(event);
+        return productVariant;
+    }
+
+    public ProductVariantRoot remove() {
+        if (!this.status.isDraft()) {
+            throw new ProductVariantDomainException(
+                    ProductVariantDomainErrorCodes.ONLY_DRAFT_CAN_BE_REMOVED,
+                    List.of(this.getRootID().toString())
+            );
+        }
+
+        var event = ProductVariantRemovedEvent.create(
+                getRootID().value().toString(),
+                getModificationTs().toOffsetDateTime()
+        );
+        addEvent(event);
+        return this;
     }
 }

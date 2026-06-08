@@ -24,6 +24,10 @@ import az.kon.academy.catalog.command.service.domain.core.port.inbound.service.p
 import az.kon.academy.catalog.command.service.domain.core.port.inbound.service.product.stock.ProductStockManagementDomainServiceImpl;
 import az.kon.academy.catalog.command.service.domain.core.port.inbound.service.product.stock.ProductStockModerationDomainService;
 import az.kon.academy.catalog.command.service.domain.core.port.inbound.service.product.stock.ProductStockModerationDomainServiceImpl;
+import az.kon.academy.catalog.command.service.domain.core.port.inbound.service.product.variant.ProductVariantManagementDomainService;
+import az.kon.academy.catalog.command.service.domain.core.port.inbound.service.product.variant.ProductVariantManagementDomainServiceImpl;
+import az.kon.academy.catalog.command.service.domain.core.port.inbound.service.product.variant.ProductVariantModerationDomainService;
+import az.kon.academy.catalog.command.service.domain.core.port.inbound.service.product.variant.ProductVariantModerationDomainServiceImpl;
 import az.kon.academy.catalog.command.service.domain.core.port.inbound.service.specification.ProductSpecificationModerationDomainService;
 import az.kon.academy.catalog.command.service.domain.core.port.inbound.service.specification.ProductSpecificationModerationDomainServiceImpl;
 import az.kon.academy.catalog.command.service.domain.core.port.inbound.service.variant.VariantModerationDomainService;
@@ -102,6 +106,16 @@ public class DomainServiceRegistry {
     @Bean
     public ProductRejectionManagementDomainService productRejectionManagementDomainService() {
         return new ProductRejectionManagementDomainServiceImpl();
+    }
+
+    @Bean
+    public ProductVariantManagementDomainService productVariantManagementDomainService() {
+        return new ProductVariantManagementDomainServiceImpl();
+    }
+
+    @Bean
+    public ProductVariantModerationDomainService productVariantModerationDomainService() {
+        return new ProductVariantModerationDomainServiceImpl();
     }
 
 }

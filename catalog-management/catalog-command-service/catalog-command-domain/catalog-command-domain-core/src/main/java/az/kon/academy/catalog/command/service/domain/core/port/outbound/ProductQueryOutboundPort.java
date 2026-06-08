@@ -23,5 +23,9 @@ public interface ProductQueryOutboundPort extends BaseQueryPort {
 
     Boolean existsByIdAndVarintIdAndMerchantId(ProductId productId, ProductVariantId productVariantId, MerchantId merchantId);
 
+    void checkExistsByIdAndMerchantId(ProductId id, MerchantId merchantId);
+
+    void checkExistsById(ProductId id);
+
     Boolean exitsByCategoryId(ProductCategoryId productCategoryId);
 }

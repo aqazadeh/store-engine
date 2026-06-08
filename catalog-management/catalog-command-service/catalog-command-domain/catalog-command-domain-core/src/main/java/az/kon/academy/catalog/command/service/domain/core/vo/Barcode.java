@@ -1,13 +1,37 @@
 package az.kon.academy.catalog.command.service.domain.core.vo;
 
+import az.kon.academy.catalog.command.service.domain.core.exception.product.ProductDomainErrorCodes;
+import az.kon.academy.catalog.command.service.domain.core.exception.product.ProductDomainException;
+
 import java.util.Objects;
 
 public final class Barcode {
 
+    public static final int MIN_LENGTH = 8;
+    public static final int MAX_LENGTH = 14;
+
     private final String value;
 
     private Barcode(String value) {
-        this.value = value;
+        if (Objects.isNull(value) || value.isBlank()) {
+            throw new ProductDomainException(ProductDomainErrorCodes.BARCODE_REQUIRED);
+        }
+
+        var normalized = value.trim();
+
+        if (!normalized.chars().allMatch(Character::isDigit)) {
+            throw new ProductDomainException(ProductDomainErrorCodes.BARCODE_INVALID_FORMAT);
+        }
+
+        if (normalized.length() < MIN_LENGTH) {
+            throw new ProductDomainException(ProductDomainErrorCodes.BARCODE_TOO_SHORT);
+        }
+
+        if (normalized.length() > MAX_LENGTH) {
+            throw new ProductDomainException(ProductDomainErrorCodes.BARCODE_TOO_LONG);
+        }
+
+        this.value = normalized;
     }
 
     public static Barcode of(String value) {

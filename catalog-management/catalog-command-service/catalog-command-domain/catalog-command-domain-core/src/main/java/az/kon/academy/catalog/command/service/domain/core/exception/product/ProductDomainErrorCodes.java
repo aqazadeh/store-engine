@@ -17,4 +17,9 @@ public final class ProductDomainErrorCodes {
 
     public static final String CATEGORY_NOT_FOUND                      = "000008";
     public static final String BRAND_NOT_FOUND                         = "000009";
+
+    public static final String BARCODE_REQUIRED                        = "000010";
+    public static final String BARCODE_INVALID_FORMAT                  = "000011";
+    public static final String BARCODE_TOO_SHORT                       = "000012";
+    public static final String BARCODE_TOO_LONG                        = "000013";
 }
