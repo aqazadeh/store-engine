@@ -7,7 +7,7 @@ import lombok.Getter;
 
 @Builder
 public final class ProductRejectionReasonChangeReasonCommand {
-    @Getter private final ProductRejectionReasonId rejectionReasonId;
+    @Getter private final ProductRejectionReasonId productRejectionReasonId;
     @Getter private final ModeratorId moderatorId;
     @Getter private final String reason;
 }

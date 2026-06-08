@@ -64,8 +64,8 @@ class ProductPriceManagementDomainServiceImplTest {
         variantId = ProductVariantId.random();
         priceId = ProductPriceId.random();
 
-        when(context.getQueryPort(ProductQueryOutboundPort.class)).thenReturn(productQuery);
-        when(context.getQueryPort(ProductPriceQueryOutboundPort.class)).thenReturn(priceQuery);
+        lenient().when(context.getQueryPort(ProductQueryOutboundPort.class)).thenReturn(productQuery);
+        lenient().when(context.getQueryPort(ProductPriceQueryOutboundPort.class)).thenReturn(priceQuery);
         lenient().when(context.getQueryPort(ProductVariantQueryOutboundPort.class)).thenReturn(variantQuery);
     }
 

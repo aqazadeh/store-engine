@@ -53,7 +53,7 @@ class ProductRootTest {
     }
 
     private ProductRoot productInApprovedState() {
-        return productInSentToApprovalState().approve();
+        return productInSentToApprovalState().moveToInReview().approve();
     }
 
     private ProductRoot productInRejectedState() {
@@ -430,7 +430,7 @@ class ProductRootTest {
             @Test
             @DisplayName("Sets status to APPROVED")
             void setsStatusToApproved() {
-                var result = productInSentToApprovalState().approve();
+                var result = productInSentToApprovalState().moveToInReview().approve();
 
                 assertThat(result.getStatus()).isEqualTo(ProductStatus.APPROVED);
             }
@@ -438,16 +438,16 @@ class ProductRootTest {
             @Test
             @DisplayName("ID is preserved")
             void idPreserved() {
-                var sentToApproval = productInSentToApprovalState();
-                var result = sentToApproval.approve();
+                var inReview = productInSentToApprovalState().moveToInReview();
+                var result = inReview.approve();
 
-                assertThat(result.getRootID()).isEqualTo(sentToApproval.getRootID());
+                assertThat(result.getRootID()).isEqualTo(inReview.getRootID());
             }
 
             @Test
             @DisplayName("modificationTs is updated")
             void modificationTsIsUpdated() {
-                var result = productInSentToApprovalState().approve();
+                var result = productInSentToApprovalState().moveToInReview().approve();
 
                 assertThat(result.getModificationTs()).isNotNull();
             }
@@ -455,10 +455,10 @@ class ProductRootTest {
             @Test
             @DisplayName("Original aggregate is unchanged")
             void originalAggregateIsUnchanged() {
-                var sentToApproval = productInSentToApprovalState();
-                sentToApproval.approve();
+                var inReview = productInSentToApprovalState().moveToInReview();
+                inReview.approve();
 
-                assertThat(sentToApproval.getStatus()).isEqualTo(ProductStatus.SENT_TO_APPROVAL);
+                assertThat(inReview.getStatus()).isEqualTo(ProductStatus.IN_REVIEW);
             }
         }
 
@@ -469,7 +469,7 @@ class ProductRootTest {
             @Test
             @DisplayName("Registers exactly one uncommitted event")
             void registersExactlyOneEvent() {
-                var result = productInSentToApprovalState().approve();
+                var result = productInSentToApprovalState().moveToInReview().approve();
 
                 assertThat(result.getUncommittedEvents()).hasSize(1);
             }
@@ -477,7 +477,7 @@ class ProductRootTest {
             @Test
             @DisplayName("Registered event is ProductApprovedEvent")
             void registeredEventIsCorrectType() {
-                var result = productInSentToApprovalState().approve();
+                var result = productInSentToApprovalState().moveToInReview().approve();
 
                 assertThat(result.getUncommittedEvents().getFirst())
                         .isInstanceOf(ProductApprovedEvent.class);
@@ -486,7 +486,7 @@ class ProductRootTest {
             @Test
             @DisplayName("Event aggregateId matches the product ID")
             void eventAggregateIdMatchesProductId() {
-                var result = productInSentToApprovalState().approve();
+                var result = productInSentToApprovalState().moveToInReview().approve();
                 var event = result.getUncommittedEvents().getFirst();
 
                 assertThat(event.getAggregateId())
@@ -496,7 +496,7 @@ class ProductRootTest {
             @Test
             @DisplayName("Event carries APPROVED status")
             void eventCarriesStatus() {
-                var result = productInSentToApprovalState().approve();
+                var result = productInSentToApprovalState().moveToInReview().approve();
                 var event = (ProductApprovedEvent) result.getUncommittedEvents().getFirst();
 
                 assertThat(event.getStatus()).isEqualTo(ProductStatus.APPROVED.name());
@@ -1371,7 +1371,7 @@ class ProductRootTest {
                 var addCmd = ProductAssignSpecificationCommand.builder()
                         .productId(ProductId.random())
                         .specificationId(ProductSpecificationId.random())
-                        .value(new ProductSpecificationValue("Old"))
+                        .value(new ProductSpecificationValue("OldVal"))
                         .build();
 
                 var result = freshProduct()
@@ -1380,7 +1380,7 @@ class ProductRootTest {
 
                 assertThat(result.getSpecifications()).hasSize(2);
                 assertThat(result.getSpecifications())
-                        .noneMatch(s -> s.getValue().equals(new ProductSpecificationValue("Old")));
+                        .noneMatch(s -> s.getValue().equals(new ProductSpecificationValue("OldVal")));
             }
 
             @Test
@@ -1568,10 +1568,12 @@ class ProductRootTest {
         void sequentialLifecycleOperationsReturnNewInstances() {
             var draft = freshProduct();
             var sentToApproval = draft.sentToApproval();
-            var approved = sentToApproval.approve();
+            var inReview = sentToApproval.moveToInReview();
+            var approved = inReview.approve();
 
             assertThat(draft.getStatus()).isEqualTo(ProductStatus.DRAFT);
             assertThat(sentToApproval.getStatus()).isEqualTo(ProductStatus.SENT_TO_APPROVAL);
+            assertThat(inReview.getStatus()).isEqualTo(ProductStatus.IN_REVIEW);
             assertThat(approved.getStatus()).isEqualTo(ProductStatus.APPROVED);
         }
 

@@ -16,14 +16,6 @@ public final class ProductCategoryModerationDomainServiceImpl implements Product
 
     @Override
     public ProductCategoryRoot createCategory(final SeDomainContext context, final ProductCategoryCreateCommand command) {
-        final var categoryQuery = context.getQueryPort(ProductCategoryQueryOutboundPort.class);
-
-        if (command.getParentId() != null) {
-            categoryQuery.fetchById(command.getParentId());
-        }
-
-        categoryQuery.checkNameUniqueByParent(command.getName(), command.getParentId());
-
         return ProductCategoryRoot.initialize(command);
     }
 

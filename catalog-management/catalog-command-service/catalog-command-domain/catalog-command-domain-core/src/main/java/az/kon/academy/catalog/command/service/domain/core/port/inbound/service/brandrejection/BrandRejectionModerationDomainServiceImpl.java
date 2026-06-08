@@ -8,6 +8,7 @@ import az.kon.academy.catalog.command.service.domain.core.exception.brand.BrandD
 import az.kon.academy.catalog.command.service.domain.core.exception.brand.BrandDomainException;
 import az.kon.academy.catalog.command.service.domain.core.port.outbound.BrandQueryOutboundPort;
 import az.kon.academy.catalog.command.service.domain.core.port.outbound.BrandRejectionReasonQueryOutboundPort;
+import az.kon.academy.catalog.command.service.domain.core.vo.brand.BrandId;
 import az.kon.academy.domain.core.SeDomainContext;
 
 import java.util.List;
@@ -36,7 +37,7 @@ public final class BrandRejectionModerationDomainServiceImpl implements BrandRej
         return brandRejectionReason.changeReason(command);
     }
 
-    private void checkBrandStatusForRejection(SeDomainContext context, var brandId) {
+    private void checkBrandStatusForRejection(SeDomainContext context, BrandId brandId) {
         final var brandQuery = context.getQueryPort(BrandQueryOutboundPort.class);
         final var brand = brandQuery.fetchById(brandId);
         if (!brand.getStatus().isInReview() && !brand.getStatus().isSentToApproval()) {

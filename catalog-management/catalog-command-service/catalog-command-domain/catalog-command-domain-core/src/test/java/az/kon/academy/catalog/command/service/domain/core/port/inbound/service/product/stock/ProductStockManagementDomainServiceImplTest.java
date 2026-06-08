@@ -2,12 +2,15 @@ package az.kon.academy.catalog.command.service.domain.core.port.inbound.service.
 
 import az.kon.academy.aggragate.valueobject.Quantity;
 import az.kon.academy.catalog.command.service.domain.core.aggregate.ProductStockAggregateRoot;
+import az.kon.academy.catalog.command.service.domain.core.aggregate.ProductVariantRoot;
 import az.kon.academy.catalog.command.service.domain.core.command.productstock.ProductStockCreateCommand;
 import az.kon.academy.catalog.command.service.domain.core.command.productstock.ProductStockDecreaseCommand;
 import az.kon.academy.catalog.command.service.domain.core.command.productstock.ProductStockIncreaseCommand;
 import az.kon.academy.catalog.command.service.domain.core.exception.product.ProductStockDomainException;
 import az.kon.academy.catalog.command.service.domain.core.port.outbound.ProductStockQueryOutboundPort;
+import az.kon.academy.catalog.command.service.domain.core.port.outbound.ProductVariantQueryOutboundPort;
 import az.kon.academy.catalog.command.service.domain.core.vo.merchent.MerchantId;
+import az.kon.academy.catalog.command.service.domain.core.vo.product.ProductId;
 import az.kon.academy.catalog.command.service.domain.core.vo.product.ProductStockId;
 import az.kon.academy.catalog.command.service.domain.core.vo.product.ProductVariantId;
 import az.kon.academy.domain.core.SeDomainContext;
@@ -23,6 +26,9 @@ import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.lenient;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -35,9 +41,13 @@ class ProductStockManagementDomainServiceImplTest {
     @Mock
     private ProductStockQueryOutboundPort stockQuery;
 
+    @Mock
+    private ProductVariantQueryOutboundPort variantQuery;
+
     private ProductStockManagementDomainServiceImpl service;
 
     private MerchantId merchantId;
+    private ProductId productId;
     private ProductStockId stockId;
     private ProductVariantId variantId;
 
@@ -46,10 +56,14 @@ class ProductStockManagementDomainServiceImplTest {
         service = new ProductStockManagementDomainServiceImpl();
 
         merchantId = MerchantId.from(UUID.randomUUID());
+        productId = ProductId.from(UUID.randomUUID());
         stockId = ProductStockId.random();
         variantId = ProductVariantId.random();
 
-        when(context.getQueryPort(ProductStockQueryOutboundPort.class)).thenReturn(stockQuery);
+        lenient().when(context.getQueryPort(ProductStockQueryOutboundPort.class)).thenReturn(stockQuery);
+        lenient().when(context.getQueryPort(ProductVariantQueryOutboundPort.class)).thenReturn(variantQuery);
+        lenient().when(variantQuery.fetchByIdAndProductIdAndMerchantId(any(), any(), any()))
+                .thenReturn(mock(ProductVariantRoot.class));
     }
 
     private ProductStockAggregateRoot stockWith(int quantity, int reservedQuantity) {
@@ -73,6 +87,8 @@ class ProductStockManagementDomainServiceImplTest {
         @DisplayName("Initializes stock aggregate with variantId and quantity")
         void initializesStockWithVariantIdAndQuantity() {
             var command = ProductStockCreateCommand.builder()
+                    .merchantId(merchantId)
+                    .productId(productId)
                     .variantId(variantId)
                     .quantity(Quantity.of(100))
                     .build();
@@ -90,6 +106,8 @@ class ProductStockManagementDomainServiceImplTest {
         @DisplayName("Provides zero initial reserve")
         void providesZeroInitialReserve() {
             var command = ProductStockCreateCommand.builder()
+                    .merchantId(merchantId)
+                    .productId(productId)
                     .variantId(ProductVariantId.random())
                     .quantity(Quantity.of(50))
                     .build();
@@ -104,6 +122,8 @@ class ProductStockManagementDomainServiceImplTest {
         @DisplayName("Supports zero initial quantity")
         void supportsZeroInitialQuantity() {
             var command = ProductStockCreateCommand.builder()
+                    .merchantId(merchantId)
+                    .productId(productId)
                     .variantId(ProductVariantId.random())
                     .quantity(Quantity.ZERO)
                     .build();

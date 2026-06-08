@@ -1,5 +1,6 @@
 package az.kon.academy.catalog.command.service.domain.core.aggregate;
 
+import az.kon.academy.aggragate.valueobject.RowStatus;
 import az.kon.academy.catalog.command.service.domain.core.command.category.ProductCategoryChangeImageCommand;
 import az.kon.academy.catalog.command.service.domain.core.command.category.ProductCategoryChangeInformationCommand;
 import az.kon.academy.catalog.command.service.domain.core.command.category.ProductCategoryCreateCommand;
@@ -777,7 +778,7 @@ class ProductCategoryRootTest {
             void setsRowStatusToArchived() {
                 var result = freshCategory().archive();
 
-                assertThat(result.isArchived()).isTrue();
+                assertThat(result.getRowStatus()).isEqualTo(RowStatus.ARCHIVED);
             }
 
             @Test
@@ -798,7 +799,7 @@ class ProductCategoryRootTest {
                 var original = freshCategory();
                 original.archive();
 
-                assertThat(original.isArchived()).isFalse();
+                assertThat(original.getRowStatus()).isEqualTo(RowStatus.ACTIVE);
             }
         }
 
@@ -848,7 +849,7 @@ class ProductCategoryRootTest {
             void setsRowStatusToActive() {
                 var result = freshCategory().activate();
 
-                assertThat(result.isActive()).isTrue();
+                assertThat(result.getRowStatus()).isEqualTo(RowStatus.ACTIVE);
             }
 
             @Test
@@ -869,7 +870,7 @@ class ProductCategoryRootTest {
                 var original = freshCategory();
                 original.activate();
 
-                assertThat(original.isActive()).isFalse();
+                assertThat(original.getRowStatus()).isEqualTo(RowStatus.ACTIVE);
             }
         }
 
@@ -919,7 +920,7 @@ class ProductCategoryRootTest {
             void setsRowStatusToArchived() {
                 var result = freshCategory().delete();
 
-                assertThat(result.isArchived()).isTrue();
+                assertThat(result.getRowStatus()).isEqualTo(RowStatus.ARCHIVED);
             }
 
             @Test
@@ -938,7 +939,7 @@ class ProductCategoryRootTest {
                 var original = freshCategory();
                 original.delete();
 
-                assertThat(original.isArchived()).isFalse();
+                assertThat(original.getRowStatus()).isEqualTo(RowStatus.ACTIVE);
             }
         }
 
@@ -973,7 +974,7 @@ class ProductCategoryRootTest {
                         .isEqualTo(result.getRootID().value().toString());
             }
         }
-    }
+
 
         @Test
         @DisplayName("Uncommitted events list is unmodifiable")

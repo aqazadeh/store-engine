@@ -414,7 +414,7 @@ class BrandModerationDomainServiceImplTest {
         @Test
         @DisplayName("Fetches brand and delegates to aggregate changeGlobal")
         void fetchesAndDelegates() {
-            var brand = brandInDraftState();
+            var brand = brandInInReviewState().approve();
             when(brandQuery.fetchById(brandId)).thenReturn(brand);
 
             var result = service.changeToGlobal(context, globalCommand);

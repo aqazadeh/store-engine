@@ -2,14 +2,17 @@ package az.kon.academy.catalog.command.service.domain.core.port.inbound.service.
 
 import az.kon.academy.aggragate.valueobject.RowStatus;
 import az.kon.academy.catalog.command.service.domain.core.aggregate.BrandRejectionReasonRoot;
+import az.kon.academy.catalog.command.service.domain.core.aggregate.BrandRoot;
 import az.kon.academy.catalog.command.service.domain.core.command.brandrejection.BrandRejectionReasonAddCommand;
 import az.kon.academy.catalog.command.service.domain.core.command.brandrejection.BrandRejectionReasonChangeReasonCommand;
 import az.kon.academy.catalog.command.service.domain.core.command.brandrejection.BrandRejectionReasonRemoveCommand;
 import az.kon.academy.catalog.command.service.domain.core.exception.brand.BrandDomainErrorCodes;
 import az.kon.academy.catalog.command.service.domain.core.exception.brand.BrandDomainException;
+import az.kon.academy.catalog.command.service.domain.core.port.outbound.BrandQueryOutboundPort;
 import az.kon.academy.catalog.command.service.domain.core.port.outbound.BrandRejectionReasonQueryOutboundPort;
 import az.kon.academy.catalog.command.service.domain.core.vo.brand.BrandId;
 import az.kon.academy.catalog.command.service.domain.core.vo.brand.BrandRejectionReasonId;
+import az.kon.academy.catalog.command.service.domain.core.vo.brand.BrandStatus;
 import az.kon.academy.catalog.command.service.domain.core.vo.moderation.ModeratorId;
 import az.kon.academy.domain.core.SeDomainContext;
 import org.junit.jupiter.api.BeforeEach;
@@ -38,6 +41,9 @@ class BrandRejectionModerationDomainServiceImplTest {
     @Mock
     private BrandRejectionReasonQueryOutboundPort rejectionReasonQuery;
 
+    @Mock
+    private BrandQueryOutboundPort brandQuery;
+
     private BrandRejectionModerationDomainServiceImpl service;
 
     private BrandId brandId;
@@ -63,6 +69,14 @@ class BrandRejectionModerationDomainServiceImplTest {
 
         lenient().when(context.getQueryPort(BrandRejectionReasonQueryOutboundPort.class))
                 .thenReturn(rejectionReasonQuery);
+        lenient().when(context.getQueryPort(BrandQueryOutboundPort.class)).thenReturn(brandQuery);
+    }
+
+    private BrandRoot brandInInReview() {
+        return BrandRoot.builder()
+                .id(brandId)
+                .status(BrandStatus.IN_REVIEW)
+                .build();
     }
 
     private BrandRejectionReasonRoot freshRejection() {
@@ -78,8 +92,10 @@ class BrandRejectionModerationDomainServiceImplTest {
     class Add {
 
         @Test
-        @DisplayName("Creates rejection reason via initialize")
+        @DisplayName("Checks brand status for rejection and creates rejection reason")
         void createsRejectionReason() {
+            when(brandQuery.fetchById(brandId)).thenReturn(brandInInReview());
+
             var result = service.add(context, addCommand);
 
             assertThat(result.getRootID()).isNotNull();
@@ -113,6 +129,7 @@ class BrandRejectionModerationDomainServiceImplTest {
             var rejection = freshRejection();
             when(rejectionReasonQuery.fetchByIdAndRowStatusActive(rejectionReasonId))
                     .thenReturn(rejection);
+            when(brandQuery.fetchById(brandId)).thenReturn(brandInInReview());
 
             var result = service.remove(context, removeCommand);
 
@@ -158,6 +175,7 @@ class BrandRejectionModerationDomainServiceImplTest {
             var rejection = freshRejection();
             when(rejectionReasonQuery.fetchByIdAndRowStatusActive(rejectionReasonId))
                     .thenReturn(rejection);
+            when(brandQuery.fetchById(brandId)).thenReturn(brandInInReview());
 
             var result = service.changeReason(context, changeCommand);
 

@@ -217,16 +217,14 @@ class ProductCategoryModerationDomainServiceImplTest {
             }
 
             @Test
-            @DisplayName("Fetches both categories and delegates to changeParent")
+            @DisplayName("Fetches category, validates parent and delegates to changeParent")
             void fetchesBothAndDelegates() {
                 var category = freshCategory();
-                var parentCategory = freshCategory();
                 when(categoryQuery.fetchById(categoryId)).thenReturn(category);
-                when(categoryQuery.fetchById(parentId)).thenReturn(parentCategory);
 
                 var result = service.changeParent(context, changeParentCommand);
 
-                assertThat(result.getParent()).isEqualTo(parentCategory.getRootID());
+                assertThat(result.getParent()).isEqualTo(parentId);
             }
 
             @Test

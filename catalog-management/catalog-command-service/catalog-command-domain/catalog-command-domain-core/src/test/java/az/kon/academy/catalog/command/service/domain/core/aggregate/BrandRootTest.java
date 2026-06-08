@@ -1491,7 +1491,7 @@ class BrandRootTest {
             var result = brandInApprovedState().changeGlobal(globalCommand);
             var event = (BrandToGlobalChangedEvent) result.getUncommittedEvents().getFirst();
 
-            assertThat(event.getIsGlobal()).isTrue();
+            assertThat(event.getIsGLobal()).isTrue();
         }
 
         @Test

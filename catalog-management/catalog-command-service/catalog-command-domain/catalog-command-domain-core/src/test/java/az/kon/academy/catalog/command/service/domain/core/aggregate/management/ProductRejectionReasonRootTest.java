@@ -394,7 +394,6 @@ class ProductRejectionReasonRootTest {
             assertThat(result.getUncommittedEvents().getFirst())
                     .isInstanceOf(ProductRejectionReasonDeletedEvent.class);
         }
-    }
 
         @Test
         @DisplayName("Two different commands produce independent aggregates")

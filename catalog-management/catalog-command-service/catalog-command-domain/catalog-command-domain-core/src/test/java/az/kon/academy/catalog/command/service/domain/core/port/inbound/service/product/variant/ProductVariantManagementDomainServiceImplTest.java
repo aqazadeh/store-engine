@@ -1,10 +1,8 @@
 package az.kon.academy.catalog.command.service.domain.core.port.inbound.service.product.variant;
 
 import az.kon.academy.catalog.command.service.domain.core.aggregate.ProductVariantRoot;
-import az.kon.academy.catalog.command.service.domain.core.aggregate.management.VariantValueRoot;
 import az.kon.academy.catalog.command.service.domain.core.command.productvariant.*;
 import az.kon.academy.catalog.command.service.domain.core.exception.product.ProductVariantDomainException;
-import az.kon.academy.catalog.command.service.domain.core.exception.variant.VariantEntityNotFoundException;
 import az.kon.academy.catalog.command.service.domain.core.port.outbound.ProductQueryOutboundPort;
 import az.kon.academy.catalog.command.service.domain.core.port.outbound.ProductVariantQueryOutboundPort;
 import az.kon.academy.catalog.command.service.domain.core.port.outbound.ProductVariantValueQueryOutboundPort;
@@ -121,29 +119,16 @@ class ProductVariantManagementDomainServiceImplTest {
     @DisplayName("addVariant()")
     class AddVariant {
 
-        private VariantKeyId keyId;
-        private VariantValueId valueId;
-
-        @BeforeEach
-        void setUp() {
-            keyId = assignment.getVariantKeyId();
-            valueId = assignment.getVariantValueId();
-        }
-
-        private void stubValidAssignments() {
-            var value = VariantValueRoot.builder().id(valueId).keyId(keyId).build();
-            when(variantValueQuery.findAllByKeyValueMap(Map.of(keyId, List.of(valueId))))
-                    .thenReturn(List.of(value));
-        }
-
         @Test
         @DisplayName("Checks product exists, validates assignments and initializes variant")
         void checksProductAndInitializes() {
-            stubValidAssignments();
-
             var result = service.addVariant(context, addCommand);
 
             verify(productQuery).checkExistsByIdAndMerchantId(productId, merchantId);
+            verify(variantValueQuery).checkAllAssignmentsExist(Map.of(
+                    assignment.getVariantKeyId(),
+                    List.of(assignment.getVariantValueId())
+            ));
             assertThat(result.getRootID()).isNotNull();
             assertThat(result.getProductId()).isEqualTo(productId);
             assertThat(result.getBarcode()).isEqualTo(barcode);
@@ -159,16 +144,6 @@ class ProductVariantManagementDomainServiceImplTest {
 
             assertThatThrownBy(() -> service.addVariant(context, addCommand))
                     .isSameAs(ex);
-        }
-
-        @Test
-        @DisplayName("Throws when variant assignments are invalid")
-        void throwsWhenAssignmentsInvalid() {
-            when(variantValueQuery.findAllByKeyValueMap(Map.of(keyId, List.of(valueId))))
-                    .thenReturn(List.of());
-
-            assertThatThrownBy(() -> service.addVariant(context, addCommand))
-                    .isInstanceOf(VariantEntityNotFoundException.class);
         }
     }
 
