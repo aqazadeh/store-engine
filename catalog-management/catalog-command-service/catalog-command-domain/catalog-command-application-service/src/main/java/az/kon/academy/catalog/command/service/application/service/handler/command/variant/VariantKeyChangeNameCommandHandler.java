@@ -5,7 +5,7 @@ import az.kon.academy.application.core.handler.AbstractCommandHandler;
 import az.kon.academy.catalog.command.service.application.service.constant.SecurityPermissions;
 import az.kon.academy.catalog.command.service.application.service.port.outbound.VariantKeyCommandOutboundPort;
 import az.kon.academy.catalog.command.service.domain.core.command.variant.VariantKeyChangeNameCommand;
-import az.kon.academy.catalog.command.service.domain.core.port.inbound.service.variant.ProductVariantModerationDomainService;
+import az.kon.academy.catalog.command.service.domain.core.port.inbound.service.variant.VariantModerationDomainService;
 import az.kon.academy.domain.core.SeDomainContext;
 import az.kon.academy.event.handler.DomainEventPublisher;
 
@@ -16,11 +16,11 @@ public class VariantKeyChangeNameCommandHandler implements AbstractCommandHandle
 
     private final SeDomainContext domainContext;
     private final DomainEventPublisher domainEventPublisher;
-    private final ProductVariantModerationDomainService productVariantModerationDomainService;
+    private final VariantModerationDomainService productVariantModerationDomainService;
 
     public VariantKeyChangeNameCommandHandler(SeDomainContext domainContext,
                                               DomainEventPublisher domainEventPublisher,
-                                              ProductVariantModerationDomainService productVariantModerationDomainService) {
+                                              VariantModerationDomainService productVariantModerationDomainService) {
         this.domainContext = domainContext;
         this.domainEventPublisher = domainEventPublisher;
         this.productVariantModerationDomainService = productVariantModerationDomainService;

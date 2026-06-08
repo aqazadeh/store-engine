@@ -7,7 +7,7 @@ import az.kon.academy.catalog.command.service.domain.core.port.outbound.ProductV
 import az.kon.academy.catalog.command.service.domain.core.port.outbound.ProductVariantValueQueryOutboundPort;
 import az.kon.academy.domain.core.SeDomainContext;
 
-public final class ProductVariantModerationDomainServiceImpl implements ProductVariantModerationDomainService {
+public final class VariantModerationDomainServiceImpl implements VariantModerationDomainService {
 
     @Override
     public VariantKeyRoot createKey(SeDomainContext context, VariantKeyCreateCommand command) {

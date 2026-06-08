@@ -26,8 +26,8 @@ import az.kon.academy.catalog.command.service.domain.core.port.inbound.service.p
 import az.kon.academy.catalog.command.service.domain.core.port.inbound.service.product.stock.ProductStockModerationDomainServiceImpl;
 import az.kon.academy.catalog.command.service.domain.core.port.inbound.service.specification.ProductSpecificationModerationDomainService;
 import az.kon.academy.catalog.command.service.domain.core.port.inbound.service.specification.ProductSpecificationModerationDomainServiceImpl;
-import az.kon.academy.catalog.command.service.domain.core.port.inbound.service.variant.ProductVariantModerationDomainService;
-import az.kon.academy.catalog.command.service.domain.core.port.inbound.service.variant.ProductVariantModerationDomainServiceImpl;
+import az.kon.academy.catalog.command.service.domain.core.port.inbound.service.variant.VariantModerationDomainService;
+import az.kon.academy.catalog.command.service.domain.core.port.inbound.service.variant.VariantModerationDomainServiceImpl;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -70,8 +70,8 @@ public class DomainServiceRegistry {
     }
 
     @Bean
-    public ProductVariantModerationDomainService variantDomainService() {
-        return new ProductVariantModerationDomainServiceImpl();
+    public VariantModerationDomainService variantDomainService() {
+        return new VariantModerationDomainServiceImpl();
     }
 
     @Bean
