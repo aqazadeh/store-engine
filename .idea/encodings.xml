@@ -13,8 +13,6 @@
     <file url="file://$PROJECT_DIR$/catalog-management/catalog-command-service/catalog-command-adapters/catalog-domain-outbound-dao/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/catalog-management/catalog-command-service/catalog-command-bootstrap/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/catalog-management/catalog-command-service/catalog-command-bootstrap/src/main/resources" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/catalog-management/catalog-command-service/catalog-command-dal/src/main/java" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/catalog-management/catalog-command-service/catalog-command-dal/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/catalog-management/catalog-command-service/catalog-command-domain/catalog-command-application-service/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/catalog-management/catalog-command-service/catalog-command-domain/catalog-command-application-service/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/catalog-management/catalog-command-service/catalog-command-domain/catalog-command-application/src/main/resources" charset="UTF-8" />
@@ -40,6 +38,8 @@
     <file url="file://$PROJECT_DIR$/catalog-management/catalog-shared/catalog-event-avro/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/catalog-management/catalog-shared/catalog-event/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/catalog-management/catalog-shared/catalog-event/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/catalog-management/catalog-shared/catalog-sql-dal/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/catalog-management/catalog-shared/catalog-sql-dal/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/catalog-management/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/catalog-management/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/example/src/main/java" charset="UTF-8" />

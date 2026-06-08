@@ -1,6 +1,8 @@
 package az.kon.academy.catalog.command.service.domain.core.aggregate;
 
 import az.kon.academy.catalog.command.service.domain.core.command.product.*;
+import az.kon.academy.catalog.command.service.domain.core.command.productvariant.ProductVariantAddCommand;
+import az.kon.academy.catalog.command.service.domain.core.command.productvariant.ProductVariantRemoveCommand;
 import az.kon.academy.catalog.command.service.domain.core.exception.product.ProductDomainException;
 import az.kon.academy.catalog.command.service.domain.core.vo.Barcode;
 import az.kon.academy.catalog.command.service.domain.core.vo.brand.BrandId;
@@ -17,7 +19,6 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
-import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -30,7 +31,6 @@ class ProductRootTest {
     private BrandId brandId;
     private ProductName name;
     private ProductDescription description;
-    private Barcode barcode;
     private ProductCreateCommand createCommand;
 
     @BeforeEach
@@ -40,14 +40,12 @@ class ProductRootTest {
         brandId = BrandId.random();
         name = new ProductName("Gaming Laptop");
         description = new ProductDescription("A high-end gaming laptop for professionals");
-        barcode = Barcode.of("1234567890123");
         createCommand = ProductCreateCommand.builder()
                 .merchantId(merchantId)
                 .categoryId(categoryId)
                 .brandId(brandId)
                 .name(name)
                 .description(description)
-                .barcode(barcode)
                 .build();
     }
 
@@ -142,14 +140,6 @@ class ProductRootTest {
                 assertThat(product.getDescription().value()).isEqualTo(description.value());
             }
 
-            @Test
-            @DisplayName("Sets barcode from command")
-            void setsBarcode() {
-                var product = ProductRoot.initialize(createCommand);
-
-                assertThat(product.getBarcode()).isEqualTo(barcode);
-                assertThat(product.getBarcode().value()).isEqualTo(barcode.value());
-            }
 
             @Test
             @DisplayName("autoPriceUpdateEnabled defaults to false")
@@ -285,15 +275,6 @@ class ProductRootTest {
                 var event = (ProductCreatedEvent) product.getUncommittedEvents().getFirst();
 
                 assertThat(event.getDescription()).isEqualTo(description.value());
-            }
-
-            @Test
-            @DisplayName("Event carries the barcode")
-            void eventCarriesBarcode() {
-                var product = ProductRoot.initialize(createCommand);
-                var event = (ProductCreatedEvent) product.getUncommittedEvents().getFirst();
-
-                assertThat(event.getBarcode()).isEqualTo(barcode.value());
             }
 
             @Test
@@ -1372,13 +1353,13 @@ class ProductRootTest {
 
         private VariantKeyId keyId;
         private VariantValueId valueId;
-        private ProductAddVariantCommand addVariantCommand;
+        private ProductVariantAddCommand addVariantCommand;
 
         @BeforeEach
         void setUpCommand() {
             keyId = VariantKeyId.random();
             valueId = VariantValueId.random();
-            addVariantCommand = ProductAddVariantCommand.builder()
+            addVariantCommand = ProductVariantAddCommand.builder()
                     .productId(ProductId.random())
                     .assignments(List.of(ProductVariantAssignment.of(keyId, valueId)))
                     .build();
@@ -1419,7 +1400,7 @@ class ProductRootTest {
             @Test
             @DisplayName("Adding two variants results in two entries")
             void addingTwoVariantsResultsInTwoEntries() {
-                var secondCmd = ProductAddVariantCommand.builder()
+                var secondCmd = ProductVariantAddCommand.builder()
                         .productId(ProductId.random())
                         .assignments(List.of(ProductVariantAssignment.of(VariantKeyId.random(), VariantValueId.random())))
                         .build();
@@ -1493,11 +1474,11 @@ class ProductRootTest {
     @DisplayName("removeVariant()")
     class RemoveVariant {
 
-        private ProductAddVariantCommand addVariantCommand;
+        private ProductVariantAddCommand addVariantCommand;
 
         @BeforeEach
         void setUpCommand() {
-            addVariantCommand = ProductAddVariantCommand.builder()
+            addVariantCommand = ProductVariantAddCommand.builder()
                     .productId(ProductId.random())
                     .assignments(List.of(ProductVariantAssignment.of(VariantKeyId.random(), VariantValueId.random())))
                     .build();
@@ -1513,7 +1494,7 @@ class ProductRootTest {
                 var withVariant = freshProduct().addVariant(addVariantCommand);
                 var variantId = withVariant.getVariants().getFirst().getRootID();
 
-                var removeCmd = ProductRemoveVariantCommand.builder()
+                var removeCmd = ProductVariantRemoveCommand.builder()
                         .productId(ProductId.random())
                         .variantId((ProductVariantId) variantId)
                         .build();
@@ -1526,7 +1507,7 @@ class ProductRootTest {
             @Test
             @DisplayName("Other variants are preserved")
             void otherVariantsPreserved() {
-                var secondCmd = ProductAddVariantCommand.builder()
+                var secondCmd = ProductVariantAddCommand.builder()
                         .productId(ProductId.random())
                         .assignments(List.of(ProductVariantAssignment.of(VariantKeyId.random(), VariantValueId.random())))
                         .build();
@@ -1534,7 +1515,7 @@ class ProductRootTest {
                 var withTwo = freshProduct().addVariant(addVariantCommand).addVariant(secondCmd);
                 var firstVariantId = withTwo.getVariants().getFirst().getRootID();
 
-                var removeCmd = ProductRemoveVariantCommand.builder()
+                var removeCmd = ProductVariantRemoveCommand.builder()
                         .productId(ProductId.random())
                         .variantId((ProductVariantId) firstVariantId)
                         .build();
@@ -1550,7 +1531,7 @@ class ProductRootTest {
                 var withVariant = freshProduct().addVariant(addVariantCommand);
                 var variantId = withVariant.getVariants().getFirst().getRootID();
 
-                var removeCmd = ProductRemoveVariantCommand.builder()
+                var removeCmd = ProductVariantRemoveCommand.builder()
                         .productId(ProductId.random())
                         .variantId((ProductVariantId) variantId)
                         .build();
@@ -1571,7 +1552,7 @@ class ProductRootTest {
                 var withVariant = freshProduct().addVariant(addVariantCommand);
                 var variantId = withVariant.getVariants().getFirst().getRootID();
 
-                var removeCmd = ProductRemoveVariantCommand.builder()
+                var removeCmd = ProductVariantRemoveCommand.builder()
                         .productId(ProductId.random())
                         .variantId((ProductVariantId) variantId)
                         .build();
@@ -1587,7 +1568,7 @@ class ProductRootTest {
                 var withVariant = freshProduct().addVariant(addVariantCommand);
                 var variantId = withVariant.getVariants().getFirst().getRootID();
 
-                var removeCmd = ProductRemoveVariantCommand.builder()
+                var removeCmd = ProductVariantRemoveCommand.builder()
                         .productId(ProductId.random())
                         .variantId((ProductVariantId) variantId)
                         .build();
@@ -1604,7 +1585,7 @@ class ProductRootTest {
                 var withVariant = freshProduct().addVariant(addVariantCommand);
                 var variantId = withVariant.getVariants().getFirst().getRootID();
 
-                var removeCmd = ProductRemoveVariantCommand.builder()
+                var removeCmd = ProductVariantRemoveCommand.builder()
                         .productId(ProductId.random())
                         .variantId((ProductVariantId) variantId)
                         .build();
@@ -1647,7 +1628,7 @@ class ProductRootTest {
         @Test
         @DisplayName("Variants list is unmodifiable after addVariant")
         void variantsListIsUnmodifiable() {
-            var cmd = ProductAddVariantCommand.builder()
+            var cmd = ProductVariantAddCommand.builder()
                     .productId(ProductId.random())
                     .assignments(List.of(ProductVariantAssignment.of(VariantKeyId.random(), VariantValueId.random())))
                     .build();
@@ -1676,7 +1657,6 @@ class ProductRootTest {
                     .brandId(BrandId.random())
                     .name(new ProductName("Tablet Model"))
                     .description(new ProductDescription("A portable tablet for everyday use"))
-                    .barcode(Barcode.of("9876543210987"))
                     .build();
 
             var first = freshProduct();

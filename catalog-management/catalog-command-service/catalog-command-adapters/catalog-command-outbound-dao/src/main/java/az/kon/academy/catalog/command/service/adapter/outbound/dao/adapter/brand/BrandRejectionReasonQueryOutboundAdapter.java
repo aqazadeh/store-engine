@@ -1,7 +1,7 @@
 package az.kon.academy.catalog.command.service.adapter.outbound.dao.adapter.brand;
 
 import az.kon.academy.application.core.annotation.QueryAdapter;
-import az.kon.academy.catalog.command.dal.enums.RowStatusType;
+import az.kon.academy.catalog.sql.dal.enums.RowStatusType;
 import az.kon.academy.catalog.command.service.adapter.outbound.dao.mapper.BrandRejectionReasonMapper;
 import az.kon.academy.catalog.command.service.domain.core.aggregate.management.rejection.BrandRejectionReasonRoot;
 import az.kon.academy.catalog.command.service.domain.core.exception.brand.BrandRejectionDomainErrorCodes;
@@ -13,7 +13,7 @@ import org.jooq.DSLContext;
 
 import java.util.Optional;
 
-import static az.kon.academy.catalog.command.dal.Tables.BRAND_REJECTION_REASON;
+import static az.kon.academy.catalog.sql.dal.Tables.BRAND_REJECTION_REASON;
 
 @QueryAdapter
 public class BrandRejectionReasonQueryOutboundAdapter implements BrandRejectionReasonQueryOutboundPort {

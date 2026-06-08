@@ -6,7 +6,7 @@ import az.kon.academy.catalog.command.service.application.service.port.outbound.
 import az.kon.academy.catalog.command.service.domain.core.aggregate.ProductPriceAggregateRoot;
 import org.jooq.DSLContext;
 
-import static az.kon.academy.catalog.command.dal.Tables.PRODUCT_PRICE;
+import static az.kon.academy.catalog.sql.dal.Tables.PRODUCT_PRICE;
 
 @CommandAdapter
 public class ProductPriceCommandOutboundAdapter implements ProductPriceCommandOutboundPort {

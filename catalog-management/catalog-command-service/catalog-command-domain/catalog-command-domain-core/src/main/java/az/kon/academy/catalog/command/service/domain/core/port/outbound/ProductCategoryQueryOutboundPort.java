@@ -12,5 +12,5 @@ public interface ProductCategoryQueryOutboundPort extends BaseQueryPort {
 
     ProductCategoryRoot fetchById(ProductCategoryId productCategoryId);
 
-    Boolean exitsByCategoryId(ProductCategoryId productCategoryId);
+    void checkExitsById(ProductCategoryId productCategoryId);
 }

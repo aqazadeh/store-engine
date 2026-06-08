@@ -10,21 +10,21 @@ public final class ProductModerationDomainServiceImpl implements ProductModerati
     @Override
     public ProductRoot approve(SeDomainContext context, ProductApproveCommand command) {
         var productQueryPort = context.getQueryPort(ProductQueryOutboundPort.class);
-        var product = productQueryPort.fetchByIdAndRowStatusActive(command.getProductId());
+        var product = productQueryPort.fetchById(command.getProductId());
         return product.approve();
     }
 
     @Override
     public ProductRoot reject(SeDomainContext context, ProductRejectCommand command) {
         var productQueryPort = context.getQueryPort(ProductQueryOutboundPort.class);
-        var product = productQueryPort.fetchByIdAndRowStatusActive(command.getProductId());
+        var product = productQueryPort.fetchById(command.getProductId());
         return product.reject();
     }
 
     @Override
     public ProductRoot moveToInReview(SeDomainContext context, ProductMoveToInReviewCommand command) {
         var productQueryPort = context.getQueryPort(ProductQueryOutboundPort.class);
-        var product = productQueryPort.fetchByIdAndRowStatusActive(command.getProductId());
+        var product = productQueryPort.fetchById(command.getProductId());
         return product.moveToInReview();
     }
 }

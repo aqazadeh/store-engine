@@ -9,7 +9,7 @@ import org.jooq.DSLContext;
 
 import java.util.Optional;
 
-import static az.kon.academy.catalog.command.dal.Tables.VARIANT_KEY;
+import static az.kon.academy.catalog.sql.dal.Tables.VARIANT_KEY;
 
 @QueryAdapter
 public class ProductVariantKeyQueryOutboundAdapter implements ProductVariantKeyQueryOutboundPort {

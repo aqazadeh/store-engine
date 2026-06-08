@@ -9,7 +9,7 @@ import org.jooq.DSLContext;
 
 import java.util.Optional;
 
-import static az.kon.academy.catalog.command.dal.Tables.PRODUCT_STOCK;
+import static az.kon.academy.catalog.sql.dal.Tables.PRODUCT_STOCK;
 
 @QueryAdapter
 public class ProductStockQueryOutboundAdapter implements ProductStockQueryOutboundPort {

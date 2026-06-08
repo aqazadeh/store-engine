@@ -10,7 +10,7 @@ import org.jooq.DSLContext;
 import java.util.List;
 import java.util.UUID;
 
-import static az.kon.academy.catalog.command.dal.Tables.*;
+import static az.kon.academy.catalog.sql.dal.Tables.*;
 
 @CommandAdapter
 public class ProductCommandOutboundAdapter implements ProductCommandOutboundPort {
@@ -66,7 +66,7 @@ public class ProductCommandOutboundAdapter implements ProductCommandOutboundPort
                     .toList();
             dsl.batchInsert(variantRecords).execute();
 
-            List<az.kon.academy.catalog.command.dal.tables.records.ProductVariantAssignmentRecord> assignmentRecords =
+            List<az.kon.academy.catalog.sql.dal.tables.records.ProductVariantAssignmentRecord> assignmentRecords =
                     aggregate.getVariants().stream()
                             .flatMap(v -> v.getAssignments().stream()
                                     .map(a -> variantMapper.toAssignmentRecord(v.getRootID().value(), a)))

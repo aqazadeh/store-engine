@@ -8,7 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.jooq.DSLContext;
 import org.springframework.dao.OptimisticLockingFailureException;
 
-import static az.kon.academy.catalog.command.dal.Tables.PRODUCT_CATEGORY;
+import static az.kon.academy.catalog.sql.dal.Tables.PRODUCT_CATEGORY;
 
 @Slf4j
 @CommandAdapter

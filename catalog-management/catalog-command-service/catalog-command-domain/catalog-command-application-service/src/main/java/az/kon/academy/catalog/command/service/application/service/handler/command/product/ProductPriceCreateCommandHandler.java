@@ -4,7 +4,7 @@ import az.kon.academy.application.core.annotation.CommandHandler;
 import az.kon.academy.application.core.handler.AbstractCommandHandler;
 import az.kon.academy.catalog.command.service.application.service.constant.SecurityPermissions;
 import az.kon.academy.catalog.command.service.application.service.port.outbound.ProductPriceCommandOutboundPort;
-import az.kon.academy.catalog.command.service.domain.core.command.product.ProductPriceCreateCommand;
+import az.kon.academy.catalog.command.service.domain.core.command.productprice.ProductPriceCreateCommand;
 import az.kon.academy.catalog.command.service.domain.core.port.inbound.service.product.price.ProductPriceManagementDomainService;
 import az.kon.academy.domain.core.SeDomainContext;
 import az.kon.academy.event.handler.DomainEventPublisher;

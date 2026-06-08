@@ -6,7 +6,7 @@ import az.kon.academy.catalog.command.service.application.service.port.outbound.
 import az.kon.academy.catalog.command.service.domain.core.aggregate.management.VariantKeyRoot;
 import org.jooq.DSLContext;
 
-import static az.kon.academy.catalog.command.dal.Tables.VARIANT_KEY;
+import static az.kon.academy.catalog.sql.dal.Tables.VARIANT_KEY;
 
 @CommandAdapter
 public class VariantKeyCommandOutboundAdapter implements VariantKeyCommandOutboundPort {

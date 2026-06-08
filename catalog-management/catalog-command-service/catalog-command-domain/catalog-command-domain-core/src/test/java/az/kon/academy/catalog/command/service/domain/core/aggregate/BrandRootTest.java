@@ -1,5 +1,6 @@
 package az.kon.academy.catalog.command.service.domain.core.aggregate;
 
+import az.kon.academy.catalog.command.service.domain.core.command.brand.BrandChangeGlobalCommand;
 import az.kon.academy.catalog.command.service.domain.core.command.brand.BrandChangeImageCommand;
 import az.kon.academy.catalog.command.service.domain.core.command.brand.BrandChangeInformationCommand;
 import az.kon.academy.catalog.command.service.domain.core.command.brand.BrandChangeOwnerCommand;
@@ -86,6 +87,18 @@ class BrandRootTest {
                 .path(path)
                 .isGlobal(Boolean.FALSE)
                 .status(BrandStatus.REJECTED)
+                .build();
+    }
+
+    private BrandRoot brandInInReviewState() {
+        return BrandRoot.builder()
+                .id(BrandId.random())
+                .owner(owner)
+                .name(name)
+                .description(description)
+                .path(path)
+                .isGlobal(Boolean.FALSE)
+                .status(BrandStatus.IN_REVIEW)
                 .build();
     }
 
@@ -230,194 +243,90 @@ class BrandRootTest {
     }
 
     // ─────────────────────────────────────────────────────────────────────────
-    // initializeGlobal
-    // ─────────────────────────────────────────────────────────────────────────
-
-//    @Nested
-//    @DisplayName("initializeGlobal()")
-//    class InitializeGlobal {
-//
-//        @Nested
-//        @DisplayName("Aggregate state")
-//        class AggregateState {
-//
-//            @Test
-//            @DisplayName("Assigns a non-null ID")
-//            void assignsNonNullId() {
-//                var brand = BrandRoot.initializeForGlobal(brandCreateForMerchantCommand);
-//
-//                assertThat(brand.getRootID()).isNotNull();
-//                assertThat(brand.getRootID().value()).isNotNull();
-//            }
-//
-//            @Test
-//            @DisplayName("Each call generates a unique ID")
-//            void eachCallGeneratesUniqueId() {
-//                var first = BrandRoot.initializeForGlobal(brandCreateForMerchantCommand);
-//                var second = BrandRoot.initializeForGlobal(brandCreateForMerchantCommand);
-//
-//                assertThat(first.getRootID().value()).isNotEqualTo(second.getRootID().value());
-//            }
-//
-//            @Test
-//            @DisplayName("Sets owner from command")
-//            void setsOwnerFromCommand() {
-//                var brand = BrandRoot.initializeForGlobal(brandCreateForMerchantCommand);
-//
-//                assertThat(brand.getOwner()).isEqualTo(owner);
-//                assertThat(brand.getOwner().value()).isEqualTo(owner.value());
-//            }
-//
-//            @Test
-//            @DisplayName("Sets name from command")
-//            void setsNameFromCommand() {
-//                var brand = BrandRoot.initializeForGlobal(brandCreateForMerchantCommand);
-//
-//                assertThat(brand.getName()).isEqualTo(name);
-//            }
-//
-//            @Test
-//            @DisplayName("Sets description from command")
-//            void setsDescriptionFromCommand() {
-//                var brand = BrandRoot.initializeForGlobal(brandCreateForMerchantCommand);
-//
-//                assertThat(brand.getDescription()).isEqualTo(description);
-//            }
-//
-//            @Test
-//            @DisplayName("Sets path from command")
-//            void setsPathFromCommand() {
-//                var brand = BrandRoot.initializeForGlobal(brandCreateForMerchantCommand);
-//
-//                assertThat(brand.getPath()).isEqualTo(path);
-//            }
-//
-//            @Test
-//            @DisplayName("isGlobal is true")
-//            void isGlobalIsTrue() {
-//                var brand = BrandRoot.initializeForGlobal(brandCreateForMerchantCommand);
-//
-//                assertThat(brand.getIsGlobal()).isTrue();
-//            }
-//
-//            @Test
-//            @DisplayName("Status is APPROVED")
-//            void statusIsApproved() {
-//                var brand = BrandRoot.initializeForGlobal(brandCreateForMerchantCommand);
-//
-//                assertThat(brand.getStatus()).isEqualTo(BrandStatus.APPROVED);
-//            }
-//
-//            @Test
-//            @DisplayName("Sets a non-null modificationTs")
-//            void setsModificationTs() {
-//                var brand = BrandRoot.initializeForGlobal(brandCreateForMerchantCommand);
-//
-//                assertThat(brand.getModificationTs()).isNotNull();
-//            }
-//        }
-//
-//        @Nested
-//        @DisplayName("Event publishing")
-//        class EventPublishing {
-//
-//            @Test
-//            @DisplayName("Registers exactly one uncommitted event")
-//            void registersExactlyOneEvent() {
-//                var brand = BrandRoot.initializeForGlobal(brandCreateForMerchantCommand);
-//
-//                assertThat(brand.getUncommittedEvents()).hasSize(1);
-//            }
-//
-//            @Test
-//            @DisplayName("Registered event is BrandCreatedGlobalEvent")
-//            void registeredEventIsBrandCreatedGlobalEvent() {
-//                var brand = BrandRoot.initializeForGlobal(brandCreateForMerchantCommand);
-//
-//                assertThat(brand.getUncommittedEvents().getFirst())
-//                        .isInstanceOf(BrandCreatedGlobalEvent.class);
-//            }
-//
-//            @Test
-//            @DisplayName("Event aggregateId matches the brand ID")
-//            void eventAggregateIdMatchesBrandId() {
-//                var brand = BrandRoot.initializeForGlobal(brandCreateForMerchantCommand);
-//                var event = brand.getUncommittedEvents().getFirst();
-//
-//                assertThat(event.getAggregateId())
-//                        .isEqualTo(brand.getRootID().value().toString());
-//            }
-//
-//            @Test
-//            @DisplayName("Event has a non-null eventId")
-//            void eventHasNonNullEventId() {
-//                var brand = BrandRoot.initializeForGlobal(brandCreateForMerchantCommand);
-//                var event = brand.getUncommittedEvents().getFirst();
-//
-//                assertThat(event.getEventId()).isNotNull();
-//            }
-//
-//            @Test
-//            @DisplayName("Event timestamp matches aggregate modificationTs")
-//            void eventTimestampMatchesModificationTs() {
-//                var brand = BrandRoot.initializeForGlobal(brandCreateForMerchantCommand);
-//                var event = brand.getUncommittedEvents().getFirst();
-//
-//                assertThat(event.getTimestamp())
-//                        .isEqualTo(brand.getModificationTs().toOffsetDateTime());
-//            }
-//        }
-//    }
-
-    // ─────────────────────────────────────────────────────────────────────────
-    // approve
+    // initializeForGlobal
     // ─────────────────────────────────────────────────────────────────────────
 
     @Nested
-    @DisplayName("approve()")
-    class Approve {
+    @DisplayName("initializeForGlobal()")
+    class InitializeGlobal {
 
         @Nested
         @DisplayName("Aggregate state")
         class AggregateState {
 
             @Test
+            @DisplayName("Assigns a non-null ID")
+            void assignsNonNullId() {
+                var brand = BrandRoot.initializeForGlobal(brandCreateCommand);
+
+                assertThat(brand.getRootID()).isNotNull();
+                assertThat(brand.getRootID().value()).isNotNull();
+            }
+
+            @Test
+            @DisplayName("Each call generates a unique ID")
+            void eachCallGeneratesUniqueId() {
+                var first = BrandRoot.initializeForGlobal(brandCreateCommand);
+                var second = BrandRoot.initializeForGlobal(brandCreateCommand);
+
+                assertThat(first.getRootID().value()).isNotEqualTo(second.getRootID().value());
+            }
+
+            @Test
+            @DisplayName("Sets owner from command")
+            void setsOwnerFromCommand() {
+                var brand = BrandRoot.initializeForGlobal(brandCreateCommand);
+
+                assertThat(brand.getOwner()).isEqualTo(owner);
+                assertThat(brand.getOwner().value()).isEqualTo(owner.value());
+            }
+
+            @Test
+            @DisplayName("Sets name from command")
+            void setsNameFromCommand() {
+                var brand = BrandRoot.initializeForGlobal(brandCreateCommand);
+
+                assertThat(brand.getName()).isEqualTo(name);
+            }
+
+            @Test
+            @DisplayName("Sets description from command")
+            void setsDescriptionFromCommand() {
+                var brand = BrandRoot.initializeForGlobal(brandCreateCommand);
+
+                assertThat(brand.getDescription()).isEqualTo(description);
+            }
+
+            @Test
+            @DisplayName("Sets path from command")
+            void setsPathFromCommand() {
+                var brand = BrandRoot.initializeForGlobal(brandCreateCommand);
+
+                assertThat(brand.getPath()).isEqualTo(path);
+            }
+
+            @Test
+            @DisplayName("isGlobal is true")
+            void isGlobalIsTrue() {
+                var brand = BrandRoot.initializeForGlobal(brandCreateCommand);
+
+                assertThat(brand.getIsGlobal()).isTrue();
+            }
+
+            @Test
             @DisplayName("Status is APPROVED")
             void statusIsApproved() {
-                var result = brandInDraftState().approve();
+                var brand = BrandRoot.initializeForGlobal(brandCreateCommand);
 
-                assertThat(result.getStatus()).isEqualTo(BrandStatus.APPROVED);
+                assertThat(brand.getStatus()).isEqualTo(BrandStatus.APPROVED);
             }
 
             @Test
-            @DisplayName("modificationTs is updated")
-            void modificationTsIsUpdated() {
-                var original = brandInDraftState();
-                var result = original.approve();
+            @DisplayName("Sets a non-null modificationTs")
+            void setsModificationTs() {
+                var brand = BrandRoot.initializeForGlobal(brandCreateCommand);
 
-                assertThat(result.getModificationTs()).isNotNull();
-            }
-
-            @Test
-            @DisplayName("Original aggregate is unchanged")
-            void originalAggregateIsUnchanged() {
-                var original = brandInDraftState();
-                original.approve();
-
-                assertThat(original.getStatus()).isEqualTo(BrandStatus.DRAFT);
-            }
-
-            @Test
-            @DisplayName("Other fields are preserved after approve")
-            void otherFieldsPreserved() {
-                var original = brandInDraftState();
-                var result = original.approve();
-
-                assertThat(result.getRootID()).isEqualTo(original.getRootID());
-                assertThat(result.getOwner()).isEqualTo(original.getOwner());
-                assertThat(result.getName()).isEqualTo(original.getName());
-                assertThat(result.getDescription()).isEqualTo(original.getDescription());
-                assertThat(result.getPath()).isEqualTo(original.getPath());
+                assertThat(brand.getModificationTs()).isNotNull();
             }
         }
 
@@ -428,47 +337,189 @@ class BrandRootTest {
             @Test
             @DisplayName("Registers exactly one uncommitted event")
             void registersExactlyOneEvent() {
-                var result = brandInDraftState().approve();
+                var brand = BrandRoot.initializeForGlobal(brandCreateCommand);
 
-                assertThat(result.getUncommittedEvents()).hasSize(1);
+                assertThat(brand.getUncommittedEvents()).hasSize(1);
             }
 
             @Test
-            @DisplayName("Registered event is BrandApprovedEvent")
-            void registeredEventIsBrandApprovedEvent() {
-                var result = brandInDraftState().approve();
+            @DisplayName("Registered event is BrandCreatedGlobalEvent")
+            void registeredEventIsBrandCreatedGlobalEvent() {
+                var brand = BrandRoot.initializeForGlobal(brandCreateCommand);
 
-                assertThat(result.getUncommittedEvents().getFirst())
-                        .isInstanceOf(BrandApprovedEvent.class);
-            }
-
-            @Test
-            @DisplayName("Event status is APPROVED")
-            void eventStatusIsApproved() {
-                var result = brandInDraftState().approve();
-                var event = (BrandApprovedEvent) result.getUncommittedEvents().getFirst();
-
-                assertThat(event.getStatus()).isEqualTo(BrandStatus.APPROVED.name());
+                assertThat(brand.getUncommittedEvents().getFirst())
+                        .isInstanceOf(BrandCreatedGlobalEvent.class);
             }
 
             @Test
             @DisplayName("Event aggregateId matches the brand ID")
             void eventAggregateIdMatchesBrandId() {
-                var result = brandInDraftState().approve();
-                var event = result.getUncommittedEvents().getFirst();
+                var brand = BrandRoot.initializeForGlobal(brandCreateCommand);
+                var event = brand.getUncommittedEvents().getFirst();
 
                 assertThat(event.getAggregateId())
-                        .isEqualTo(result.getRootID().value().toString());
+                        .isEqualTo(brand.getRootID().value().toString());
+            }
+
+            @Test
+            @DisplayName("Event has a non-null eventId")
+            void eventHasNonNullEventId() {
+                var brand = BrandRoot.initializeForGlobal(brandCreateCommand);
+                var event = brand.getUncommittedEvents().getFirst();
+
+                assertThat(event.getEventId()).isNotNull();
             }
 
             @Test
             @DisplayName("Event timestamp matches aggregate modificationTs")
             void eventTimestampMatchesModificationTs() {
-                var result = brandInDraftState().approve();
-                var event = result.getUncommittedEvents().getFirst();
+                var brand = BrandRoot.initializeForGlobal(brandCreateCommand);
+                var event = brand.getUncommittedEvents().getFirst();
 
                 assertThat(event.getTimestamp())
-                        .isEqualTo(result.getModificationTs().toOffsetDateTime());
+                        .isEqualTo(brand.getModificationTs().toOffsetDateTime());
+            }
+        }
+    }
+
+    // ─────────────────────────────────────────────────────────────────────────
+    // approve
+    // ─────────────────────────────────────────────────────────────────────────
+
+    @Nested
+    @DisplayName("approve()")
+    class Approve {
+
+        @Nested
+        @DisplayName("When status is IN_REVIEW")
+        class WhenStatusIsInReview {
+
+            @Nested
+            @DisplayName("Aggregate state")
+            class AggregateState {
+
+                @Test
+                @DisplayName("Status is APPROVED")
+                void statusIsApproved() {
+                    var result = brandInInReviewState().approve();
+
+                    assertThat(result.getStatus()).isEqualTo(BrandStatus.APPROVED);
+                }
+
+                @Test
+                @DisplayName("modificationTs is updated")
+                void modificationTsIsUpdated() {
+                    var original = brandInInReviewState();
+                    var result = original.approve();
+
+                    assertThat(result.getModificationTs()).isNotNull();
+                }
+
+                @Test
+                @DisplayName("Original aggregate is unchanged")
+                void originalAggregateIsUnchanged() {
+                    var original = brandInInReviewState();
+                    original.approve();
+
+                    assertThat(original.getStatus()).isEqualTo(BrandStatus.IN_REVIEW);
+                }
+
+                @Test
+                @DisplayName("Other fields are preserved after approve")
+                void otherFieldsPreserved() {
+                    var original = brandInInReviewState();
+                    var result = original.approve();
+
+                    assertThat(result.getRootID()).isEqualTo(original.getRootID());
+                    assertThat(result.getOwner()).isEqualTo(original.getOwner());
+                    assertThat(result.getName()).isEqualTo(original.getName());
+                    assertThat(result.getDescription()).isEqualTo(original.getDescription());
+                    assertThat(result.getPath()).isEqualTo(original.getPath());
+                }
+            }
+
+            @Nested
+            @DisplayName("Event publishing")
+            class EventPublishing {
+
+                @Test
+                @DisplayName("Registers exactly one uncommitted event")
+                void registersExactlyOneEvent() {
+                    var result = brandInInReviewState().approve();
+
+                    assertThat(result.getUncommittedEvents()).hasSize(1);
+                }
+
+                @Test
+                @DisplayName("Registered event is BrandApprovedEvent")
+                void registeredEventIsBrandApprovedEvent() {
+                    var result = brandInInReviewState().approve();
+
+                    assertThat(result.getUncommittedEvents().getFirst())
+                            .isInstanceOf(BrandApprovedEvent.class);
+                }
+
+                @Test
+                @DisplayName("Event status is APPROVED")
+                void eventStatusIsApproved() {
+                    var result = brandInInReviewState().approve();
+                    var event = (BrandApprovedEvent) result.getUncommittedEvents().getFirst();
+
+                    assertThat(event.getStatus()).isEqualTo(BrandStatus.APPROVED.name());
+                }
+
+                @Test
+                @DisplayName("Event aggregateId matches the brand ID")
+                void eventAggregateIdMatchesBrandId() {
+                    var result = brandInInReviewState().approve();
+                    var event = result.getUncommittedEvents().getFirst();
+
+                    assertThat(event.getAggregateId())
+                            .isEqualTo(result.getRootID().value().toString());
+                }
+
+                @Test
+                @DisplayName("Event timestamp matches aggregate modificationTs")
+                void eventTimestampMatchesModificationTs() {
+                    var result = brandInInReviewState().approve();
+                    var event = result.getUncommittedEvents().getFirst();
+
+                    assertThat(event.getTimestamp())
+                            .isEqualTo(result.getModificationTs().toOffsetDateTime());
+                }
+            }
+        }
+
+        @Nested
+        @DisplayName("Guard: invalid statuses")
+        class Guard {
+
+            @Test
+            @DisplayName("Throws BrandDomainException when status is DRAFT")
+            void throwsWhenStatusIsDraft() {
+                assertThatThrownBy(() -> brandInDraftState().approve())
+                        .isInstanceOf(BrandDomainException.class);
+            }
+
+            @Test
+            @DisplayName("Throws BrandDomainException when status is SENT_TO_APPROVAL")
+            void throwsWhenStatusIsSentToApproval() {
+                assertThatThrownBy(() -> brandInSentToApprovalState().approve())
+                        .isInstanceOf(BrandDomainException.class);
+            }
+
+            @Test
+            @DisplayName("Throws BrandDomainException when status is APPROVED")
+            void throwsWhenStatusIsApproved() {
+                assertThatThrownBy(() -> brandInApprovedState().approve())
+                        .isInstanceOf(BrandDomainException.class);
+            }
+
+            @Test
+            @DisplayName("Throws BrandDomainException when status is REJECTED")
+            void throwsWhenStatusIsRejected() {
+                assertThatThrownBy(() -> brandInRejectedState().approve())
+                        .isInstanceOf(BrandDomainException.class);
             }
         }
     }
@@ -482,94 +533,132 @@ class BrandRootTest {
     class Reject {
 
         @Nested
-        @DisplayName("Aggregate state")
-        class AggregateState {
+        @DisplayName("When status is IN_REVIEW")
+        class WhenStatusIsInReview {
 
-            @Test
-            @DisplayName("Status is REJECTED")
-            void statusIsRejected() {
-                var result = brandInDraftState().reject();
+            @Nested
+            @DisplayName("Aggregate state")
+            class AggregateState {
 
-                assertThat(result.getStatus()).isEqualTo(BrandStatus.REJECTED);
+                @Test
+                @DisplayName("Status is REJECTED")
+                void statusIsRejected() {
+                    var result = brandInInReviewState().reject();
+
+                    assertThat(result.getStatus()).isEqualTo(BrandStatus.REJECTED);
+                }
+
+                @Test
+                @DisplayName("modificationTs is updated")
+                void modificationTsIsUpdated() {
+                    var result = brandInInReviewState().reject();
+
+                    assertThat(result.getModificationTs()).isNotNull();
+                }
+
+                @Test
+                @DisplayName("Original aggregate is unchanged")
+                void originalAggregateIsUnchanged() {
+                    var original = brandInInReviewState();
+                    original.reject();
+
+                    assertThat(original.getStatus()).isEqualTo(BrandStatus.IN_REVIEW);
+                }
+
+                @Test
+                @DisplayName("Other fields are preserved after reject")
+                void otherFieldsPreserved() {
+                    var original = brandInInReviewState();
+                    var result = original.reject();
+
+                    assertThat(result.getRootID()).isEqualTo(original.getRootID());
+                    assertThat(result.getOwner()).isEqualTo(original.getOwner());
+                    assertThat(result.getName()).isEqualTo(original.getName());
+                }
             }
 
-            @Test
-            @DisplayName("modificationTs is updated")
-            void modificationTsIsUpdated() {
-                var result = brandInDraftState().reject();
+            @Nested
+            @DisplayName("Event publishing")
+            class EventPublishing {
 
-                assertThat(result.getModificationTs()).isNotNull();
-            }
+                @Test
+                @DisplayName("Registers exactly one uncommitted event")
+                void registersExactlyOneEvent() {
+                    var result = brandInInReviewState().reject();
 
-            @Test
-            @DisplayName("Original aggregate is unchanged")
-            void originalAggregateIsUnchanged() {
-                var original = brandInDraftState();
-                original.reject();
+                    assertThat(result.getUncommittedEvents()).hasSize(1);
+                }
 
-                assertThat(original.getStatus()).isEqualTo(BrandStatus.DRAFT);
-            }
+                @Test
+                @DisplayName("Registered event is BrandRejectedEvent")
+                void registeredEventIsBrandRejectedEvent() {
+                    var result = brandInInReviewState().reject();
 
-            @Test
-            @DisplayName("Other fields are preserved after reject")
-            void otherFieldsPreserved() {
-                var original = brandInDraftState();
-                var result = original.reject();
+                    assertThat(result.getUncommittedEvents().getFirst())
+                            .isInstanceOf(BrandRejectedEvent.class);
+                }
 
-                assertThat(result.getRootID()).isEqualTo(original.getRootID());
-                assertThat(result.getOwner()).isEqualTo(original.getOwner());
-                assertThat(result.getName()).isEqualTo(original.getName());
+                @Test
+                @DisplayName("Event status is REJECTED")
+                void eventStatusIsRejected() {
+                    var result = brandInInReviewState().reject();
+                    var event = (BrandRejectedEvent) result.getUncommittedEvents().getFirst();
+
+                    assertThat(event.getStatus()).isEqualTo(BrandStatus.REJECTED.name());
+                }
+
+                @Test
+                @DisplayName("Event aggregateId matches the brand ID")
+                void eventAggregateIdMatchesBrandId() {
+                    var result = brandInInReviewState().reject();
+                    var event = result.getUncommittedEvents().getFirst();
+
+                    assertThat(event.getAggregateId())
+                            .isEqualTo(result.getRootID().value().toString());
+                }
+
+                @Test
+                @DisplayName("Event timestamp matches aggregate modificationTs")
+                void eventTimestampMatchesModificationTs() {
+                    var result = brandInInReviewState().reject();
+                    var event = result.getUncommittedEvents().getFirst();
+
+                    assertThat(event.getTimestamp())
+                            .isEqualTo(result.getModificationTs().toOffsetDateTime());
+                }
             }
         }
 
         @Nested
-        @DisplayName("Event publishing")
-        class EventPublishing {
+        @DisplayName("Guard: invalid statuses")
+        class Guard {
 
             @Test
-            @DisplayName("Registers exactly one uncommitted event")
-            void registersExactlyOneEvent() {
-                var result = brandInDraftState().reject();
-
-                assertThat(result.getUncommittedEvents()).hasSize(1);
+            @DisplayName("Throws BrandDomainException when status is DRAFT")
+            void throwsWhenStatusIsDraft() {
+                assertThatThrownBy(() -> brandInDraftState().reject())
+                        .isInstanceOf(BrandDomainException.class);
             }
 
             @Test
-            @DisplayName("Registered event is BrandRejectedEvent")
-            void registeredEventIsBrandRejectedEvent() {
-                var result = brandInDraftState().reject();
-
-                assertThat(result.getUncommittedEvents().getFirst())
-                        .isInstanceOf(BrandRejectedEvent.class);
+            @DisplayName("Throws BrandDomainException when status is SENT_TO_APPROVAL")
+            void throwsWhenStatusIsSentToApproval() {
+                assertThatThrownBy(() -> brandInSentToApprovalState().reject())
+                        .isInstanceOf(BrandDomainException.class);
             }
 
             @Test
-            @DisplayName("Event status is REJECTED")
-            void eventStatusIsRejected() {
-                var result = brandInDraftState().reject();
-                var event = (BrandRejectedEvent) result.getUncommittedEvents().getFirst();
-
-                assertThat(event.getStatus()).isEqualTo(BrandStatus.REJECTED.name());
+            @DisplayName("Throws BrandDomainException when status is APPROVED")
+            void throwsWhenStatusIsApproved() {
+                assertThatThrownBy(() -> brandInApprovedState().reject())
+                        .isInstanceOf(BrandDomainException.class);
             }
 
             @Test
-            @DisplayName("Event aggregateId matches the brand ID")
-            void eventAggregateIdMatchesBrandId() {
-                var result = brandInDraftState().reject();
-                var event = result.getUncommittedEvents().getFirst();
-
-                assertThat(event.getAggregateId())
-                        .isEqualTo(result.getRootID().value().toString());
-            }
-
-            @Test
-            @DisplayName("Event timestamp matches aggregate modificationTs")
-            void eventTimestampMatchesModificationTs() {
-                var result = brandInDraftState().reject();
-                var event = result.getUncommittedEvents().getFirst();
-
-                assertThat(event.getTimestamp())
-                        .isEqualTo(result.getModificationTs().toOffsetDateTime());
+            @DisplayName("Throws BrandDomainException when status is REJECTED")
+            void throwsWhenStatusIsRejected() {
+                assertThatThrownBy(() -> brandInRejectedState().reject())
+                        .isInstanceOf(BrandDomainException.class);
             }
         }
     }
@@ -691,6 +780,138 @@ class BrandRootTest {
     }
 
     // ─────────────────────────────────────────────────────────────────────────
+    // moveToInReview
+    // ─────────────────────────────────────────────────────────────────────────
+
+    @Nested
+    @DisplayName("moveToInReview()")
+    class MoveToInReview {
+
+        @Nested
+        @DisplayName("When status is SENT_TO_APPROVAL")
+        class WhenStatusIsSentToApproval {
+
+            @Nested
+            @DisplayName("Aggregate state")
+            class AggregateState {
+
+                @Test
+                @DisplayName("Status becomes IN_REVIEW")
+                void statusIsInReview() {
+                    var result = brandInSentToApprovalState().moveToInReview();
+
+                    assertThat(result.getStatus()).isEqualTo(BrandStatus.IN_REVIEW);
+                }
+
+                @Test
+                @DisplayName("modificationTs is updated")
+                void modificationTsIsUpdated() {
+                    var result = brandInSentToApprovalState().moveToInReview();
+
+                    assertThat(result.getModificationTs()).isNotNull();
+                }
+
+                @Test
+                @DisplayName("Original aggregate is unchanged")
+                void originalAggregateIsUnchanged() {
+                    var original = brandInSentToApprovalState();
+                    original.moveToInReview();
+
+                    assertThat(original.getStatus()).isEqualTo(BrandStatus.SENT_TO_APPROVAL);
+                }
+
+                @Test
+                @DisplayName("Other fields are preserved")
+                void otherFieldsPreserved() {
+                    var original = brandInSentToApprovalState();
+                    var result = original.moveToInReview();
+
+                    assertThat(result.getRootID()).isEqualTo(original.getRootID());
+                    assertThat(result.getOwner()).isEqualTo(original.getOwner());
+                    assertThat(result.getName()).isEqualTo(original.getName());
+                }
+            }
+
+            @Nested
+            @DisplayName("Event publishing")
+            class EventPublishing {
+
+                @Test
+                @DisplayName("Registers exactly one uncommitted event")
+                void registersExactlyOneEvent() {
+                    var result = brandInSentToApprovalState().moveToInReview();
+
+                    assertThat(result.getUncommittedEvents()).hasSize(1);
+                }
+
+                @Test
+                @DisplayName("Registered event is BrandMovedToInReviewEvent")
+                void registeredEventIsBrandMovedToInReviewEvent() {
+                    var result = brandInSentToApprovalState().moveToInReview();
+
+                    assertThat(result.getUncommittedEvents().getFirst())
+                            .isInstanceOf(BrandMovedToInReviewEvent.class);
+                }
+
+                @Test
+                @DisplayName("Event status is IN_REVIEW")
+                void eventStatusIsInReview() {
+                    var result = brandInSentToApprovalState().moveToInReview();
+                    var event = (BrandMovedToInReviewEvent) result.getUncommittedEvents().getFirst();
+
+                    assertThat(event.getStatus()).isEqualTo(BrandStatus.IN_REVIEW.name());
+                }
+
+                @Test
+                @DisplayName("Event aggregateId matches the brand ID")
+                void eventAggregateIdMatchesBrandId() {
+                    var result = brandInSentToApprovalState().moveToInReview();
+                    var event = result.getUncommittedEvents().getFirst();
+
+                    assertThat(event.getAggregateId())
+                            .isEqualTo(result.getRootID().value().toString());
+                }
+
+                @Test
+                @DisplayName("Event timestamp matches aggregate modificationTs")
+                void eventTimestampMatchesModificationTs() {
+                    var result = brandInSentToApprovalState().moveToInReview();
+                    var event = result.getUncommittedEvents().getFirst();
+
+                    assertThat(event.getTimestamp())
+                            .isEqualTo(result.getModificationTs().toOffsetDateTime());
+                }
+            }
+        }
+
+        @Nested
+        @DisplayName("Guard: invalid statuses")
+        class Guard {
+
+            @Test
+            @DisplayName("Throws BrandDomainException when status is DRAFT")
+            void throwsWhenStatusIsDraft() {
+                assertThatThrownBy(() -> brandInDraftState().moveToInReview())
+                        .isInstanceOf(BrandDomainException.class);
+            }
+
+            @Test
+            @DisplayName("Throws BrandDomainException when status is APPROVED")
+            void throwsWhenStatusIsApproved() {
+                assertThatThrownBy(() -> brandInApprovedState().moveToInReview())
+                        .isInstanceOf(BrandDomainException.class);
+            }
+
+            @Test
+            @DisplayName("Throws BrandDomainException when status is REJECTED")
+            void throwsWhenStatusIsRejected() {
+                assertThatThrownBy(() -> brandInRejectedState().moveToInReview())
+                        .isInstanceOf(BrandDomainException.class);
+            }
+        }
+    }
+
+    // ─────────────────────────────────────────────────────────────────────────
     // moveToDraft
     // ─────────────────────────────────────────────────────────────────────────
 
@@ -767,6 +988,45 @@ class BrandRootTest {
         }
 
         @Nested
+        @DisplayName("When status is REJECTED")
+        class WhenStatusIsRejected {
+
+            @Test
+            @DisplayName("Status becomes DRAFT")
+            void statusIsDraft() {
+                var result = brandInRejectedState().moveToDraft();
+
+                assertThat(result.getStatus()).isEqualTo(BrandStatus.DRAFT);
+            }
+
+            @Test
+            @DisplayName("Registers exactly one uncommitted event")
+            void registersExactlyOneEvent() {
+                var result = brandInRejectedState().moveToDraft();
+
+                assertThat(result.getUncommittedEvents()).hasSize(1);
+            }
+
+            @Test
+            @DisplayName("Registered event is BrandMovedToDraftEvent")
+            void registeredEventIsBrandMovedToDraftEvent() {
+                var result = brandInRejectedState().moveToDraft();
+
+                assertThat(result.getUncommittedEvents().getFirst())
+                        .isInstanceOf(BrandMovedToDraftEvent.class);
+            }
+
+            @Test
+            @DisplayName("Event status is DRAFT")
+            void eventStatusIsDraft() {
+                var result = brandInRejectedState().moveToDraft();
+                var event = (BrandMovedToDraftEvent) result.getUncommittedEvents().getFirst();
+
+                assertThat(event.getStatus()).isEqualTo(BrandStatus.DRAFT.name());
+            }
+        }
+
+        @Nested
         @DisplayName("Guard: invalid statuses")
         class Guard {
 
@@ -783,13 +1043,6 @@ class BrandRootTest {
                 assertThatThrownBy(() -> brandInApprovedState().moveToDraft())
                         .isInstanceOf(BrandDomainException.class);
             }
-
-            @Test
-            @DisplayName("Throws BrandDomainException when status is REJECTED")
-            void throwsWhenStatusIsRejected() {
-                assertThatThrownBy(() -> brandInRejectedState().moveToDraft())
-                        .isInstanceOf(BrandDomainException.class);
-            }
         }
     }
 
@@ -803,14 +1056,12 @@ class BrandRootTest {
 
         private BrandName newName;
         private BrandDescription newDescription;
-        private BrandPath newPath;
         private BrandChangeInformationCommand changeCommand;
 
         @BeforeEach
         void setUpChangeCommand() {
             newName = new BrandName("Adidas Brand");
             newDescription = new BrandDescription("A well-known German sports brand");
-            newPath = new BrandPath("adidas-brand");
             changeCommand = BrandChangeInformationCommand.builder()
                     .brandId(BrandId.random())
                     .name(newName)
@@ -839,11 +1090,12 @@ class BrandRootTest {
             }
 
             @Test
-            @DisplayName("Updates path from command")
-            void updatesPath() {
-                var result = brandInDraftState().changeInformation(changeCommand);
+            @DisplayName("Path is unchanged")
+            void pathIsUnchanged() {
+                var original = brandInDraftState();
+                var result = original.changeInformation(changeCommand);
 
-                assertThat(result.getPath()).isEqualTo(newPath);
+                assertThat(result.getPath()).isEqualTo(original.getPath());
             }
 
             @Test
@@ -1160,6 +1412,114 @@ class BrandRootTest {
             assertThat(brandInSentToApprovalState().changeOwner(ownerCommand).getOwner()).isEqualTo(newOwner);
             assertThat(brandInApprovedState().changeOwner(ownerCommand).getOwner()).isEqualTo(newOwner);
             assertThat(brandInRejectedState().changeOwner(ownerCommand).getOwner()).isEqualTo(newOwner);
+        }
+    }
+
+    // ─────────────────────────────────────────────────────────────────────────
+    // changeGlobal
+    // ─────────────────────────────────────────────────────────────────────────
+
+    @Nested
+    @DisplayName("changeGlobal()")
+    class ChangeGlobal {
+
+        private BrandChangeGlobalCommand globalCommand;
+
+        @BeforeEach
+        void setUpGlobalCommand() {
+            globalCommand = BrandChangeGlobalCommand.builder()
+                    .brandId(BrandId.random())
+                    .build();
+        }
+
+        @Test
+        @DisplayName("Sets isGlobal to true")
+        void setIsGlobalToTrue() {
+            var result = brandInDraftState().changeGlobal(globalCommand);
+
+            assertThat(result.getIsGlobal()).isTrue();
+        }
+
+        @Test
+        @DisplayName("modificationTs is updated")
+        void modificationTsIsUpdated() {
+            var result = brandInDraftState().changeGlobal(globalCommand);
+
+            assertThat(result.getModificationTs()).isNotNull();
+        }
+
+        @Test
+        @DisplayName("Original aggregate is unchanged")
+        void originalAggregateIsUnchanged() {
+            var original = brandInDraftState();
+            original.changeGlobal(globalCommand);
+
+            assertThat(original.getIsGlobal()).isFalse();
+        }
+
+        @Test
+        @DisplayName("Other fields are preserved")
+        void otherFieldsPreserved() {
+            var original = brandInDraftState();
+            var result = original.changeGlobal(globalCommand);
+
+            assertThat(result.getRootID()).isEqualTo(original.getRootID());
+            assertThat(result.getOwner()).isEqualTo(original.getOwner());
+            assertThat(result.getName()).isEqualTo(original.getName());
+        }
+
+        @Test
+        @DisplayName("Registers exactly one uncommitted event")
+        void registersExactlyOneEvent() {
+            var result = brandInDraftState().changeGlobal(globalCommand);
+
+            assertThat(result.getUncommittedEvents()).hasSize(1);
+        }
+
+        @Test
+        @DisplayName("Registered event is BrandToGlobalChangedEvent")
+        void registeredEventIsBrandToGlobalChangedEvent() {
+            var result = brandInDraftState().changeGlobal(globalCommand);
+
+            assertThat(result.getUncommittedEvents().getFirst())
+                    .isInstanceOf(BrandToGlobalChangedEvent.class);
+        }
+
+        @Test
+        @DisplayName("Event isGlobal is true")
+        void eventIsGlobalIsTrue() {
+            var result = brandInDraftState().changeGlobal(globalCommand);
+            var event = (BrandToGlobalChangedEvent) result.getUncommittedEvents().getFirst();
+
+            assertThat(event.getIsGLobal()).isTrue();
+        }
+
+        @Test
+        @DisplayName("Event aggregateId matches the brand ID")
+        void eventAggregateIdMatchesBrandId() {
+            var result = brandInDraftState().changeGlobal(globalCommand);
+            var event = result.getUncommittedEvents().getFirst();
+
+            assertThat(event.getAggregateId())
+                    .isEqualTo(result.getRootID().value().toString());
+        }
+
+        @Test
+        @DisplayName("Event timestamp matches aggregate modificationTs")
+        void eventTimestampMatchesModificationTs() {
+            var result = brandInDraftState().changeGlobal(globalCommand);
+            var event = result.getUncommittedEvents().getFirst();
+
+            assertThat(event.getTimestamp())
+                    .isEqualTo(result.getModificationTs().toOffsetDateTime());
+        }
+
+        @Test
+        @DisplayName("Works regardless of status")
+        void worksRegardlessOfStatus() {
+            assertThat(brandInSentToApprovalState().changeGlobal(globalCommand).getIsGlobal()).isTrue();
+            assertThat(brandInApprovedState().changeGlobal(globalCommand).getIsGlobal()).isTrue();
+            assertThat(brandInRejectedState().changeGlobal(globalCommand).getIsGlobal()).isTrue();
         }
     }
 

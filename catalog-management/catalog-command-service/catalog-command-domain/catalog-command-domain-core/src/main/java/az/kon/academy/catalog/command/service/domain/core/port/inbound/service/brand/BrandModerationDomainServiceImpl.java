@@ -16,47 +16,40 @@ public final class BrandModerationDomainServiceImpl implements BrandModerationDo
 
     @Override
     public BrandRoot create(final SeDomainContext context, final BrandCreateCommand command) {
-        final var brandQueryPort = context.getQueryPort(BrandQueryOutboundPort.class);
-        final var merchantQueryPort = context.getQueryPort(MerchantQueryOutboundPort.class);
+        final var merchantQuery = context.getQueryPort(MerchantQueryOutboundPort.class);
         if(!Objects.isNull(command.getOwner())) {
-            final var merchantIsExists = merchantQueryPort.isActiveMerchantExists(command.getOwner());
-            if(merchantIsExists == Boolean.FALSE){
-                throw new BrandDomainException(BrandDomainErrorCodes.MERCHANT_NOT_FOUND, List.of(command.getOwner().toString()));
-            }
+            merchantQuery.checkMerchantIsActive(command.getOwner());
         }
-
-        if (brandQueryPort.existsByName(command.getName())) {
-            throw new BrandDomainException(BrandDomainErrorCodes.NAME_ALREADY_EXISTS, List.of(command.getName().value()));
-        }
-
+        final var brandQuery = context.getQueryPort(BrandQueryOutboundPort.class);
+        brandQuery.checkExistsByName(command.getName());
         return BrandRoot.initializeForGlobal(command);
     }
 
     @Override
     public BrandRoot changeInformation(final SeDomainContext context, final BrandChangeInformationCommand command) {
-        final var brandQueryPort = context.getQueryPort(BrandQueryOutboundPort.class);
-        final var brand = brandQueryPort.fetchByIdAndIsGlobalTrue(command.getBrandId());
+        final var brandQuery = context.getQueryPort(BrandQueryOutboundPort.class);
+        final var brand = brandQuery.fetchByIdAndIsGlobalTrue(command.getBrandId());
         return brand.changeInformation(command);
     }
 
     @Override
     public BrandRoot changeImage(final SeDomainContext context, final BrandChangeImageCommand command) {
-        final var brandQueryPort = context.getQueryPort(BrandQueryOutboundPort.class);
-        final var brand = brandQueryPort.fetchByIdAndIsGlobalTrue(command.getBrandId());
+        final var brandQuery = context.getQueryPort(BrandQueryOutboundPort.class);
+        final var brand = brandQuery.fetchByIdAndIsGlobalTrue(command.getBrandId());
         return brand.changeImage(command);
     }
 
     @Override
     public BrandRoot changeOwner(final SeDomainContext context, final BrandChangeOwnerCommand command) {
-        final var brandQueryPort = context.getQueryPort(BrandQueryOutboundPort.class);
-        final var brand = brandQueryPort.fetchByIdAndIsGlobalTrue(command.getBrandId());
+        final var brandQuery = context.getQueryPort(BrandQueryOutboundPort.class);
+        final var brand = brandQuery.fetchByIdAndIsGlobalTrue(command.getBrandId());
         return brand.changeOwner(command);
     }
 
     @Override
     public BrandRoot approve(final SeDomainContext context, final BrandApproveCommand command) {
-        final var brandRejectionQueryPort = context.getQueryPort(BrandRejectionReasonQueryOutboundPort.class);
-        final var existsReason = brandRejectionQueryPort.existsByBrandIdAndNotSolved(command.getBrandId());
+        final var brandRejectionQuery = context.getQueryPort(BrandRejectionReasonQueryOutboundPort.class);
+        final var existsReason = brandRejectionQuery.existsByBrandIdAndNotSolved(command.getBrandId());
         if(existsReason) {
             throw new BrandDomainException(
                     BrandDomainErrorCodes.HAS_UNSOLVED_REASON,
@@ -64,37 +57,37 @@ public final class BrandModerationDomainServiceImpl implements BrandModerationDo
             );
         }
 
-        final var brandQueryPort = context.getQueryPort(BrandQueryOutboundPort.class);
-        final var brand = brandQueryPort.fetchById(command.getBrandId());
+        final var brandQuery = context.getQueryPort(BrandQueryOutboundPort.class);
+        final var brand = brandQuery.fetchById(command.getBrandId());
         return brand.approve();
     }
 
     @Override
     public BrandRoot reject(final SeDomainContext context, final BrandRejectCommand command) {
-        final var brandRejectionQueryPort = context.getQueryPort(BrandRejectionReasonQueryOutboundPort.class);
-        final var existsReason = brandRejectionQueryPort.existsByBrandIdAndNotSolved(command.getBrandId());
+        final var brandRejectionQuery = context.getQueryPort(BrandRejectionReasonQueryOutboundPort.class);
+        final var existsReason = brandRejectionQuery.existsByBrandIdAndNotSolved(command.getBrandId());
         if(!existsReason) {
             throw new BrandDomainException(
                     BrandDomainErrorCodes.AT_LEAST_ONE_REJECTION_REASON_REQUIRED,
                     List.of(command.getBrandId().toString())
             );
         }
-        final var brandQueryPort = context.getQueryPort(BrandQueryOutboundPort.class);
-        final var brand = brandQueryPort.fetchById(command.getBrandId());
+        final var brandQuery = context.getQueryPort(BrandQueryOutboundPort.class);
+        final var brand = brandQuery.fetchById(command.getBrandId());
         return brand.reject();
     }
 
     @Override
     public BrandRoot changeToGlobal(final SeDomainContext context, final BrandChangeGlobalCommand command) {
-        final var brandQueryPort = context.getQueryPort(BrandQueryOutboundPort.class);
-        final var brand = brandQueryPort.fetchById(command.getBrandId());
+        final var brandQuery = context.getQueryPort(BrandQueryOutboundPort.class);
+        final var brand = brandQuery.fetchById(command.getBrandId());
         return brand.changeGlobal(command);
     }
 
     @Override
     public BrandRoot moveToInReview(SeDomainContext context, BrandMoveToInReviewCommand command) {
-        final var brandQueryPort = context.getQueryPort(BrandQueryOutboundPort.class);
-        final var brand = brandQueryPort.fetchById(command.getBrandId());
+        final var brandQuery = context.getQueryPort(BrandQueryOutboundPort.class);
+        final var brand = brandQuery.fetchById(command.getBrandId());
         return brand.moveToInReview();
     }
 }

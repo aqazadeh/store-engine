@@ -16,15 +16,15 @@ public final class BrandRejectionModerationDomainServiceImpl implements BrandRej
 
     @Override
     public BrandRejectionReasonRoot remove(SeDomainContext context, BrandRejectionReasonRemoveCommand command) {
-        var brandRejectionReasonQueryPort = context.getQueryPort(BrandRejectionReasonQueryOutboundPort.class);
-        var brandRejectionReason = brandRejectionReasonQueryPort.fetchByIdAndRowStatusActive(command.getBrandRejectionReasonId());
+        final var brandRejectionReasonQuery = context.getQueryPort(BrandRejectionReasonQueryOutboundPort.class);
+        final var brandRejectionReason = brandRejectionReasonQuery.fetchByIdAndRowStatusActive(command.getBrandRejectionReasonId());
         return brandRejectionReason.remove(command);
     }
 
     @Override
     public BrandRejectionReasonRoot changeReason(SeDomainContext context, BrandRejectionReasonChangeReasonCommand command) {
-        var brandRejectionReasonQueryPort = context.getQueryPort(BrandRejectionReasonQueryOutboundPort.class);
-        var brandRejectionReason = brandRejectionReasonQueryPort.fetchByIdAndRowStatusActive(command.getBrandRejectionReasonId());
+        final var brandRejectionReasonQueryPort = context.getQueryPort(BrandRejectionReasonQueryOutboundPort.class);
+        final var brandRejectionReason = brandRejectionReasonQueryPort.fetchByIdAndRowStatusActive(command.getBrandRejectionReasonId());
         return brandRejectionReason.changeReason(command);
     }
 }

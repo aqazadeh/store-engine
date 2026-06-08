@@ -4,5 +4,5 @@ import az.kon.academy.catalog.command.service.domain.core.vo.merchent.MerchantId
 import az.kon.academy.domain.core.BaseQueryPort;
 
 public interface MerchantQueryOutboundPort extends BaseQueryPort {
-    Boolean isActiveMerchantExists(MerchantId merchantId);
+    void checkMerchantIsActive(MerchantId merchantId);
 }

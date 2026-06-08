@@ -1,4 +1,4 @@
-package az.kon.academy.catalog.command.service.domain.core.command.product;
+package az.kon.academy.catalog.command.service.domain.core.command.productstock;
 
 import az.kon.academy.catalog.command.service.domain.core.vo.product.ProductStockId;
 import lombok.Builder;

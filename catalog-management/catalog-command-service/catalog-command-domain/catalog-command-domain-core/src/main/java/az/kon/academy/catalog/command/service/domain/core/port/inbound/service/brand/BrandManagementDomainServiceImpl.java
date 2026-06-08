@@ -15,38 +15,35 @@ public final class BrandManagementDomainServiceImpl implements BrandManagementDo
 
     @Override
     public BrandRoot create(final SeDomainContext context, final BrandCreateCommand command) {
-        final var brandQueryPort = context.getQueryPort(BrandQueryOutboundPort.class);
-        final var merchantBrandCount = brandQueryPort.fetchCountByMerchantId(command.getOwner());
+        final var brandQuery = context.getQueryPort(BrandQueryOutboundPort.class);
+        final var merchantBrandCount = brandQuery.fetchCountByMerchantId(command.getOwner());
         if (merchantBrandCount >= BrandDomainRules.MAX_BRANDS_PER_MERCHANT) {
             throw new BrandDomainException(BrandDomainErrorCodes.TOO_MANY_BRANDS_FOR_MERCHANT, List.of(command.getOwner().toString()));
         }
-        final var existsByName = brandQueryPort.existsByName(command.getName());
-        if (existsByName) {
-            throw new BrandDomainException(BrandDomainErrorCodes.NAME_ALREADY_EXISTS, List.of(command.getName().value()));
-        }
+        brandQuery.checkExistsByName(command.getName());
         return BrandRoot.initializeForMerchant(command);
     }
 
     @Override
     public BrandRoot changeInformation(final SeDomainContext context, final BrandChangeInformationCommand command) {
-        final var brandQueryPort = context.getQueryPort(BrandQueryOutboundPort.class);
-        final var brand = brandQueryPort.fetchByIdAndMerchantId(command.getBrandId(), command.getOwner());
+        final var brandQuery = context.getQueryPort(BrandQueryOutboundPort.class);
+        final var brand = brandQuery.fetchByIdAndMerchantId(command.getBrandId(), command.getOwner());
         return brand.changeInformation(command);
     }
 
     @Override
     public BrandRoot changeImage(final SeDomainContext context, final BrandChangeImageCommand command) {
-        final var brandQueryPort = context.getQueryPort(BrandQueryOutboundPort.class);
-        final var brand = brandQueryPort.fetchByIdAndMerchantId(command.getBrandId(), command.getOwner());
+        final var brandQuery = context.getQueryPort(BrandQueryOutboundPort.class);
+        final var brand = brandQuery.fetchByIdAndMerchantId(command.getBrandId(), command.getOwner());
         return brand.changeImage(command);
     }
 
     @Override
     public BrandRoot sentToApproval(final SeDomainContext context, final BrandSentToApprovalCommand command) {
-        final var brandQueryPort = context.getQueryPort(BrandQueryOutboundPort.class);
-        final var brand = brandQueryPort.fetchByIdAndMerchantId(command.getBrandId(), command.getOwner());
-        final var brandRejectionReasonQueryPort = context.getQueryPort(BrandRejectionReasonQueryOutboundPort.class);
-        if(brandRejectionReasonQueryPort.existsByBrandIdAndNotSolved(command.getBrandId())) {
+        final var brandQuery = context.getQueryPort(BrandQueryOutboundPort.class);
+        final var brand = brandQuery.fetchByIdAndMerchantId(command.getBrandId(), command.getOwner());
+        final var brandRejectionReasonQuery = context.getQueryPort(BrandRejectionReasonQueryOutboundPort.class);
+        if(brandRejectionReasonQuery.existsByBrandIdAndNotSolved(command.getBrandId())) {
             throw new BrandDomainException(BrandDomainErrorCodes.HAS_UNSOLVED_REASON);
         }
         return brand.sentToApproval();
@@ -54,8 +51,8 @@ public final class BrandManagementDomainServiceImpl implements BrandManagementDo
 
     @Override
     public BrandRoot moveToDraft(final SeDomainContext context, final BrandMoveToDraftCommand command) {
-        final var brandQueryPort = context.getQueryPort(BrandQueryOutboundPort.class);
-        final var brand = brandQueryPort.fetchByIdAndMerchantId(command.getBrandId(), command.getOwner());
+        final var brandQuery = context.getQueryPort(BrandQueryOutboundPort.class);
+        final var brand = brandQuery.fetchByIdAndMerchantId(command.getBrandId(), command.getOwner());
         return brand.moveToDraft();
     }
 }

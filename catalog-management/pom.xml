@@ -19,6 +19,7 @@
         <module>catalog-query-service</module>
         <module>catalog-shared/catalog-event</module>
         <module>catalog-shared/catalog-event-avro</module>
+        <module>catalog-shared/catalog-sql-dal</module>
     </modules>
 
     <dependencyManagement>

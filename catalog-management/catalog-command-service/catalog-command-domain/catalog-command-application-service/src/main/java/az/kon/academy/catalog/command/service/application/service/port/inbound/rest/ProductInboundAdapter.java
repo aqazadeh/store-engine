@@ -32,7 +32,7 @@ import az.kon.academy.catalog.command.service.application.service.handler.comman
 import az.kon.academy.catalog.command.service.application.service.handler.command.product.ProductStockCreateCommandHandler;
 import az.kon.academy.catalog.command.service.application.service.handler.command.product.ProductStockDecreaseCommandHandler;
 import az.kon.academy.catalog.command.service.application.service.handler.command.product.ProductStockIncreaseCommandHandler;
-import az.kon.academy.catalog.command.service.domain.core.command.product.ProductAddVariantCommand;
+import az.kon.academy.catalog.command.service.domain.core.command.productvariant.ProductVariantAddCommand;
 import az.kon.academy.catalog.command.service.domain.core.command.product.ProductArchiveCommand;
 import az.kon.academy.catalog.command.service.domain.core.command.product.ProductAssignBrandCommand;
 import az.kon.academy.catalog.command.service.domain.core.command.product.ProductAssignCategoryCommand;
@@ -40,13 +40,13 @@ import az.kon.academy.catalog.command.service.domain.core.command.product.Produc
 import az.kon.academy.catalog.command.service.domain.core.command.product.ProductChangeInformationCommand;
 import az.kon.academy.catalog.command.service.domain.core.command.product.ProductCreateCommand;
 import az.kon.academy.catalog.command.service.domain.core.command.product.ProductCreateRejectionReasonCommand;
-import az.kon.academy.catalog.command.service.domain.core.command.product.ProductPriceCreateCommand;
-import az.kon.academy.catalog.command.service.domain.core.command.product.ProductPriceChangedCommand;
+import az.kon.academy.catalog.command.service.domain.core.command.productprice.ProductPriceCreateCommand;
+import az.kon.academy.catalog.command.service.domain.core.command.productprice.ProductPriceChangedCommand;
 import az.kon.academy.catalog.command.service.domain.core.command.product.ProductRemoveSpecificationCommand;
-import az.kon.academy.catalog.command.service.domain.core.command.product.ProductRemoveVariantCommand;
-import az.kon.academy.catalog.command.service.domain.core.command.product.ProductStockCreateCommand;
-import az.kon.academy.catalog.command.service.domain.core.command.product.ProductStockDecreaseCommand;
-import az.kon.academy.catalog.command.service.domain.core.command.product.ProductStockIncreaseCommand;
+import az.kon.academy.catalog.command.service.domain.core.command.productvariant.ProductVariantRemoveCommand;
+import az.kon.academy.catalog.command.service.domain.core.command.productstock.ProductStockCreateCommand;
+import az.kon.academy.catalog.command.service.domain.core.command.productstock.ProductStockDecreaseCommand;
+import az.kon.academy.catalog.command.service.domain.core.command.productstock.ProductStockIncreaseCommand;
 import az.kon.academy.catalog.command.service.domain.core.vo.Barcode;
 import az.kon.academy.catalog.command.service.domain.core.vo.brand.BrandId;
 import az.kon.academy.catalog.command.service.domain.core.vo.management.category.ProductCategoryId;
@@ -128,7 +128,6 @@ class ProductInboundAdapter implements ProductInboundPort {
                 .brandId(BrandId.from(request.getBrandId()))
                 .name(ProductName.of(request.getName()))
                 .description(ProductDescription.of(request.getDescription()))
-                .barcode(Barcode.of(request.getBarcode()))
                 .build();
         this.productCreateCommandHandler.handle(command);
     }
@@ -190,7 +189,7 @@ class ProductInboundAdapter implements ProductInboundPort {
 
     @Override
     public void addVariant(ProductAddVariantRequest request) {
-        var command = ProductAddVariantCommand.builder()
+        var command = ProductVariantAddCommand.builder()
                 .productId(ProductId.from(request.getProductId()))
                 .assignments(request.getAssignments().stream()
                         .map(item -> ProductVariantAssignment.of(
@@ -203,7 +202,7 @@ class ProductInboundAdapter implements ProductInboundPort {
 
     @Override
     public void removeVariant(ProductRemoveVariantRequest request) {
-        var command = ProductRemoveVariantCommand.builder()
+        var command = ProductVariantRemoveCommand.builder()
                 .productId(ProductId.from(request.getProductId()))
                 .variantId(ProductVariantId.from(request.getVariantId()))
                 .build();

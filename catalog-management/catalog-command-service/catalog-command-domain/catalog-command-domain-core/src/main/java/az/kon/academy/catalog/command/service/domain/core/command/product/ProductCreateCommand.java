@@ -16,5 +16,4 @@ public final class ProductCreateCommand {
     @Getter private final BrandId brandId;
     @Getter private final ProductName name;
     @Getter private final ProductDescription description;
-    @Getter private final Barcode barcode;
 }

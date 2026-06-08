@@ -5,9 +5,9 @@ import az.kon.academy.aggragate.valueobject.ProcessStatus;
 import az.kon.academy.aggragate.valueobject.RowStatus;
 import az.kon.academy.aggragate.valueobject.SeDateTime;
 import az.kon.academy.aggragate.valueobject.Version;
-import az.kon.academy.catalog.command.dal.enums.ProcessStatusType;
-import az.kon.academy.catalog.command.dal.enums.RowStatusType;
-import az.kon.academy.catalog.command.dal.tables.records.ProductPriceRecord;
+import az.kon.academy.catalog.sql.dal.enums.ProcessStatusType;
+import az.kon.academy.catalog.sql.dal.enums.RowStatusType;
+import az.kon.academy.catalog.sql.dal.tables.records.ProductPriceRecord;
 import az.kon.academy.catalog.command.service.domain.core.aggregate.ProductPriceAggregateRoot;
 import az.kon.academy.catalog.command.service.domain.core.vo.product.ProductPriceId;
 import az.kon.academy.catalog.command.service.domain.core.vo.product.ProductVariantId;
@@ -20,8 +20,6 @@ public class ProductPriceMapper {
         return new ProductPriceRecord()
                 .setId(root.getRootID().value())
                 .setVersion(root.getVersion().value())
-                .setProcessStatus(ProcessStatusType.valueOf(root.getProcessStatus().name()))
-                .setRowStatus(RowStatusType.valueOf(root.getRowStatus().name()))
                 .setCreationTs(root.getCreationTs().toOffsetDateTime())
                 .setModificationTs(root.getModificationTs().toOffsetDateTime())
 
@@ -34,8 +32,6 @@ public class ProductPriceMapper {
         return ProductPriceAggregateRoot.builder()
                 .id(ProductPriceId.from(r.getId()))
                 .version(Version.of(r.getVersion()))
-                .processStatus(ProcessStatus.valueOf(r.getProcessStatus().name()))
-                .rowStatus(RowStatus.valueOf(r.getRowStatus().name()))
                 .creationTs(SeDateTime.of(r.getCreationTs()))
                 .modificationTs(SeDateTime.of(r.getModificationTs()))
 

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                            http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+    <!-- Management aggregates (no external FKs) -->
+    <include file="/db/changelog/v1/000-general.xml"/>
+    <include file="/db/changelog/v1/001-create-brand.xml"/>
+    <include file="/db/changelog/v1/002-create-brand-rejection-reason.xml"/>
+    <include file="/db/changelog/v1/003-create-product-category.xml"/>
+    <include file="/db/changelog/v1/004-create-product-specification.xml"/>
+    <include file="/db/changelog/v1/005-create-product-specification-category-assignment.xml"/>
+    <include file="/db/changelog/v1/006-create-variant-key.xml"/>
+    <include file="/db/changelog/v1/007-create-variant-value.xml"/>
+
+    <!-- Product aggregate and its nested entities -->
+    <include file="/db/changelog/v1/008-create-product.xml"/>
+    <include file="/db/changelog/v1/009-create-product-specification-assignment.xml"/>
+    <include file="/db/changelog/v1/010-create-product-variant.xml"/>
+    <include file="/db/changelog/v1/011-create-product-variant-assignment.xml"/>
+    <include file="/db/changelog/v1/012-create-product-price.xml"/>
+    <include file="/db/changelog/v1/013-create-product-stock.xml"/>
+    <include file="/db/changelog/v1/014-create-product-rejection-reason.xml"/>
+
+</databaseChangeLog>

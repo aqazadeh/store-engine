@@ -8,9 +8,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.jooq.DSLContext;
 import org.springframework.dao.OptimisticLockingFailureException;
 
-import java.util.ConcurrentModificationException;
 
-import static az.kon.academy.catalog.command.dal.Tables.BRAND;
+import static az.kon.academy.catalog.sql.dal.Tables.BRAND;
 
 @Slf4j
 @CommandAdapter

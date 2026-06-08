@@ -2,6 +2,8 @@ package az.kon.academy.catalog.command.service.domain.core.port.inbound.service.
 
 import az.kon.academy.catalog.command.service.domain.core.aggregate.ProductRoot;
 import az.kon.academy.catalog.command.service.domain.core.command.product.*;
+import az.kon.academy.catalog.command.service.domain.core.command.productvariant.ProductVariantAddCommand;
+import az.kon.academy.catalog.command.service.domain.core.command.productvariant.ProductVariantRemoveCommand;
 import az.kon.academy.domain.core.SeDomainContext;
 
 public sealed interface ProductManagementDomainService extends ProductDomainService permits ProductManagementDomainServiceImpl {
@@ -12,8 +14,8 @@ public sealed interface ProductManagementDomainService extends ProductDomainServ
     ProductRoot assignCategory(SeDomainContext context, ProductAssignCategoryCommand command);
     ProductRoot assignSpecification(SeDomainContext context, ProductAssignSpecificationCommand command);
     ProductRoot removeSpecification(SeDomainContext context, ProductRemoveSpecificationCommand command);
-    ProductRoot addVariant(SeDomainContext context, ProductAddVariantCommand command);
-    ProductRoot removeVariant(SeDomainContext context, ProductRemoveVariantCommand command);
+    ProductRoot addVariant(SeDomainContext context, ProductVariantAddCommand command);
+    ProductRoot removeVariant(SeDomainContext context, ProductVariantRemoveCommand command);
     ProductRoot sentToApproval(SeDomainContext context, ProductSentToApprovalCommand command);
     ProductRoot moveToDraft(SeDomainContext context, ProductMoveToDraftCommand command);
 

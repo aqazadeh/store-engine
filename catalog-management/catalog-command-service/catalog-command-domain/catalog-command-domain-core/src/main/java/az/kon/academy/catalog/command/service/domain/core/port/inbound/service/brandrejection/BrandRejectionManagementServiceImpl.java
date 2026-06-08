@@ -9,8 +9,8 @@ public final class BrandRejectionManagementServiceImpl implements BrandRejection
 
     @Override
     public BrandRejectionReasonRoot solve(SeDomainContext context, BrandRejectionReasonSolveCommand command) {
-        var brandRejectionReasonQueryPort = context.getQueryPort(BrandRejectionReasonQueryOutboundPort.class);
-        var brandRejectionReason = brandRejectionReasonQueryPort.fetchByIdAndRowStatusActive(command.getBrandRejectionReasonId());
+        final var brandRejectionReasonQuery = context.getQueryPort(BrandRejectionReasonQueryOutboundPort.class);
+        final var brandRejectionReason = brandRejectionReasonQuery.fetchByIdAndRowStatusActive(command.getBrandRejectionReasonId());
         return brandRejectionReason.markAsSolved();
     }
 

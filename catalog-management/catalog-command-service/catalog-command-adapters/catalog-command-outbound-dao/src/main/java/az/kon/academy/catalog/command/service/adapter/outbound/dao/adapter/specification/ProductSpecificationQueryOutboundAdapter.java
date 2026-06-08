@@ -1,8 +1,8 @@
 package az.kon.academy.catalog.command.service.adapter.outbound.dao.adapter.specification;
 
 import az.kon.academy.application.core.annotation.QueryAdapter;
-import az.kon.academy.catalog.command.dal.enums.RowStatusType;
-import az.kon.academy.catalog.command.dal.tables.records.ProductSpecificationCategoryAssignmentRecord;
+import az.kon.academy.catalog.sql.dal.enums.RowStatusType;
+import az.kon.academy.catalog.sql.dal.tables.records.ProductSpecificationCategoryAssignmentRecord;
 import az.kon.academy.catalog.command.service.adapter.outbound.dao.mapper.ProductSpecificationMapper;
 import az.kon.academy.catalog.command.service.domain.core.aggregate.management.ProductSpecificationRoot;
 import az.kon.academy.catalog.command.service.domain.core.exception.specification.ProductSpecificationDomainErrorCodes;
@@ -15,8 +15,8 @@ import org.jooq.DSLContext;
 import java.util.List;
 import java.util.Optional;
 
-import static az.kon.academy.catalog.command.dal.Tables.PRODUCT_SPECIFICATION;
-import static az.kon.academy.catalog.command.dal.Tables.PRODUCT_SPECIFICATION_CATEGORY_ASSIGNMENT;
+import static az.kon.academy.catalog.sql.dal.Tables.PRODUCT_SPECIFICATION;
+import static az.kon.academy.catalog.sql.dal.Tables.PRODUCT_SPECIFICATION_CATEGORY_ASSIGNMENT;
 import static org.jooq.impl.DSL.multiset;
 import static org.jooq.impl.DSL.selectFrom;
 

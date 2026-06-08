@@ -2,8 +2,12 @@ package az.kon.academy.catalog.command.service.adapter.outbound.dao.adapter.prod
 
 import az.kon.academy.aggragate.valueobject.RowStatus;
 import az.kon.academy.application.core.annotation.QueryAdapter;
-import az.kon.academy.catalog.command.dal.enums.RowStatusType;
-import az.kon.academy.catalog.command.dal.tables.records.ProductVariantRecord;
+import az.kon.academy.catalog.command.service.domain.core.exception.product.ProductDomainErrorCodes;
+import az.kon.academy.catalog.command.service.domain.core.exception.product.ProductEntityNotFoundException;
+import az.kon.academy.catalog.command.service.domain.core.vo.merchent.MerchantId;
+import az.kon.academy.catalog.command.service.domain.core.vo.product.ProductVariantId;
+import az.kon.academy.catalog.sql.dal.enums.RowStatusType;
+import az.kon.academy.catalog.sql.dal.tables.records.ProductVariantRecord;
 import az.kon.academy.catalog.command.service.adapter.outbound.dao.mapper.ProductMapper;
 import az.kon.academy.catalog.command.service.adapter.outbound.dao.mapper.ProductVariantMapper;
 import az.kon.academy.catalog.command.service.domain.core.aggregate.ProductRoot;
@@ -19,7 +23,7 @@ import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-import static az.kon.academy.catalog.command.dal.Tables.*;
+import static az.kon.academy.catalog.sql.dal.Tables.*;
 
 @QueryAdapter
 public class ProductQueryOutboundAdapter implements ProductQueryOutboundPort {
@@ -35,7 +39,7 @@ public class ProductQueryOutboundAdapter implements ProductQueryOutboundPort {
     }
 
     @Override
-    public Optional<ProductRoot> findByIdAndRowStatusActive(ProductId id) {
+    public Optional<ProductRoot> findById(ProductId id) {
         return dsl.selectFrom(PRODUCT)
                 .where(PRODUCT.ID.eq(id.value())
                         .and(PRODUCT.ROW_STATUS.eq(RowStatusType.ACTIVE)))
@@ -55,7 +59,7 @@ public class ProductQueryOutboundAdapter implements ProductQueryOutboundPort {
                             .map(ProductVariantRecord::getId)
                             .toList();
 
-                    Map<UUID, List<az.kon.academy.catalog.command.dal.tables.records.ProductVariantAssignmentRecord>> assignmentsByVariant =
+                    Map<UUID, List<az.kon.academy.catalog.sql.dal.tables.records.ProductVariantAssignmentRecord>> assignmentsByVariant =
                             variantIds.isEmpty()
                                     ? Map.of()
                                     : dsl.selectFrom(PRODUCT_VARIANT_ASSIGNMENT)
@@ -63,7 +67,7 @@ public class ProductQueryOutboundAdapter implements ProductQueryOutboundPort {
                                     .fetch()
                                     .stream()
                                     .collect(Collectors.groupingBy(
-                                            az.kon.academy.catalog.command.dal.tables.records.ProductVariantAssignmentRecord::getVariantId
+                                            az.kon.academy.catalog.sql.dal.tables.records.ProductVariantAssignmentRecord::getVariantId
                                     ));
 
                     List<ProductVariantRoot> variants = variantRecords.stream()
@@ -75,6 +79,17 @@ public class ProductQueryOutboundAdapter implements ProductQueryOutboundPort {
 
                     return mapper.toDomain(productRecord, specAssignments, variants);
                 });
+    }
+
+    @Override
+    public ProductRoot fetchById(ProductId id) {
+        return this.findById(id).orElseThrow(() ->
+                new ProductEntityNotFoundException(ProductDomainErrorCodes.ENTITY_NOT_FOUND, List.of(id.toString())));
+    }
+
+    @Override
+    public Boolean existsByIdAndVarintIdAndMerchantId(ProductId productId, ProductVariantId productVariantId, MerchantId merchantId) {
+        return null;
     }
 
     @Override

@@ -1,8 +1,8 @@
 //package az.kon.academy.catalog.command.service.domain.core.aggregate;
 //
 //import az.kon.academy.aggragate.valueobject.Money;
-//import az.kon.academy.catalog.command.service.domain.core.command.product.ProductPriceCreateCommand;
-//import az.kon.academy.catalog.command.service.domain.core.command.product.ProductPriceChangedCommand;
+//import az.kon.academy.catalog.command.service.domain.core.command.productprice.ProductPriceCreateCommand;
+//import az.kon.academy.catalog.command.service.domain.core.command.productprice.ProductPriceChangedCommand;
 //import az.kon.academy.catalog.command.service.domain.core.vo.product.ProductPriceId;
 //import az.kon.academy.catalog.command.service.domain.core.vo.product.ProductVariantId;
 //import az.kon.academy.catalog.event.product.price.ProductPriceCreatedEvent;

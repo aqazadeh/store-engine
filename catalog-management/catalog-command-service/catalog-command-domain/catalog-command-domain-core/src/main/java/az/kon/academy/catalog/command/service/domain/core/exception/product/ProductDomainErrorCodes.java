@@ -6,12 +6,15 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class ProductDomainErrorCodes {
 
-    public static final String STATUS_INVALID_FOR_APPROVAL             = "020001";
-    public static final String STATUS_INVALID_FOR_MOVE_TO_DRAFT        = "020002";
-    public static final String STATUS_INVALID_FOR_MOVE_TO_IN_REVIEW    = "020008";
-    public static final String STATUS_INVALID_FOR_ARCHIVE              = "020003";
-    public static final String CANNOT_BE_CHANGED_WHEN_SENT_TO_APPROVAL = "020004";
-    public static final String ENTITY_NOT_FOUND                        = "020005";
-    public static final String PRICE_NOT_FOUND                         = "020006";
-    public static final String STOCK_NOT_FOUND                         = "020007";
+    public static final String STATUS_INVALID_FOR_APPROVAL             = "000001";
+    public static final String STATUS_INVALID_FOR_MOVE_TO_DRAFT        = "000002";
+    public static final String STATUS_INVALID_FOR_MOVE_TO_IN_REVIEW    = "000008";
+    public static final String STATUS_INVALID_FOR_ARCHIVE              = "000003";
+    public static final String CANNOT_BE_CHANGED_WHEN_IN_REVIEW        = "000004";
+    public static final String ENTITY_NOT_FOUND                        = "000005";
+    public static final String PRICE_NOT_FOUND                         = "000006";
+    public static final String STOCK_NOT_FOUND                         = "000007";
+
+    public static final String CATEGORY_NOT_FOUND                      = "000008";
+    public static final String BRAND_NOT_FOUND                         = "000009";
 }

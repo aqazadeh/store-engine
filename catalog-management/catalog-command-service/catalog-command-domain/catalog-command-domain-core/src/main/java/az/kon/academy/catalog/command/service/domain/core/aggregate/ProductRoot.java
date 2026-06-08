@@ -3,9 +3,10 @@ package az.kon.academy.catalog.command.service.domain.core.aggregate;
 import az.kon.academy.aggragate.AggregateRoot;
 import az.kon.academy.aggragate.valueobject.SeDateTime;
 import az.kon.academy.catalog.command.service.domain.core.command.product.*;
+import az.kon.academy.catalog.command.service.domain.core.command.productvariant.ProductVariantAddCommand;
+import az.kon.academy.catalog.command.service.domain.core.command.productvariant.ProductVariantRemoveCommand;
 import az.kon.academy.catalog.command.service.domain.core.exception.product.ProductDomainErrorCodes;
 import az.kon.academy.catalog.command.service.domain.core.exception.product.ProductDomainException;
-import az.kon.academy.catalog.command.service.domain.core.vo.Barcode;
 import az.kon.academy.catalog.command.service.domain.core.vo.brand.BrandId;
 import az.kon.academy.catalog.command.service.domain.core.vo.management.category.ProductCategoryId;
 import az.kon.academy.catalog.command.service.domain.core.vo.merchent.MerchantId;
@@ -26,7 +27,6 @@ public class ProductRoot extends AggregateRoot<ProductRoot, ProductId> {
     @Getter private BrandId brandId;
     @Getter private ProductName name;
     @Getter private ProductDescription description;
-    @Getter private final Barcode barcode;
     @Getter private Boolean autoPriceUpdateEnabled;
     @Getter private ProductStatus status;
     @Getter private List<ProductSpecificationAssignment> specifications;
@@ -40,14 +40,13 @@ public class ProductRoot extends AggregateRoot<ProductRoot, ProductId> {
                 .brandId(command.getBrandId())
                 .name(command.getName())
                 .description(command.getDescription())
-                .barcode(command.getBarcode())
                 .autoPriceUpdateEnabled(Boolean.FALSE)
                 .status(ProductStatus.DRAFT)
                 .specifications(Collections.emptyList())
                 .variants(Collections.emptyList())
                 .build();
 
-        product.addEvent(ProductCreatedEvent.of(
+        var event = ProductCreatedEvent.of(
                 product.getRootID().value().toString(),
                 product.getModificationTs().toOffsetDateTime(),
                 product.getMerchantId().value(),
@@ -55,9 +54,10 @@ public class ProductRoot extends AggregateRoot<ProductRoot, ProductId> {
                 product.getBrandId().value(),
                 product.getName().value(),
                 product.getDescription().value(),
-                product.getBarcode().value(),
                 product.getStatus().name()
-        ));
+        );
+
+        product.addEvent(event);
         return product;
     }
 
@@ -174,9 +174,9 @@ public class ProductRoot extends AggregateRoot<ProductRoot, ProductId> {
     }
 
     public ProductRoot changeInformation(ProductChangeInformationCommand command) {
-        if (this.status.isSentToApproval()) {
+        if (this.status.isInReview()) {
             throw new ProductDomainException(
-                    ProductDomainErrorCodes.CANNOT_BE_CHANGED_WHEN_SENT_TO_APPROVAL,
+                    ProductDomainErrorCodes.CANNOT_BE_CHANGED_WHEN_IN_REVIEW,
                     List.of(this.getRootID().toString())
             );
         }
@@ -260,7 +260,7 @@ public class ProductRoot extends AggregateRoot<ProductRoot, ProductId> {
         return product;
     }
 
-    public ProductRoot addVariant(ProductAddVariantCommand command) {
+    public ProductRoot addVariant(ProductVariantAddCommand command) {
         var variant = ProductVariantRoot.initialize(command);
 
         var updatedVariants = new ArrayList<>(this.variants);
@@ -288,7 +288,7 @@ public class ProductRoot extends AggregateRoot<ProductRoot, ProductId> {
         return product;
     }
 
-    public ProductRoot removeVariant(ProductRemoveVariantCommand command) {
+    public ProductRoot removeVariant(ProductVariantRemoveCommand command) {
         var updatedVariants = this.variants.stream()
                 .filter(v -> !command.getVariantId().value().equals(v.getRootID().value()))
                 .toList();

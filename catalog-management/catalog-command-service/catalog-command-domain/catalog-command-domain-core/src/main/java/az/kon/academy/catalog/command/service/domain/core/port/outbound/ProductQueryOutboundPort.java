@@ -4,7 +4,9 @@ import az.kon.academy.catalog.command.service.domain.core.aggregate.ProductRoot;
 import az.kon.academy.catalog.command.service.domain.core.exception.product.ProductDomainErrorCodes;
 import az.kon.academy.catalog.command.service.domain.core.exception.product.ProductEntityNotFoundException;
 import az.kon.academy.catalog.command.service.domain.core.vo.management.category.ProductCategoryId;
+import az.kon.academy.catalog.command.service.domain.core.vo.merchent.MerchantId;
 import az.kon.academy.catalog.command.service.domain.core.vo.product.ProductId;
+import az.kon.academy.catalog.command.service.domain.core.vo.product.ProductVariantId;
 import az.kon.academy.domain.core.BaseQueryPort;
 
 import java.util.List;
@@ -12,14 +14,14 @@ import java.util.Optional;
 
 public interface ProductQueryOutboundPort extends BaseQueryPort {
 
-    Optional<ProductRoot> findByIdAndRowStatusActive(ProductId id);
+    Optional<ProductRoot> findById(ProductId id);
 
-    default ProductRoot fetchByIdAndRowStatusActive(ProductId id) {
-        return this.findByIdAndRowStatusActive(id)
-                .orElseThrow(() -> new ProductEntityNotFoundException(
-                        ProductDomainErrorCodes.ENTITY_NOT_FOUND,
-                        List.of(id.value().toString())));
-    }
+    ProductRoot fetchById(ProductId id);
+
+    Optional<ProductRoot> findByIdAndMerchantId(ProductId id, MerchantId merchantId);
+    ProductRoot fetchByIdAndMerchantId(ProductId id, MerchantId merchantId);
+
+    Boolean existsByIdAndVarintIdAndMerchantId(ProductId productId, ProductVariantId productVariantId, MerchantId merchantId);
 
     Boolean exitsByCategoryId(ProductCategoryId productCategoryId);
 }

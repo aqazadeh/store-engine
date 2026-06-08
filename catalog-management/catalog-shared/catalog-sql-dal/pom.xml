@@ -10,12 +10,12 @@
     </parent>
 
     <groupId>az.kon.academy.catalog</groupId>
-    <artifactId>catalog-command-dal</artifactId>
+    <artifactId>catalog-sql-dal</artifactId>
     <version>1.0.0-SNAPSHOT</version>
 
     <properties>
-        <dal.database>catalog_command</dal.database>
-        <dal.export.package>az.kon.academy.catalog.command.dal</dal.export.package>
+        <dal.database>catalog</dal.database>
+        <dal.export.package>az.kon.academy.catalog.sql.dal</dal.export.package>
         <dal.default.schema>catalog</dal.default.schema>
 
     </properties>

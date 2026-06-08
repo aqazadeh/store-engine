@@ -2,9 +2,9 @@ package az.kon.academy.catalog.command.service.domain.core.aggregate;
 
 import az.kon.academy.aggragate.EventSourcedAggregateRoot;
 import az.kon.academy.aggragate.valueobject.SeDateTime;
-import az.kon.academy.catalog.command.service.domain.core.command.product.ProductStockCreateCommand;
-import az.kon.academy.catalog.command.service.domain.core.command.product.ProductStockDecreaseCommand;
-import az.kon.academy.catalog.command.service.domain.core.command.product.ProductStockIncreaseCommand;
+import az.kon.academy.catalog.command.service.domain.core.command.productstock.ProductStockCreateCommand;
+import az.kon.academy.catalog.command.service.domain.core.command.productstock.ProductStockDecreaseCommand;
+import az.kon.academy.catalog.command.service.domain.core.command.productstock.ProductStockIncreaseCommand;
 import az.kon.academy.catalog.command.service.domain.core.exception.product.ProductStockDomainErrorCodes;
 import az.kon.academy.catalog.command.service.domain.core.exception.product.ProductStockDomainException;
 import az.kon.academy.catalog.command.service.domain.core.vo.product.ProductStockId;

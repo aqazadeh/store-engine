@@ -3,8 +3,8 @@ package az.kon.academy.catalog.command.service.domain.core.aggregate;
 import az.kon.academy.aggragate.EventSourcedAggregateRoot;
 import az.kon.academy.aggragate.valueobject.Money;
 import az.kon.academy.aggragate.valueobject.SeDateTime;
-import az.kon.academy.catalog.command.service.domain.core.command.product.ProductPriceCreateCommand;
-import az.kon.academy.catalog.command.service.domain.core.command.product.ProductPriceChangedCommand;
+import az.kon.academy.catalog.command.service.domain.core.command.productprice.ProductPriceCreateCommand;
+import az.kon.academy.catalog.command.service.domain.core.command.productprice.ProductPriceChangedCommand;
 import az.kon.academy.catalog.command.service.domain.core.vo.product.ProductPriceId;
 import az.kon.academy.catalog.command.service.domain.core.vo.product.ProductVariantId;
 import az.kon.academy.catalog.event.product.price.ProductPriceCreatedEvent;
@@ -13,7 +13,6 @@ import az.kon.academy.catalog.event.product.price.ProductPriceUpdatedEvent;
 import lombok.Getter;
 import lombok.experimental.SuperBuilder;
 
-import java.math.BigDecimal;
 import java.util.List;
 
 @SuperBuilder(toBuilder = true)
@@ -79,16 +78,16 @@ public class ProductPriceAggregateRoot extends EventSourcedAggregateRoot<Product
         var event = ProductPriceUpdatedEvent.of(
                 this.getRootID().value().toString(),
                 SeDateTime.now().toOffsetDateTime(),
-                command.getMinPrice().toString(),
-                command.getMaxPrice().toString()
+                command.getMinPrice().value(),
+                command.getMaxPrice().value()
         );
         return this.apply(event);
     }
 
     private ProductPriceAggregateRoot apply(ProductPriceUpdatedEvent event) {
         var price = this.toBuilder()
-                .minPrice(Money.of(new BigDecimal(event.getMinPrice())))
-                .maxPrice(Money.of(new BigDecimal(event.getMaxPrice())))
+                .minPrice(Money.of(event.getMinPrice()))
+                .maxPrice(Money.of(event.getMaxPrice()))
                 .build();
 
         price.addEvent(event);

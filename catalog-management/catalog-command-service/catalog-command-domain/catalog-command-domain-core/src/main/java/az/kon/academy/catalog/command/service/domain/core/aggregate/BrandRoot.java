@@ -146,7 +146,7 @@ public class BrandRoot extends AggregateRoot<BrandRoot, BrandId> {
 
     public BrandRoot moveToDraft() {
 
-        if (!this.status.isSentToApproval() || !this.status.isRejected()) {
+        if (!this.status.isSentToApproval() && !this.status.isRejected()) {
             throw new BrandDomainException(
                     BrandDomainErrorCodes.STATUS_INVALID_FOR_MOVE_TO_DRAFT,
                     List.of(this.getRootID().toString())

@@ -19,12 +19,6 @@
             <column name="version" type="BIGINT" defaultValueNumeric="1">
                 <constraints nullable="false"/>
             </column>
-            <column name="process_status" type="process_status_type">
-                <constraints nullable="false"/>
-            </column>
-            <column name="row_status" type="row_status_type">
-                <constraints nullable="false"/>
-            </column>
             <column name="creation_ts" type="TIMESTAMPTZ">
                 <constraints nullable="false"/>
             </column>
@@ -45,22 +39,6 @@
 
         <rollback>
             <dropTable tableName="product_stock"/>
-        </rollback>
-    </changeSet>
-
-    <changeSet id="013-2" author="rovshan.aghayev">
-        <preConditions onFail="MARK_RAN">
-            <not>
-                <indexExists indexName="idx_product_stock_row_status"/>
-            </not>
-        </preConditions>
-
-        <createIndex tableName="product_stock" indexName="idx_product_stock_row_status">
-            <column name="row_status"/>
-        </createIndex>
-
-        <rollback>
-            <dropIndex tableName="product_stock" indexName="idx_product_stock_row_status"/>
         </rollback>
     </changeSet>
 

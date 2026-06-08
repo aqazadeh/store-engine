@@ -1,8 +1,8 @@
 package az.kon.academy.catalog.command.service.adapter.outbound.dao.mapper;
 
 import az.kon.academy.aggragate.valueobject.SeDateTime;
-import az.kon.academy.catalog.command.dal.tables.records.ProductVariantAssignmentRecord;
-import az.kon.academy.catalog.command.dal.tables.records.ProductVariantRecord;
+import az.kon.academy.catalog.sql.dal.tables.records.ProductVariantAssignmentRecord;
+import az.kon.academy.catalog.sql.dal.tables.records.ProductVariantRecord;
 import az.kon.academy.catalog.command.service.domain.core.aggregate.ProductVariantRoot;
 import az.kon.academy.catalog.command.service.domain.core.vo.management.variant.VariantKeyId;
 import az.kon.academy.catalog.command.service.domain.core.vo.management.variant.VariantValueId;

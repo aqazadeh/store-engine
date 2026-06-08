@@ -4,7 +4,7 @@ import az.kon.academy.application.core.annotation.CommandHandler;
 import az.kon.academy.application.core.handler.AbstractCommandHandler;
 import az.kon.academy.catalog.command.service.application.service.constant.SecurityPermissions;
 import az.kon.academy.catalog.command.service.application.service.port.outbound.ProductCommandOutboundPort;
-import az.kon.academy.catalog.command.service.domain.core.command.product.ProductAddVariantCommand;
+import az.kon.academy.catalog.command.service.domain.core.command.productvariant.ProductVariantAddCommand;
 import az.kon.academy.catalog.command.service.domain.core.port.inbound.service.product.general.ProductManagementDomainService;
 import az.kon.academy.domain.core.SeDomainContext;
 import az.kon.academy.event.handler.DomainEventPublisher;
@@ -12,7 +12,7 @@ import az.kon.academy.event.handler.DomainEventPublisher;
 @CommandHandler(
         roles = SecurityPermissions.Role.ROLE_MERCHANT,
         permissions = SecurityPermissions.Product.PRODUCT_ADD_VARIANT)
-public class ProductAddVariantCommandHandler implements AbstractCommandHandler<ProductAddVariantCommand, Void> {
+public class ProductAddVariantCommandHandler implements AbstractCommandHandler<ProductVariantAddCommand, Void> {
 
     private final SeDomainContext domainContext;
     private final DomainEventPublisher domainEventPublisher;
@@ -27,7 +27,7 @@ public class ProductAddVariantCommandHandler implements AbstractCommandHandler<P
     }
 
     @Override
-    public Void handle(ProductAddVariantCommand command) {
+    public Void handle(ProductVariantAddCommand command) {
         var aggregate = this.productManagementDomainService.addVariant(domainContext, command);
         var port = this.domainContext.getCommandPort(ProductCommandOutboundPort.class);
         port.save(aggregate);

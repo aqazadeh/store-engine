@@ -1,8 +1,8 @@
 package az.kon.academy.catalog.command.service.adapter.outbound.dao.adapter.brand;
 
-import az.kon.academy.aggragate.valueobject.RowStatus;
 import az.kon.academy.application.core.annotation.QueryAdapter;
-import az.kon.academy.catalog.command.dal.enums.RowStatusType;
+import az.kon.academy.catalog.command.service.domain.core.exception.category.ProductCategoryEntityNotFoundException;
+import az.kon.academy.catalog.sql.dal.enums.RowStatusType;
 import az.kon.academy.catalog.command.service.adapter.outbound.dao.mapper.BrandMapper;
 import az.kon.academy.catalog.command.service.domain.core.aggregate.BrandRoot;
 import az.kon.academy.catalog.command.service.domain.core.exception.brand.BrandDomainErrorCodes;
@@ -13,9 +13,10 @@ import az.kon.academy.catalog.command.service.domain.core.vo.brand.BrandName;
 import az.kon.academy.catalog.command.service.domain.core.vo.merchent.MerchantId;
 import org.jooq.DSLContext;
 
+import java.util.List;
 import java.util.Optional;
 
-import static az.kon.academy.catalog.command.dal.Tables.BRAND;
+import static az.kon.academy.catalog.sql.dal.Tables.BRAND;
 
 @QueryAdapter
 public class BrandQueryOutboundAdapter implements BrandQueryOutboundPort {
@@ -85,11 +86,16 @@ public class BrandQueryOutboundAdapter implements BrandQueryOutboundPort {
     }
 
     @Override
-    public Boolean existsByName(final BrandName name) {
-        return dsl.fetchExists(
+    public void checkExistsByName(final BrandName name) {
+        if(!dsl.fetchExists(
                 BRAND,
                 BRAND.NAME.eq(name.value())
                         .and(BRAND.ROW_STATUS.eq(RowStatusType.ACTIVE))
-        );
+        )){
+            throw new ProductCategoryEntityNotFoundException(
+                    BrandDomainErrorCodes.NAME_ALREADY_EXISTS,
+                    List.of(name.toString())
+            );
+        }
     }
 }
