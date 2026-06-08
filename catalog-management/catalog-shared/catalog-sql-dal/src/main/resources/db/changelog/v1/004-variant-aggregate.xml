@@ -5,15 +5,80 @@
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
                             http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
 
-    <changeSet id="007-1" author="rovshan.aghayev">
+    <!-- ============================================================
+         Variant aggregate
+         Aggregate root: VariantKeyRoot
+         Entities: VariantValue (List<>)
+         Shared lookup data referenced by ProductVariantAssignment.
+         ============================================================ -->
+
+    <!-- VariantKeyRoot table -->
+    <changeSet id="004-1" author="rovshan.aghayev">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="variant_key"/>
+            </not>
+        </preConditions>
+
+        <createTable tableName="variant_key">
+            <column name="id" type="UUID">
+                <constraints primaryKey="true" nullable="false" primaryKeyName="pk_variant_key"/>
+            </column>
+            <column name="version" type="BIGINT" defaultValueNumeric="1">
+                <constraints nullable="false"/>
+            </column>
+            <column name="process_status" type="process_status_type">
+                <constraints nullable="false"/>
+            </column>
+            <column name="row_status" type="row_status_type">
+                <constraints nullable="false"/>
+            </column>
+            <column name="creation_ts" type="TIMESTAMPTZ">
+                <constraints nullable="false"/>
+            </column>
+            <column name="modification_ts" type="TIMESTAMPTZ">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="name" type="VARCHAR(20)">
+                <constraints nullable="false" unique="true" uniqueConstraintName="uq_variant_key_name"/>
+            </column>
+            <column name="description" type="VARCHAR(500)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <rollback>
+            <dropTable tableName="variant_key"/>
+        </rollback>
+    </changeSet>
+
+    <!-- VariantKeyRoot indexes -->
+    <changeSet id="004-2" author="rovshan.aghayev">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <indexExists indexName="idx_variant_key_row_status"/>
+            </not>
+        </preConditions>
+
+        <createIndex tableName="variant_key" indexName="idx_variant_key_row_status">
+            <column name="row_status"/>
+        </createIndex>
+
+        <rollback>
+            <dropIndex tableName="variant_key" indexName="idx_variant_key_row_status"/>
+        </rollback>
+    </changeSet>
+
+    <!-- VariantValue (List<> inside VariantKeyRoot) -->
+    <changeSet id="004-3" author="rovshan.aghayev">
         <preConditions onFail="MARK_RAN">
             <not>
                 <tableExists tableName="variant_value"/>
             </not>
         </preConditions>
 
-        <createTable tableName="variant_value"
-        >
+        <createTable tableName="variant_value">
             <column name="id" type="UUID">
                 <constraints primaryKey="true" nullable="false" primaryKeyName="pk_variant_value"/>
             </column>
@@ -53,7 +118,8 @@
         </rollback>
     </changeSet>
 
-    <changeSet id="007-2" author="rovshan.aghayev">
+    <!-- VariantValue indexes -->
+    <changeSet id="004-4" author="rovshan.aghayev">
         <preConditions onFail="MARK_RAN">
             <not>
                 <indexExists indexName="idx_variant_value_key_id"/>
