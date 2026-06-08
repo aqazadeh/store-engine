@@ -3,10 +3,16 @@ package az.kon.academy.catalog.command.service.domain.core.aggregate;
 import az.kon.academy.aggragate.EventSourcedAggregateRoot;
 import az.kon.academy.aggragate.valueobject.Money;
 import az.kon.academy.aggragate.valueobject.SeDateTime;
-import az.kon.academy.catalog.command.service.domain.core.command.productprice.ProductPriceCreateCommand;
+import az.kon.academy.catalog.command.service.domain.core.command.productprice.ProductPriceChangeActualPriceCommand;
 import az.kon.academy.catalog.command.service.domain.core.command.productprice.ProductPriceChangedCommand;
+import az.kon.academy.catalog.command.service.domain.core.command.productprice.ProductPriceCreateCommand;
+import az.kon.academy.catalog.command.service.domain.core.command.productprice.ProductPriceToggleAutoPriceCommand;
+import az.kon.academy.catalog.command.service.domain.core.exception.product.ProductPriceDomainErrorCodes;
+import az.kon.academy.catalog.command.service.domain.core.exception.product.ProductPriceDomainException;
 import az.kon.academy.catalog.command.service.domain.core.vo.product.ProductPriceId;
 import az.kon.academy.catalog.command.service.domain.core.vo.product.ProductVariantId;
+import az.kon.academy.catalog.event.product.price.ProductPriceActualPriceChangedEvent;
+import az.kon.academy.catalog.event.product.price.ProductPriceAutoPriceToggledEvent;
 import az.kon.academy.catalog.event.product.price.ProductPriceCreatedEvent;
 import az.kon.academy.catalog.event.product.price.ProductPriceEvent;
 import az.kon.academy.catalog.event.product.price.ProductPriceUpdatedEvent;
@@ -36,6 +42,13 @@ public class ProductPriceAggregateRoot extends EventSourcedAggregateRoot<Product
 
     public static ProductPriceAggregateRoot initialize(ProductPriceCreateCommand command) {
 
+        if (command.getMinPrice().isGreaterThan(command.getMaxPrice())) {
+            throw new ProductPriceDomainException(
+                    ProductPriceDomainErrorCodes.MIN_GREATER_THAN_MAX,
+                    List.of(command.getMinPrice().toString(), command.getMaxPrice().toString())
+            );
+        }
+
         var productPrice = ProductPriceAggregateRoot.builder()
                 .id(ProductPriceId.random())
                 .variantId(command.getVariantId())
@@ -61,41 +74,91 @@ public class ProductPriceAggregateRoot extends EventSourcedAggregateRoot<Product
         return productPrice;
     }
 
+    public ProductPriceAggregateRoot changePrice(ProductPriceChangedCommand command) {
+
+        if (command.getMinPrice().isGreaterThan(command.getMaxPrice())) {
+            throw new ProductPriceDomainException(
+                    ProductPriceDomainErrorCodes.MIN_GREATER_THAN_MAX,
+                    List.of(command.getMinPrice().toString(), command.getMaxPrice().toString())
+            );
+        }
+
+        var productPrice = this.toBuilder()
+                .minPrice(command.getMinPrice())
+                .maxPrice(command.getMaxPrice())
+                .modificationTs(SeDateTime.now())
+                .build();
+
+        productPrice.addEvent(ProductPriceUpdatedEvent.of(
+                productPrice.getRootID().value().toString(),
+                productPrice.getModificationTs().toOffsetDateTime(),
+                command.getMinPrice().value(),
+                command.getMaxPrice().value()
+        ));
+        return productPrice;
+    }
+
+    public ProductPriceAggregateRoot changeActualPrice(ProductPriceChangeActualPriceCommand command) {
+
+        var productPrice = this.toBuilder()
+                .actualPrice(command.getActualPrice())
+                .modificationTs(SeDateTime.now())
+                .build();
+
+        productPrice.addEvent(ProductPriceActualPriceChangedEvent.of(
+                productPrice.getRootID().value().toString(),
+                productPrice.getModificationTs().toOffsetDateTime(),
+                command.getActualPrice().value()
+        ));
+        return productPrice;
+    }
+
+    public ProductPriceAggregateRoot toggleAutoPriceChange(ProductPriceToggleAutoPriceCommand command) {
+
+        var productPrice = this.toBuilder()
+                .autoPriceChangeEnabled(command.getEnabled())
+                .modificationTs(SeDateTime.now())
+                .build();
+
+        productPrice.addEvent(ProductPriceAutoPriceToggledEvent.of(
+                productPrice.getRootID().value().toString(),
+                productPrice.getModificationTs().toOffsetDateTime(),
+                command.getEnabled()
+        ));
+        return productPrice;
+    }
+
     @Override
     protected ProductPriceAggregateRoot applyEvent(ProductPriceEvent event) {
         return switch (event) {
             case ProductPriceCreatedEvent e -> apply(e);
             case ProductPriceUpdatedEvent e -> apply(e);
+            case ProductPriceActualPriceChangedEvent e -> apply(e);
+            case ProductPriceAutoPriceToggledEvent e -> apply(e);
         };
     }
 
-    public ProductPriceAggregateRoot changePrice(ProductPriceChangedCommand command) {
-
-        var productPrice = this.toBuilder()
-
-                .build();
-
-        var event = ProductPriceUpdatedEvent.of(
-                this.getRootID().value().toString(),
-                SeDateTime.now().toOffsetDateTime(),
-                command.getMinPrice().value(),
-                command.getMaxPrice().value()
-        );
-        return this.apply(event);
-    }
-
     private ProductPriceAggregateRoot apply(ProductPriceUpdatedEvent event) {
-        var price = this.toBuilder()
+        return this.toBuilder()
                 .minPrice(Money.of(event.getMinPrice()))
                 .maxPrice(Money.of(event.getMaxPrice()))
                 .build();
+    }
 
-        price.addEvent(event);
-        return price;
+    private ProductPriceAggregateRoot apply(ProductPriceActualPriceChangedEvent event) {
+        return this.toBuilder()
+                .actualPrice(Money.of(event.getActualPrice()))
+                .build();
+    }
+
+    private ProductPriceAggregateRoot apply(ProductPriceAutoPriceToggledEvent event) {
+        return this.toBuilder()
+                .autoPriceChangeEnabled(event.getAutoPriceChangeEnabled())
+                .build();
     }
 
     private ProductPriceAggregateRoot apply(ProductPriceCreatedEvent event) {
-        var price = this.toBuilder()
+        return this.toBuilder()
                 .variantId(ProductVariantId.from(event.getVariantId()))
                 .minPrice(Money.of(event.getMinPrice()))
                 .maxPrice(Money.of(event.getMaxPrice()))
@@ -103,7 +166,5 @@ public class ProductPriceAggregateRoot extends EventSourcedAggregateRoot<Product
                 .actualPrice(Money.of(event.getActualPrice()))
                 .autoPriceChangeEnabled(event.getAutoPriceChangeEnabled())
                 .build();
-        price.addEvent(event);
-        return price;
     }
 }

@@ -3,6 +3,7 @@ package az.kon.academy.catalog.command.service.domain.core.port.outbound;
 import az.kon.academy.catalog.command.service.domain.core.aggregate.ProductPriceAggregateRoot;
 import az.kon.academy.catalog.command.service.domain.core.exception.product.ProductDomainErrorCodes;
 import az.kon.academy.catalog.command.service.domain.core.exception.product.ProductEntityNotFoundException;
+import az.kon.academy.catalog.command.service.domain.core.vo.merchent.MerchantId;
 import az.kon.academy.catalog.command.service.domain.core.vo.product.ProductPriceId;
 import az.kon.academy.domain.core.BaseQueryPort;
 
@@ -15,6 +16,15 @@ public interface ProductPriceQueryOutboundPort extends BaseQueryPort {
 
     default ProductPriceAggregateRoot fetchById(ProductPriceId id) {
         return this.findById(id)
+                .orElseThrow(() -> new ProductEntityNotFoundException(
+                        ProductDomainErrorCodes.PRICE_NOT_FOUND,
+                        List.of(id.value().toString())));
+    }
+
+    Optional<ProductPriceAggregateRoot> findByIdAndMerchantId(ProductPriceId id, MerchantId merchantId);
+
+    default ProductPriceAggregateRoot fetchByIdAndMerchantId(ProductPriceId id, MerchantId merchantId) {
+        return this.findByIdAndMerchantId(id, merchantId)
                 .orElseThrow(() -> new ProductEntityNotFoundException(
                         ProductDomainErrorCodes.PRICE_NOT_FOUND,
                         List.of(id.value().toString())));

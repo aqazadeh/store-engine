@@ -1,6 +1,7 @@
 package az.kon.academy.catalog.command.service.application.service.port.inbound.rest;
 
 import az.kon.academy.aggragate.valueobject.Money;
+import az.kon.academy.aggragate.valueobject.Quantity;
 import az.kon.academy.application.core.annotation.InputAdapter;
 import az.kon.academy.catalog.command.service.application.service.dto.request.product.ProductAddVariantRequest;
 import az.kon.academy.catalog.command.service.application.service.dto.request.product.ProductArchiveRequest;
@@ -244,7 +245,7 @@ class ProductInboundAdapter implements ProductInboundPort {
     public void createStock(ProductStockCreateRequest request) {
         var command = ProductStockCreateCommand.builder()
                 .variantId(ProductVariantId.from(request.getVariantId()))
-                .quantity(request.getQuantity())
+                .quantity(Quantity.of(request.getQuantity()))
                 .build();
         this.productStockCreateCommandHandler.handle(command);
     }
@@ -253,7 +254,7 @@ class ProductInboundAdapter implements ProductInboundPort {
     public void increaseStock(ProductStockIncreaseRequest request) {
         var command = ProductStockIncreaseCommand.builder()
                 .stockId(ProductStockId.from(request.getStockId()))
-                .quantity(request.getQuantity())
+                .quantity(Quantity.of(request.getQuantity()))
                 .build();
         this.productStockIncreaseCommandHandler.handle(command);
     }
@@ -262,7 +263,7 @@ class ProductInboundAdapter implements ProductInboundPort {
     public void decreaseStock(ProductStockDecreaseRequest request) {
         var command = ProductStockDecreaseCommand.builder()
                 .stockId(ProductStockId.from(request.getStockId()))
-                .quantity(request.getQuantity())
+                .quantity(Quantity.of(request.getQuantity()))
                 .build();
         this.productStockDecreaseCommandHandler.handle(command);
     }

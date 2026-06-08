@@ -9,4 +9,6 @@ import az.kon.academy.domain.core.BaseQueryPort;
 public interface ProductVariantQueryOutboundPort extends BaseQueryPort {
 
     ProductVariantRoot fetchByIdAndProductIdAndMerchantId(ProductVariantId variantId, ProductId productId, MerchantId merchantId);
+
+    void checkExistsByIdAndProductIdAndMerchantId(ProductVariantId variantId, ProductId productId, MerchantId merchantId);
 }

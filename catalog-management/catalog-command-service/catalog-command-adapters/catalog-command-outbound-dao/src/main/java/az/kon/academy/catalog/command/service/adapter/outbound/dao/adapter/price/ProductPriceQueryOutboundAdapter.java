@@ -4,12 +4,15 @@ import az.kon.academy.application.core.annotation.QueryAdapter;
 import az.kon.academy.catalog.command.service.adapter.outbound.dao.mapper.ProductPriceMapper;
 import az.kon.academy.catalog.command.service.domain.core.aggregate.ProductPriceAggregateRoot;
 import az.kon.academy.catalog.command.service.domain.core.port.outbound.ProductPriceQueryOutboundPort;
+import az.kon.academy.catalog.command.service.domain.core.vo.merchent.MerchantId;
 import az.kon.academy.catalog.command.service.domain.core.vo.product.ProductPriceId;
 import org.jooq.DSLContext;
 
 import java.util.Optional;
 
+import static az.kon.academy.catalog.sql.dal.Tables.PRODUCT;
 import static az.kon.academy.catalog.sql.dal.Tables.PRODUCT_PRICE;
+import static az.kon.academy.catalog.sql.dal.Tables.PRODUCT_VARIANT;
 
 @QueryAdapter
 public class ProductPriceQueryOutboundAdapter implements ProductPriceQueryOutboundPort {
@@ -28,5 +31,17 @@ public class ProductPriceQueryOutboundAdapter implements ProductPriceQueryOutbou
                 .where(PRODUCT_PRICE.ID.eq(id.value()))
                 .fetchOptional()
                 .map(mapper::toDomain);
+    }
+
+    @Override
+    public Optional<ProductPriceAggregateRoot> findByIdAndMerchantId(ProductPriceId id, MerchantId merchantId) {
+        return dsl.select(PRODUCT_PRICE.fields())
+                .from(PRODUCT_PRICE)
+                .join(PRODUCT_VARIANT).on(PRODUCT_PRICE.VARIANT_ID.eq(PRODUCT_VARIANT.ID))
+                .join(PRODUCT).on(PRODUCT_VARIANT.PRODUCT_ID.eq(PRODUCT.ID))
+                .where(PRODUCT_PRICE.ID.eq(id.value())
+                        .and(PRODUCT.MERCHANT_ID.eq(merchantId.value())))
+                .fetchOptional()
+                .map(r -> mapper.toDomain(r.into(PRODUCT_PRICE)));
     }
 }

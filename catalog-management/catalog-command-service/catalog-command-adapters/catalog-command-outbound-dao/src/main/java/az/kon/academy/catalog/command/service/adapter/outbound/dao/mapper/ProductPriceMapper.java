@@ -25,7 +25,10 @@ public class ProductPriceMapper {
 
                 .setVariantId(root.getVariantId().value())
                 .setMinPrice(root.getMinPrice().value())
-                .setMaxPrice(root.getMaxPrice().value());
+                .setMaxPrice(root.getMaxPrice().value())
+                .setDefaultPrice(root.getDefaultPrice().value())
+                .setActualPrice(root.getActualPrice().value())
+                .setAutoPriceChangeEnabled(root.getAutoPriceChangeEnabled());
     }
 
     public ProductPriceAggregateRoot toDomain(ProductPriceRecord r) {
@@ -38,6 +41,9 @@ public class ProductPriceMapper {
                 .variantId(ProductVariantId.from(r.getVariantId()))
                 .minPrice(Money.of(r.getMinPrice()))
                 .maxPrice(Money.of(r.getMaxPrice()))
+                .defaultPrice(Money.of(r.getDefaultPrice()))
+                .actualPrice(Money.of(r.getActualPrice()))
+                .autoPriceChangeEnabled(r.getAutoPriceChangeEnabled())
                 .build();
     }
 }

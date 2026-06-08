@@ -1,6 +1,7 @@
 package az.kon.academy.catalog.command.service.adapter.outbound.dao.mapper;
 
 import az.kon.academy.aggragate.valueobject.ProcessStatus;
+import az.kon.academy.aggragate.valueobject.Quantity;
 import az.kon.academy.aggragate.valueobject.RowStatus;
 import az.kon.academy.aggragate.valueobject.SeDateTime;
 import az.kon.academy.aggragate.valueobject.Version;
@@ -23,7 +24,8 @@ public class ProductStockMapper {
                 .setModificationTs(root.getModificationTs().toOffsetDateTime())
 
                 .setVariantId(root.getVariantId().value())
-                .setQuantity(root.getQuantity());
+                .setQuantity(root.getQuantity().intValue())
+                .setReservedQuantity(root.getReservedQuantity().intValue());
     }
 
     public ProductStockAggregateRoot toDomain(ProductStockRecord r) {
@@ -34,7 +36,8 @@ public class ProductStockMapper {
                 .modificationTs(SeDateTime.of(r.getModificationTs()))
 
                 .variantId(ProductVariantId.from(r.getVariantId()))
-                .quantity(r.getQuantity())
+                .quantity(Quantity.of(r.getQuantity()))
+                .reservedQuantity(Quantity.of(r.getReservedQuantity()))
                 .build();
     }
 }
